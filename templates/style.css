@@ -1,0 +1,7 @@
+header,footer {
+  height: 50px;
+  width: 100%;
+  background: #333;
+  color: #fff;
+  text-align: center;
+}

@@ -27,10 +27,12 @@ class Ceiling:
     ):
         self._pixels = neopixel.NeoPixel(io_pin, number_lights, auto_write=auto_write)
         self._indexing = LinearIndexing(self._pixels)
+        self.NUMBER_LIGHTS = NUMBER_LIGHTS
 
     def clear(self) -> None:
-        """Set every pixel to black"""
+        """Set every pixel to black (and updates the LEDs)"""
         self.fill([0, 0, 0])
+        self._pixels.show()
 
     def fill(self, clear_color: RGB) -> None:
         """Set every pixel to the given color"""

@@ -3,4 +3,4 @@
 from typing import List
 
 
-RGB = List[int, int, int]
+RGB = list[int]

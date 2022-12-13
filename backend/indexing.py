@@ -2,7 +2,7 @@
 
 from neopixel import NeoPixel
 from backend_types import RGB
-from typing import Any, Tuple
+from typing import Any, Tuple, List
 
 """
 Abstraction of how indexing gets and sets indeces
@@ -40,6 +40,22 @@ class LinearIndexing(Indexing):
         self._pixels[key] = newvalue
 
 
+class RowIndexing(Indexing):
+    """Index into the light strip based on how they are arranged into rows."""
+
+    def __init__(self, pixels: NeoPixel, lights_per_row: List[int]):
+        self._pixels = pixels
+        self.rows = lights_per_row
+
+    def get(self, key: Tuple[int, int]) -> RGB:
+        """key: (row, col)"""
+        return self._pixels[key]
+
+    def set(self, key: Tuple[int, int], newvalue: RGB) -> None:
+        """key: (row, col)"""
+        self._pixels[key] = newvalue
+
+
 class CartesianIndexing(Indexing):
     """Index into the light strip as a grid on 2D space.
     This is done by mapping lights in sequence to integer 2 dimensional coordinates."""
@@ -50,10 +66,12 @@ class CartesianIndexing(Indexing):
         self.COLS = cols
 
     def get(self, key: Tuple[int, int]) -> RGB:
+        """key: (x, y)"""
         # TODO
         return [0, 0, 0]
 
-    def set(self, key: int, newvalue: RGB) -> None:
+    def set(self, key: Tuple[int, int], newvalue: RGB) -> None:
+        """key: (x, y)"""
         # TODO
         pass
 
@@ -98,10 +116,12 @@ class FloatCartesianIndexing(Indexing):
         self.COLS = cols
 
     def get(self, key: Tuple[float, float]) -> RGB:
+        """key: (x, y)"""
         # TODO
         return [0, 0, 0]
 
     def set(self, key: Tuple[float, float], newvalue: RGB) -> None:
+        """key: (x, y)"""
         # TODO
         pass
 

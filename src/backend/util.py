@@ -5,6 +5,7 @@
 import colour
 import copy
 from typing import Union, List
+import numpy as np
 
 from backend.backend_types import RGB
 
@@ -27,7 +28,9 @@ def color_obj_to_rgb(color_obj: colour.Color) -> RGB:
 
 
 def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:
-    if color is RGB:
+    print(color)
+    if type(color) is list or type(color) is tuple:
+        assert len(color) >= 3
         return colour.Color(rgb=color)
     else:
         return colour.Color(color)

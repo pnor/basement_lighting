@@ -12,7 +12,6 @@ import colour
 import sys
 import time
 import copy
-import numpy as np
 
 from backend.ceiling import Ceiling
 from backend.util import (
@@ -22,6 +21,7 @@ from backend.util import (
     hex_to_color_obj,
     hex_to_rgb,
     sigmoid,
+    color_range,
 )
 
 
@@ -34,7 +34,7 @@ interval = int(sys.argv[2])
 ceil = Ceiling(auto_write=True)
 ceil.clear()
 
-cycle_colors = color_range(color_input, dim_color(color_input))
+cycle_colors = color_range(color_input, dim_color(color_input), 100)
 
 FPS = 30
 DELTA = 1 / FPS

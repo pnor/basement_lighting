@@ -43,5 +43,5 @@ while True:
         progresses = (progresses + 1) % 100
         for i in range(len(progresses)):
             ceil[i] = colors[progress_indeces[progresses[i]]]
-            ceil.show()
+        ceil.show()
     time.sleep(DELTA)

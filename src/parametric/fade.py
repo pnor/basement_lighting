@@ -15,7 +15,14 @@ import copy
 import numpy as np
 
 from backend.ceiling import Ceiling
-from backend.util import clamp, color_obj_to_rgb, hex_to_color_obj, hex_to_rgb, sigmoid
+from backend.util import (
+    clamp,
+    color_obj_to_rgb,
+    dim_color,
+    hex_to_color_obj,
+    hex_to_rgb,
+    sigmoid,
+)
 
 
 if len(sys.argv) != 3:
@@ -27,14 +34,7 @@ interval = int(sys.argv[2])
 ceil = Ceiling(auto_write=True)
 ceil.clear()
 
-
-# Getting range of colors for all LEDs to cycle through
-on_color_obj = hex_to_color_obj(color_input)
-off_color_obj = copy.deepcopy(on_color_obj)
-off_color_obj.luminance = 0.001
-color_range = list(on_color_obj.range_to(off_color_obj, 100))
-cycle_colors = [color_obj_to_rgb(c) for c in color_range]
-
+cycle_colors = color_range(color_input, dim_color(color_input))
 
 FPS = 30
 DELTA = 1 / FPS

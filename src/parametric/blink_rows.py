@@ -8,9 +8,10 @@ import time
 from typing import List
 
 from backend.ceiling import Ceiling
+from backend.util import hex_to_rgb
 
 if len(sys.argv) != 3:
-    print("Usage: python blink.py [color hex string] [blink interval in seconds]")
+    print("Usage: python blink_rows.py [color hex string] [blink interval in seconds]")
 
 color_input = sys.argv[1]
 interval = float(sys.argv[2])

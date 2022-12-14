@@ -73,7 +73,8 @@ class RowIndexing(Indexing):
 
     def row_col_to_indx(self, row: int, col: int) -> int:
         """Convert row and col position to index in light strip"""
-        indx = sum(self.rows[:key])
+        row = row % len(self.rows)
+        indx = sum(self.rows[:row])
         if row % 2 == 0:
             indx += col
         else:

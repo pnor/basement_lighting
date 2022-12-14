@@ -29,7 +29,7 @@ ceil.clear()
 colors = color_range(dim_color(color_input), color_input, 100)
 colors = colors + list(reversed(colors))
 
-FPS = 30
+FPS = 60
 DELTA = 1 / FPS
 
 progress_indeces = (((np.arange(100) / 99) ** 10) * 99).astype(int)

@@ -4,6 +4,7 @@ src/backend/__init__.py
 src/backend/backend_types.py
 src/backend/ceiling.py
 src/backend/indexing.py
+src/backend/led_locations.py
 src/backend/util.py
 src/byons_basement.egg-info/PKG-INFO
 src/byons_basement.egg-info/SOURCES.txt
@@ -18,6 +19,9 @@ src/package/app.py
 src/parametric/__init__.py
 src/parametric/alternate.py
 src/parametric/blink.py
+src/parametric/blink_rows.py
 src/parametric/fade.py
 src/parametric/fill.py
 src/parametric/runthrough.py
+src/parametric/sparkle.py
+test/test_led_space.py

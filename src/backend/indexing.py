@@ -90,14 +90,14 @@ class CartesianIndexing(Indexing):
      \
       \
     ----
+    Indexing will yield the single closest LED to where user specified
     """
 
     # https://pypi.org/project/hqt/
     # quadtree for later
-    def __init__(self, pixels: NeoPixel, rows: int, cols: int):
+    def __init__(self, pixels: NeoPixel, lights_per_row: List[int]):
         self._pixels = pixels
-        self.ROWS = rows
-        self.COLS = cols
+        self.rows = lights_per_row
 
     def get(self, key: Tuple[int, int]) -> RGB:
         """key: (x, y)"""

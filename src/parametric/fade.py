@@ -8,10 +8,8 @@
 #
 # Fade interval is time for it to go from on to off/vice versa
 
-import colour
 import sys
 import time
-import copy
 
 from backend.ceiling import Ceiling
 from backend.util import (

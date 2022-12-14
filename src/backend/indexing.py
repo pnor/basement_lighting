@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 from neopixel import NeoPixel
-from backend_types import RGB
 from typing import Any, Tuple, List
+
+from backend.backend_types import RGB
 
 """
 Abstraction of how indexing gets and sets indeces

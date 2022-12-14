@@ -11,11 +11,14 @@
 import colour
 import sys
 import time
+import copy
+import numpy as np
 
 from backend.ceiling import Ceiling
-from backend.util import clamp, color_obj_to_rgb, hex_to_color_obj, hex_to_rgb
+from backend.util import clamp, color_obj_to_rgb, hex_to_color_obj, hex_to_rgb, sigmoid
 
-if len(sys.argv) != 2:
+
+if len(sys.argv) != 3:
     print("Usage: python fade.py [color hex string] [entire fade interval in seconds]")
 
 color_input = sys.argv[1]
@@ -27,11 +30,13 @@ ceil.clear()
 
 # Getting range of colors for all LEDs to cycle through
 on_color_obj = hex_to_color_obj(color_input)
-off_color_obj = hex_to_color_obj("#000000")
+off_color_obj = copy.deepcopy(on_color_obj)
+off_color_obj.luminance = 0.001
 color_range = list(on_color_obj.range_to(off_color_obj, 100))
 cycle_colors = [color_obj_to_rgb(c) for c in color_range]
 
-FPS = 60
+
+FPS = 30
 DELTA = 1 / FPS
 cur_time = 0
 forward = True
@@ -45,7 +50,13 @@ while True:
         if cur_time <= 0:
             forward = True
 
-    i = int((cur_time / interval) * 100)
+    prog = cur_time / interval
+    # use sigmoid to get better pulsing
+    LARGE_NUM = 8
+    sigmoid_input = (prog - 0.5) * LARGE_NUM
+    prog = sigmoid(sigmoid_input)
+
+    i = int(prog * 99)
 
     ceil.fill(cycle_colors[i])
 

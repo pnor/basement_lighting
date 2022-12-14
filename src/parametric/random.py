@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-# Blinks every LED to the same color
+# Sets every LED to a random color based on a base color
 #
 # Usage:
-# python blink.py [color hex string] [blink interval in seconds]
+# python random.py [color hex string] [change interval in seconds]
 
 import colour
 import sys
@@ -16,7 +16,7 @@ if len(sys.argv) != 2:
     print("Usage: python blink.py [color hex string] [blink interval in seconds]")
 
 color_input = sys.argv[1]
-interval = int(sys.argv[2])
+interval = float(sys.argv[2])
 
 on_rgb = hex_to_rgb(color_input)
 off_rgb = [0] * len(on_rgb)

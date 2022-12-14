@@ -11,7 +11,7 @@ import sys
 from backend.ceiling import Ceiling
 from backend.util import hex_to_rgb
 
-if len(sys.argv) != 1:
+if len(sys.argv) != 2:
     print("Usage: python fill.py [color hex string]")
 
 color = sys.argv[1]

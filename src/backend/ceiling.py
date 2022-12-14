@@ -5,10 +5,9 @@ import neopixel
 import board
 from typing import Callable, Any
 
-from usb.core import Configuration
-from backend.backend_types import RGB
+from .backend_types import RGB
 
-from indexing import *
+from .indexing import *
 
 """
 A layer between the neopixel API and our light scripts to abstract away all that coordinate math
@@ -25,14 +24,17 @@ class Ceiling:
         number_lights: int = NUMBER_LIGHTS,
         auto_write: bool = False,
     ):
-        self._pixels = neopixel.NeoPixel(io_pin, number_lights, auto_write=auto_write)
+        self._pixels = neopixel.NeoPixel(
+            io_pin, number_lights, auto_write=auto_write, pixel_order=neopixel.RGB
+        )
         self._indexing = LinearIndexing(self._pixels)
         self.NUMBER_LIGHTS = NUMBER_LIGHTS
 
-    def clear(self) -> None:
+    def clear(self, show=True) -> None:
         """Set every pixel to black (and updates the LEDs)"""
         self.fill([0, 0, 0])
-        self._pixels.show()
+        if show:
+            self._pixels.show()
 
     def fill(self, clear_color: RGB) -> None:
         """Set every pixel to the given color"""

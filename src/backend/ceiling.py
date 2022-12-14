@@ -3,7 +3,7 @@
 from microcontroller import Pin
 import neopixel
 import board
-from typing import Callable, Any
+from typing import Callable, Any, Optional
 
 from .backend_types import RGB
 
@@ -15,6 +15,15 @@ A layer between the neopixel API and our light scripts to abstract away all that
 
 # Basement related constants
 NUMBER_LIGHTS = 200
+CEILING_ROW_ARRANGEMENT = [
+    20,  # ---
+    40,  # \
+    20,  # ---
+    40,  # \
+    20,  # ---
+    40,  # \
+    20,  # ---
+]
 
 
 class Ceiling:
@@ -47,6 +56,13 @@ class Ceiling:
     def set_auto_write(self, auto_write: bool) -> None:
         self._pixels.auto_write = auto_write
 
+    def rows(self) -> Optional[List[int]]:
+        """Returns rows information if the indexing is row indexing"""
+        if isinstance(self._indexing, RowIndexing):
+            return self._indexing.rows
+        else:
+            return None
+
     def indexing(self) -> Indexing:
         """Return the current Indexing object"""
         return self._indexing
@@ -55,8 +71,8 @@ class Ceiling:
         "Use linear indexing"
         self._indexing = LinearIndexing(self._pixels)
 
-    def use_row(self, lights_per_row: List[int]):
-        """Use linear indexing"""
+    def use_row(self, lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT):
+        """Use row based indexing"""
         self._indexing = RowIndexing(self._pixels, lights_per_row)
 
     def use_cartesian(self, rows: int, cols: int):

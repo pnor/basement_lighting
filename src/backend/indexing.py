@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from neopixel import NeoPixel
-from typing import Any, Tuple, List
+from typing import Any, Tuple, List, Union
 
 from backend.backend_types import RGB
 
@@ -42,7 +42,9 @@ class LinearIndexing(Indexing):
 
 
 class RowIndexing(Indexing):
-    """Index into the light strip based on how they are arranged into rows."""
+    """
+    Index into the light strip based on how they are arranged into rows.
+    """
 
     def __init__(self, pixels: NeoPixel, lights_per_row: List[int]):
         self._pixels = pixels
@@ -50,17 +52,48 @@ class RowIndexing(Indexing):
 
     def get(self, key: Tuple[int, int]) -> RGB:
         """key: (row, col)"""
-        return self._pixels[key]
+        row, col = key
+        return self._pixels[self.row_col_to_indx(row, col)]
 
-    def set(self, key: Tuple[int, int], newvalue: RGB) -> None:
-        """key: (row, col)"""
-        self._pixels[key] = newvalue
+    def set(self, key: Union[Tuple[int, int], int], newvalue: RGB) -> None:
+        """
+        key: (row, col) or row
+        if key is a tuple, will set one LED. If key is an int corresponding to the row, will set
+        every LED in the row
+        """
+        if type(key) == tuple:
+            row, col = key
+            self._pixels[self.row_col_to_indx(row, col)] = newvalue
+        elif type(key) == int:
+            row = key
+            for i in range(self.rows[row]):
+                self._pixels[self.row_col_to_indx(row, i)] = newvalue
+        else:
+            raise NotImplementedError("key for row indexing was neither tuple or int")
+
+    def row_col_to_indx(self, row: int, col: int) -> int:
+        """Convert row and col position to index in light strip"""
+        indx = sum(self.rows[:key])
+        if row % 2 == 0:
+            indx += col
+        else:
+            indx += self.rows[row] - col
+        return indx
 
 
 class CartesianIndexing(Indexing):
     """Index into the light strip as a grid on 2D space.
-    This is done by mapping lights in sequence to integer 2 dimensional coordinates."""
+    This is done by mapping lights in sequence to integer 2 dimensional coordinates.
 
+    Assumes rows of LEDs are layed out like this:
+    --->
+     \
+      \
+    ----
+    """
+
+    # https://pypi.org/project/hqt/
+    # quadtree for later
     def __init__(self, pixels: NeoPixel, rows: int, cols: int):
         self._pixels = pixels
         self.ROWS = rows

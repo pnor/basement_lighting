@@ -63,3 +63,7 @@ def clamp(num, min_value, max_value):
 
 def sigmoid(x: float) -> float:
     return 1 / (1 + np.exp(-x))
+
+
+def distance_formula(x1: float, y1: float, x2: float, y2: float):
+    return np.sqrt(np.power(x2 - x1, 2) + np.power(y2 - y1, 2))

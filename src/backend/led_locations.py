@@ -99,7 +99,17 @@ class LEDSpace:
         `max_distance` is the largest distance a point will be returned from the queried point querying for specific
         location in 2D space
         """
-        pass
+        left = x - (max_distance / 2)
+        right = x + (max_distance / 2)
+        bot = y - (max_distance / 2)
+        top = y + (max_distance / 2)
+        self._quadtree.set_mask((left, bot), (left, top), (right, top), (right, bot))
+        closest = None
+        for led in self._quadtree.elements():
+            pass
+        # TODO
+
+        self._quadtree.set_mask(None)
 
     def get_LEDs_around_point(
         self, x: float, y: float, range: float = 0.05

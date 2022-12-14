@@ -91,7 +91,7 @@ class Ceiling:
         """Use floating point polar indexing"""
         self._indexing = FloatPolarIndexing(self._pixels, rows, cols)
 
-    def __getitem__(self, key: Any) -> RGB:
+    def __getitem__(self, key: Any) -> Optional[RGB]:
         return self._indexing.get(key)
 
     def __setitem__(self, key: Any, value: RGB) -> None:

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 from neopixel import NeoPixel
-from typing import Any, Tuple, List, Union
+from typing import Any, Tuple, List, Union, Optional
 
 from backend.backend_types import RGB
+from backend.led_locations import LEDSpace
 
 """
 Abstraction of how indexing gets and sets indeces
@@ -18,7 +19,7 @@ class Indexing:
     def __init__(self):
         pass
 
-    def get(self, key: Any) -> RGB:
+    def get(self, key: Any) -> Optional[RGB]:
         raise NotImplementedError("'Indexing' class is abstract and should not be used")
         return (0, 0, 0)
 
@@ -34,7 +35,7 @@ class LinearIndexing(Indexing):
     def __init__(self, pixels: NeoPixel):
         self._pixels = pixels
 
-    def get(self, key: int) -> RGB:
+    def get(self, key: int) -> Optional[RGB]:
         return self._pixels[key]
 
     def set(self, key: int, newvalue: RGB) -> None:
@@ -50,7 +51,7 @@ class RowIndexing(Indexing):
         self._pixels = pixels
         self.rows = lights_per_row
 
-    def get(self, key: Tuple[int, int]) -> RGB:
+    def get(self, key: Tuple[int, int]) -> Optional[RGB]:
         """key: (row, col)"""
         row, col = key
         return self._pixels[self.row_col_to_indx(row, col)]
@@ -94,21 +95,25 @@ class CartesianIndexing(Indexing):
     Indexing will yield the single closest LED to where user specified
     """
 
-    # https://pypi.org/project/hqt/
-    # quadtree for later
     def __init__(self, pixels: NeoPixel, lights_per_row: List[int]):
         self._pixels = pixels
         self.rows = lights_per_row
 
-    def get(self, key: Tuple[int, int]) -> RGB:
-        """key: (x, y)"""
-        # TODO
-        return [0, 0, 0]
+        self._led_spacing = LEDSpace()
+        self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
+
+    def get(self, key: Tuple[float, float]) -> Optional[RGB]:
+        """key: (x, y), x and y in (0..1)"""
+        x, y = key
+        indx = self._led_spacing.get_closest_LED_index(x, y)
+        return None if indx is None else self._pixels[indx]
 
     def set(self, key: Tuple[int, int], newvalue: RGB) -> None:
         """key: (x, y)"""
-        # TODO
-        pass
+        x, y = key
+        indx = self._led_spacing.get_closest_LED_index(x, y)
+        if indx is not None:
+            self._pixels[indx] = newvalue
 
 
 class PolarIndexing(Indexing):
@@ -125,7 +130,7 @@ class PolarIndexing(Indexing):
         self.ROWS = rows
         self.COLS = cols
 
-    def get(self, key: Tuple[float, float]) -> RGB:
+    def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """
         key: (radius, theta)
         """
@@ -150,7 +155,7 @@ class FloatCartesianIndexing(Indexing):
         self.ROWS = rows
         self.COLS = cols
 
-    def get(self, key: Tuple[float, float]) -> RGB:
+    def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """key: (x, y)"""
         # TODO
         return [0, 0, 0]
@@ -175,7 +180,7 @@ class FloatPolarIndexing(Indexing):
         self.ROWS = rows
         self.COLS = cols
 
-    def get(self, key: Tuple[float, float]) -> RGB:
+    def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """
         key: (radius, theta)
         """

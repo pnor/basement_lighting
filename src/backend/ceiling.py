@@ -73,6 +73,7 @@ class Ceiling:
     def testing_mode(
         self, lights_per_row: Optional[List[int]] = None, print_to_stdout=True
     ):
+        """Note: to get std output, must explicitly call ceiling.show()"""
         self._test_print = print_to_stdout
         self._test_display = TestDisplay(
             lights_per_row if lights_per_row else CEILING_ROW_ARRANGEMENT, self._pixels

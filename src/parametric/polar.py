@@ -21,22 +21,21 @@ CEILING_ROW_ARRANGEMENT = [
     20,  # ---
 ]
 ceil = Ceiling(auto_write=False)
-ceil.use_cartesian(CEILING_ROW_ARRANGEMENT)
+ceil.use_polar(CEILING_ROW_ARRANGEMENT)
 ceil.testing_mode(CEILING_ROW_ARRANGEMENT)
 ceil.clear()
 
-print(ceil._indexing._led_spacing._quadtree)
+# print(ceil._indexing._led_spacing._quadtree)
 # for i in ceil._indexing._led_spacing._quadtree.elements():
 #     print(i)
 # print(list(ceil._indexing._led_spacing._quadtree.elements()))
 
 
-# regions test
-ceil[(0, 0):(0.5, 0.5)] = (255, 0, 0)
-ceil[(0.5, 0.5):(1, 1)] = (255, 0, 0)
-ceil[(0.5, 0):(1, 0.5)] = (0, 255, 0)
-ceil[(0, 0.5):(0.5, 1)] = (0, 255, 0)
+# polar points
+for theta in range(0, 360, 10):
+    ceil[0.5, theta] = (255, 0, 0)
 
+ceil.show()
 # corners test
 # TODO
 

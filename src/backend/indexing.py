@@ -6,7 +6,7 @@ import numpy as np
 
 from backend.backend_types import RGB
 from backend.led_locations import LEDSpace
-from backend.util import polar_to_cartesian, transform_origin_space_to_zero_one
+from backend.util import polar_to_cartesian, transform_unit_circle_to_origin
 
 """
 Abstraction of how indexing gets and sets indeces
@@ -172,9 +172,7 @@ class PolarIndexing(Indexing):
         r, theta = key
         theta %= 360
         x, y = polar_to_cartesian(r, theta)
-        x, y = transform_origin_space_to_zero_one(
-            x, y, self._origin[0], self._origin[1]
-        )
+        x, y = transform_unit_circle_to_origin(x, y, self._origin[0], self._origin[1])
         # get location in light strip
         indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
         return None if indx is None else self._pixels[indx]
@@ -197,7 +195,7 @@ class PolarIndexing(Indexing):
             r, theta = key
             theta %= 360
             x, y = polar_to_cartesian(r, theta)
-            x, y = transform_origin_space_to_zero_one(
+            x, y = transform_unit_circle_to_origin(
                 x, y, self._origin[0], self._origin[1]
             )
             indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)

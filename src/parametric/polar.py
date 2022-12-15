@@ -33,7 +33,7 @@ ceil.clear()
 
 # polar points
 for theta in range(0, 360, 10):
-    ceil[0.5, theta] = (255, 0, 0)
+    ceil[0.7, theta] = (255, 0, 0)
 
 ceil.show()
 # corners test

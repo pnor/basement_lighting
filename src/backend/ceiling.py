@@ -99,9 +99,9 @@ class Ceiling:
         """Use cartesian indexing"""
         self._indexing = CartesianIndexing(self._pixels, lights_per_row, search_range)
 
-    def use_polar(self, rows: int, cols: int):
+    def use_polar(self, lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT):
         """Use polar indexing"""
-        self._indexing = PolarIndexing(self._pixels, rows, cols)
+        self._indexing = PolarIndexing(self._pixels, lights_per_row)
 
     def use_float_cartesian(self, rows: int, cols: int):
         """Use floating point cartesian indexing"""

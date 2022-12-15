@@ -4,7 +4,7 @@
 
 import colour
 import copy
-from typing import Union, List
+from typing import Union, List, Tuple
 import numpy as np
 from numba import jit
 
@@ -74,6 +74,18 @@ def distance_formula(x1: float, y1: float, x2: float, y2: float):
 
 @jit
 def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
-    x = rad * np.cos(theta)
-    y = rad * np.sin(theta)
+    x = r * np.cos(theta)
+    y = r * np.sin(theta)
+    return x, y
+
+
+@jit
+def transform_origin_space_to_zero_one(x: float, y: float) -> Tuple[float, float]:
+    """
+    Transforms coordinates in x: (-1..1), y: (-1..1) to x: (0..1), y: (0..1).
+    Mostly for converting the unit circle results in `polar_to_cartesian` to the space used to
+    locate LEDs in 2D space.
+    """
+    x = (x / 2) + 0.5
+    y = (y / 2) + 0.5
     return x, y

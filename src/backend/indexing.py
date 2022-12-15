@@ -2,6 +2,7 @@
 
 from neopixel import NeoPixel
 from typing import Any, Tuple, List, Union, Optional
+import numpy as np
 
 from backend.backend_types import RGB
 from backend.led_locations import LEDSpace
@@ -143,17 +144,31 @@ class PolarIndexing(Indexing):
     # NOTE: thinking, wherever the polar coords end up, select the closest of the 4 points around
     # it. Have a check if its v out of bounds ofc
 
-    def __init__(self, pixels: NeoPixel, lights_per_row: List[int]):
+    def __init__(
+        self, pixels: NeoPixel, lights_per_row: List[int], search_range: float = 0.2
+    ):
         self._pixels = pixels
         self._lights_per_row = lights_per_row
+        self._search_range = search_range
+
+        self._led_spacing = LEDSpace()
+        self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
 
     def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """
         key: (radius, theta)
         """
-        # TODO
         rad, theta = key
-        return [0, 0, 0]
+        x = rad * np.cos(theta)
+        y = rad * np.sin(theta)
+        # convert to 0..1 box space
+        x = (x / 2) + 0.5
+        x += 0.5
+        y = (y / 2) + 0.5
+        y += 0.5
+        # get location in light strip
+        indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
+        return None if indx is None else self._pixels[indx]
 
     def set(self, key: Tuple[float, float], newvalue: RGB) -> None:
         """

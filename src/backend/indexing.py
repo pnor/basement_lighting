@@ -184,7 +184,7 @@ class PolarIndexing(Indexing):
         key: either a tuple of 2 or 3 elements.
         If tuple of 2, represents (r, theta)
         If tuple of 3, represetns (x, y, r) and will fill a circle of radius `r` centered at `(x,
-        y)` with `newvalue`
+        y)` with `newvalue`. When doing this, `(x, y)` ignore origin, and are based in (0..1, 0..1)
         """
         if len(key) == 3:
             x, y, r = key

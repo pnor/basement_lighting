@@ -109,6 +109,8 @@ class LEDSpace:
 
         self._quadtree.set_mask(None)
 
+        for l in res:
+            print(l)
         return res
 
     def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:
@@ -134,7 +136,6 @@ class LEDSpace:
         closest: Optional[LED] = None
         closest_distance = 9999999
         for led in results:
-            print(led)
             distance = distance_formula(x, y, led.get_x(), led.get_y())
             if distance > max_distance:
                 continue

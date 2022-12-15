@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 import colour
 import sys
 
@@ -12,10 +11,20 @@ if len(sys.argv) != 2:
 
 color = sys.argv[1]
 
-ceil = Ceiling(number_lights=100, auto_write=True)
-# ceil.use_cartesian([14, 18, 16, 22, 15, 14], 0.1)
-ceil.use_cartesian()
-ceil.testing_mode()
+CEILING_ROW_ARRANGEMENT = [
+    30,  # ---
+    30,  # \
+    30,  # ---
+    30,  # \
+    30,  # ---
+    30,  # \
+    20,  # ---
+]
+ceil = Ceiling(auto_write=False)
+# ceil = Ceiling(number_lights=100, auto_write=True)
+ceil.use_cartesian(CEILING_ROW_ARRANGEMENT)
+# ceil.use_cartesian()
+ceil.testing_mode(CEILING_ROW_ARRANGEMENT)
 ceil.clear()
 
 print(ceil._indexing._led_spacing._quadtree)
@@ -24,23 +33,29 @@ print(ceil._indexing._led_spacing._quadtree)
 # print(list(ceil._indexing._led_spacing._quadtree.elements()))
 
 
-ceil[0, 0] = (255, 0, 0)
-ceil[0, 0.2] = (255, 0, 0)
-ceil[0, 0.4] = (255, 0, 0)
-ceil[0, 0.6] = (255, 0, 0)
-ceil[0, 0.8] = (255, 0, 0)
-ceil[0, 1] = (255, 0, 0)
-
-ceil[0.3, 0] = (0, 255, 0)
-ceil[0.3, 0.2] = (0, 255, 0)
-ceil[0.3, 0.4] = (0, 255, 0)
-ceil[0.3, 0.6] = (0, 255, 0)
-ceil[0.3, 0.8] = (0, 255, 0)
-ceil[0.3, 1] = (0, 255, 0)
-
-ceil[0.6, 0] = (0, 0, 255)
-ceil[0.6, 0.2] = (0, 0, 255)
-ceil[0.6, 0.4] = (0, 0, 255)
-ceil[0.6, 0.6] = (0, 0, 255)
-ceil[0.6, 0.8] = (0, 0, 255)
-ceil[0.6, 1] = (0, 0, 255)
+ceil[(0, 0):(0.5, 0.5)] = (255, 0, 0)
+ceil[(0.5, 0.5):(1, 1)] = (255, 0, 0)
+ceil[(0.5, 0):(1, 0.5)] = (0, 255, 0)
+ceil[(0, 0.5):(0.5, 1)] = (0, 255, 0)
+# ceil[0:3] = (255, 0, 0)
+# ceil[0, 0] = (255, 0, 0)
+# ceil[0, 0.2] = (255, 0, 0)
+# ceil[0, 0.4] = (255, 0, 0)
+# ceil[0, 0.6] = (255, 0, 0)
+# ceil[0, 0.8] = (255, 0, 0)
+# ceil[0, 1] = (255, 0, 0)
+#
+# ceil[0.3, 0] = (0, 255, 0)
+# ceil[0.3, 0.2] = (0, 255, 0)
+# ceil[0.3, 0.4] = (0, 255, 0)
+# ceil[0.3, 0.6] = (0, 255, 0)
+# ceil[0.3, 0.8] = (0, 255, 0)
+# ceil[0.3, 1] = (0, 255, 0)
+#
+# ceil[0.6, 0] = (0, 0, 255)
+# ceil[0.6, 0.2] = (0, 0, 255)
+# ceil[0.6, 0.4] = (0, 0, 255)
+# ceil[0.6, 0.6] = (0, 0, 255)
+# ceil[0.6, 0.8] = (0, 0, 255)
+# ceil[0.6, 1] = (0, 0, 255)
+ceil.show()

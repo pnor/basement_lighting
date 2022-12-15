@@ -69,7 +69,7 @@ class Ceiling:
         else:
             return None
 
-    def test_display(self, lights_per_row: Optional[List[int]] = None):
+    def testing_mode(self, lights_per_row: Optional[List[int]] = None):
         self._test_display = TestDisplay(
             lights_per_row if lights_per_row else CEILING_ROW_ARRANGEMENT, self._pixels
         )

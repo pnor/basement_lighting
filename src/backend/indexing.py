@@ -118,10 +118,16 @@ class CartesianIndexing(Indexing):
         If slice, is 2 tuples, (x1, y1):(x2, y2), and will set box spanning x1..x2 and y1..y2 to
         same color"""
         if type(key) is slice:
-            x1, y1 = slice.start
-            x2, y2 = slice.stop
-            horiz_dist = abs(x2 - x1)
-            vert_dist = abs(y2 - y1)
+            x1, y1 = key.start
+            x2, y2 = key.stop
+            epsilon = 0.08  # little extra to get points on the borders
+            horiz_dist = abs(x2 - x1) + epsilon
+            vert_dist = abs(y2 - y1) + epsilon
+            x1 -= epsilon
+            y1 -= epsilon
+
+            x = min(x1, x2) + (horiz_dist / 2)
+            y = min(y1, y2) + (vert_dist / 2)
 
             leds = self._led_spacing.get_LEDs_in_area(x, y, horiz_dist, vert_dist)
             for l in leds:

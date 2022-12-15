@@ -32,9 +32,9 @@ class TestDisplay:
                 color = self._pixels[indx]
 
                 if i % 2 == 0:  # horizontal -
-                    line += truecolor.fore_text("x", color)
+                    line += truecolor.color_text("x", color, (0, 0, 0))
                 else:  # diagonal \
-                    line += truecolor.fore_text("\\", color)
+                    line = truecolor.color_text("-", color, (0, 0, 0)) + line
 
                 indx += 1
 

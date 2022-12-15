@@ -1,0 +1,22 @@
+// Text utils
+@use "sass:map";
+
+@use "fonts" as *;
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+@each $i, $s in $font-sizes {
+    .text-size-#{$i} {
+        font-size: $s;
+    }
+}

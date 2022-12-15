@@ -1,0 +1,17 @@
+// Size and ratio utils
+@for $i from 0 through 10 {
+    $size: $i * 10;
+
+    .w-#{$size} {
+        width: #{$size * 1%};
+    }
+
+    .h-#{$size} {
+        height: #{$size * 1%};
+    }
+}
+
+.ratio-1-1 {
+    width: 100%;
+    padding-bottom: 100%;
+}

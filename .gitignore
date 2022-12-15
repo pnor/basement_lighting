@@ -16,3 +16,6 @@ yarn-error.log*
 *.egg
 build
 htmlcov
+
+node_modules/
+static/css/

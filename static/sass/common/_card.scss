@@ -1,0 +1,19 @@
+// Generic card block
+@use "sass:color";
+
+@use "control" as *;
+@use "colors" as *;
+
+.card {
+    @include control;
+
+    background: $color-bg;
+
+    &__content {
+        border-top: $control-border-size solid $color-fg;
+
+        &--borderless {
+            border-top: none;
+        }
+    }
+}

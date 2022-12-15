@@ -1,0 +1,61 @@
+// Colors Default
+@use "sass:map";
+@use "sass:color";
+
+
+$colors: (
+    "black": #0E0F19,
+    "white": #F2F7F2,
+    "red": #92140C,
+    "orange": #FF430A,
+    "yellow": #FFC914,
+    "green": #6FAF5A,
+    "blue": #4C9BBD,
+    "purple": #77678E,
+);
+
+$opacity: (
+    "0": 0,
+    "1": .15,
+    "2": .25,
+    "3": .375,
+    "4": .50,
+    "5": .60,
+    "6": .75,
+    "7": .90,
+    "8": 1,
+);
+
+$color-fg: map.get($colors, "black");
+$color-bg: map.get($colors, "white");
+$color-primary: map.get($colors, "blue");
+$color-warn: map.get($colors, "red");
+$color-ok: map.get($colors, "green");
+$color-important: map.get($colors, "yellow");
+$color-link: color.scale($color-primary, $lightness: -50%);
+$color-link-hover: color.scale($color-link, $lightness: 25%);
+$color-link-active: color.scale($color-link, $lightness: 40%);
+
+$color-gradient-1: map.get($colors, "orange");
+$color-gradient-2: map.get($colors, "blue");
+
+$color-shadow: color.change(map.get($colors, "black"), $alpha: map.get($opacity, "2"));
+
+// Overall coloring
+html {
+    background-image: url("../images/background.jpg");
+    background-size: cover;
+    color: $color-fg;
+}
+
+a {
+    color: $color-link;
+
+    &:hover {
+        color: $color-link-hover;
+    }
+
+    &:active {
+        color: $color-link-active;
+    }
+}

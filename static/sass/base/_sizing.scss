@@ -1,0 +1,8 @@
+// Default sizing/scaling
+
+$scale-min: 8px;
+$scale-max: 16px;
+
+html {
+    font-size: clamp($scale-min, 2vw, $scale-max);
+}

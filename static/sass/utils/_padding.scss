@@ -1,0 +1,35 @@
+// Padding utils
+@use "sass:map";
+@use "spacing" as *;
+
+@each $i, $s in $spacing {
+    .pl-#{$i} {
+        padding-left: $s;
+    }
+
+    .pr-#{$i} {
+        padding-right: $s;
+    }
+
+    .pt-#{$i} {
+        padding-top: $s;
+    }
+
+    .pb-#{$i} {
+        padding-bottom: $s;
+    }
+
+    .px-#{$i} {
+        padding-left: $s;
+        padding-right: $s;
+    }
+
+    .py-#{$i} {
+        padding-top: $s;
+        padding-bottom: $s;
+    }
+
+    .p-#{$i} {
+        padding: $s;
+    }
+}

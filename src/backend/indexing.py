@@ -99,7 +99,7 @@ class CartesianIndexing(Indexing):
         self, pixels: NeoPixel, lights_per_row: List[int], search_range: float = 0.2
     ):
         self._pixels = pixels
-        self.rows = lights_per_row
+        self._lights_per_row = lights_per_row
         self._search_range = search_range
 
         self._led_spacing = LEDSpace()
@@ -129,10 +129,9 @@ class PolarIndexing(Indexing):
     # NOTE: thinking, wherever the polar coords end up, select the closest of the 4 points around
     # it. Have a check if its v out of bounds ofc
 
-    def __init__(self, pixels: NeoPixel, rows: int, cols: int):
+    def __init__(self, pixels: NeoPixel, lights_per_row: List[int]):
         self._pixels = pixels
-        self.ROWS = rows
-        self.COLS = cols
+        self._lights_per_row = lights_per_row
 
     def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """

@@ -30,13 +30,13 @@ ceil.clear()
 #     print(i)
 # print(list(ceil._indexing._led_spacing._quadtree.elements()))
 
+# circle of radius
+ceil[0.5, 0.5, 0.4] = (0, 0, 255)
 
 # polar points
 for theta in range(0, 360, 10):
     ceil[0.8, theta] = (255, 0, 0)
 
-# circle of radius
-ceil[0.5, 0.5, 0.4] = (0, 0, 255)
 
 ceil.show()
 # corners test

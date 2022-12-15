@@ -111,13 +111,27 @@ class CartesianIndexing(Indexing):
         indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
         return None if indx is None else self._pixels[indx]
 
-    def set(self, key: Tuple[int, int], newvalue: RGB) -> None:
-        """key: (x, y)"""
-        x, y = key
-        indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
-        if indx is not None:
-            print(indx)
-            self._pixels[indx] = newvalue
+    def set(self, key: Union[Tuple[float, float], slice], newvalue: RGB) -> None:
+        """key: either a tuple or slice.
+        If tuple, (x, y) are in (0..1)
+        If slice, is 2 tuples, (x1, y1):(x2, y2), and will set box spanning x1..x2 and y1..y2 to
+        same color"""
+        if type(key) is slice:
+            x1, y1 = slice.start
+            x2, y2 = slice.stop
+            horiz_dist = abs(x2 - x1)
+            vert_dist = abs(y2 - y1)
+
+            leds = self._led_spacing.get_LEDs_in_area(x, y, horiz_dist, vert_dist)
+            for l in leds:
+                self._pixels[l._index] = newvalue
+
+        else:
+            x, y = key
+            indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
+            if indx is not None:
+                print(indx)
+                self._pixels[indx] = newvalue
 
 
 class PolarIndexing(Indexing):

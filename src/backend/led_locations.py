@@ -89,28 +89,38 @@ class LEDSpace:
 
                 indx += 1
 
-    def get_LEDs_around_point(
-        self, x: float, y: float, search_range: float = 0.10
+    def get_LEDs_in_area(
+        self, x: float, y: float, width: float, height: float
     ) -> List[LED]:
         """
-        `search_range`: radius around (x, y) that points should be returned
+        `width`: width of box centered on `(x, y)`
+        `height`: height of box centered on `(x, y)`
         """
-        left = x - (search_range / 2)
-        right = x + (search_range / 2)
-        bot = y - (search_range / 2)
-        top = y + (search_range / 2)
+        left = x - (width / 2)
+        right = x + (width / 2)
+        bot = y - (height / 2)
+        top = y + (height / 2)
 
         self._quadtree.set_mask([(left, bot), (left, top), (right, top), (right, bot)])
 
         res: List[LED] = []
         for led in self._quadtree.elements():
-            distance = distance_formula(x, y, led.get_x(), led.get_y())
-            if distance <= search_range:
-                res += [led]
+            res += [led]
 
         self._quadtree.set_mask(None)
 
         return res
+
+    def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:
+        """
+        `radius` around (x, y) of points should be returned
+        """
+        res = self.get_LEDs_in_area(x, y, radius * 2, radius * 2)
+        return list(
+            filter(
+                lambda l: distance_formula(x, y, l.get_x(), l.get_y()) <= radius, res
+            )
+        )
 
     def get_closest_LED_index(
         self, x: float, y: float, max_distance: float = 0.30
@@ -119,9 +129,9 @@ class LEDSpace:
         `max_distance` is the largest distance a point will be returned from the queried point querying for specific
         location in 2D space
         """
-        results = self.get_LEDs_around_point(x, y, max_distance)
+        results = self.get_LEDs_in_area(x, y, max_distance * 2, max_distance * 2)
 
-        closest: Option[LED] = None
+        closest: Optional[LED] = None
         closest_distance = 9999999
         for led in results:
             print(led)

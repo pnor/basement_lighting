@@ -7,6 +7,8 @@ Estimate the location of LEDs in 2D space based on how they are arranged
 from typing import List, Optional
 from smartquadtree import Quadtree
 
+from backend.util import distance_formula
+
 
 class LED:
     def __init__(self, x: float, y: float, index: int):
@@ -67,11 +69,6 @@ class LEDSpace:
             row_height = 1 / (len(lights_per_row) // 2)
 
         for i in range(len(lights_per_row)):
-            # lights = (
-            #     range(lights_per_row[i])
-            #     if i % 2 == 0
-            #     else reversed(range(lights_per_row[i]))
-            # )
             lights = range(lights_per_row[i])
 
             number_lights = lights_per_row[i]
@@ -92,29 +89,56 @@ class LEDSpace:
 
                 indx += 1
 
+    def get_LEDs_in_area(
+        self, x: float, y: float, width: float, height: float
+    ) -> List[LED]:
+        """
+        `width`: width of box centered on `(x, y)`
+        `height`: height of box centered on `(x, y)`
+        """
+        left = x - (width / 2)
+        right = x + (width / 2)
+        bot = y - (height / 2)
+        top = y + (height / 2)
+
+        self._quadtree.set_mask([(left, bot), (left, top), (right, top), (right, bot)])
+
+        res: List[LED] = []
+        for led in self._quadtree.elements():
+            res += [led]
+
+        self._quadtree.set_mask(None)
+        return res
+
+    def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:
+        """
+        `radius` around (x, y) of points should be returned
+        """
+        res = self.get_LEDs_in_area(x, y, radius * 2, radius * 2)
+        return list(
+            filter(
+                lambda l: distance_formula(x, y, l.get_x(), l.get_y()) <= radius, res
+            )
+        )
+
     def get_closest_LED_index(
-        self, x: float, y: float, max_distance: float = 0.05
+        self, x: float, y: float, max_distance: float = 0.30
     ) -> Optional[int]:
         """
         `max_distance` is the largest distance a point will be returned from the queried point querying for specific
         location in 2D space
         """
-        left = x - (max_distance / 2)
-        right = x + (max_distance / 2)
-        bot = y - (max_distance / 2)
-        top = y + (max_distance / 2)
-        self._quadtree.set_mask((left, bot), (left, top), (right, top), (right, bot))
-        closest = None
-        for led in self._quadtree.elements():
-            pass
-        # TODO
+        results = self.get_LEDs_in_area(x, y, max_distance * 2, max_distance * 2)
 
+        closest: Optional[LED] = None
+        closest_distance = 9999999
+        for led in results:
+            distance = distance_formula(x, y, led.get_x(), led.get_y())
+            if distance > max_distance:
+                continue
+            if closest is None or distance < closest_distance:
+                closest = led
+                closest_distance = distance
         self._quadtree.set_mask(None)
 
-    def get_LEDs_around_point(
-        self, x: float, y: float, range: float = 0.05
-    ) -> List[LED]:
-        """
-        `range`: radius around (x, y) that points should be returned
-        """
-        pass
+        return None if closest is None else closest._index

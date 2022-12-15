@@ -17,4 +17,5 @@ yarn-error.log*
 build
 htmlcov
 
-src/package/static/css/
+node_modules/
+static/css/

@@ -1,12 +1,6 @@
 from flask import Flask
 import os
-from package.blueprints import root
-import sass
-import sassutils
-from sassutils.wsgi import SassMiddleware
-
-
-
+from .blueprints import root
 
 def create_app(test_config=None):
     # create and configure the app
@@ -14,10 +8,6 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
     )
-
-    app.wsgi_app = SassMiddleware(app.wsgi_app, {
-        'package': ('static/sass', 'static/css', '/static/css')
-    })
 
     if test_config is None:
         # load the instance config, if it exists, when not testing

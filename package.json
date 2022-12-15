@@ -1,0 +1,25 @@
+{
+  "name": "byronsbasement",
+  "version": "1.0.0",
+  "description": "lighting up his basement with pis",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "watch": "flask run && ./node_modules/.bin/sass --watch --update --style=expanded --load-path=static/sass/base --load-path=static/sass/common --load-path=static/sass/utils static/sass/main.scss:static/css/main.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pnor/byronsbasement.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pnor/byronsbasement/issues"
+  },
+  "homepage": "https://github.com/pnor/byronsbasement#readme",
+  "devDependencies": {
+    "sass": "^1.56.2"
+  }
+}

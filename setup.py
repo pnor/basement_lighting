@@ -48,7 +48,10 @@ setup(
     python_requires=">=3.9",
     install_requires=[],
     extras_require={},
-    setup_requires=[],
+    sass_manifests={
+        'byronsbasement': ('static/sass', 'static/css')
+    },
+    setup_requires=['libsass >= 0.6.0'],
     entry_points={
         "console_scripts": [
             #            "api = api.api:main",

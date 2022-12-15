@@ -1,0 +1,19 @@
+@use 'sass:map';
+
+@use 'control' as *;
+@use 'colors' as *;
+@use 'spacing' as *;
+
+// Button Default
+.button {
+    @include control;
+
+    padding: $spacing-p-button;
+    background: $color-bg;
+    color: $color-fg;
+
+    &:hover, :active {
+        background: $color-fg;
+        color: $color-bg;
+    }
+}

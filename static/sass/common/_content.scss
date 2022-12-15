@@ -1,0 +1,15 @@
+// Main content block
+@use "sass:map";
+@use "sass:color";
+
+@use "colors" as *;
+
+.content {
+    min-height: 100vh;
+    max-width: 50rem;
+    
+    &--filled {
+        background: color.change($color-bg, $alpha: map.get($opacity, "3"));
+        backdrop-filter: blur(10px);
+    }
+}

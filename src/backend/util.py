@@ -6,6 +6,7 @@ import colour
 import copy
 from typing import Union, List
 import numpy as np
+from numba import jit
 
 from backend.backend_types import RGB
 
@@ -55,14 +56,24 @@ def color_range(
     return [color_obj_to_rgb(c) for c in colors_spanning]
 
 
+@jit
 def clamp(num, min_value, max_value):
     num = max(min(num, max_value), min_value)
     return num
 
 
+@jit
 def sigmoid(x: float) -> float:
     return 1 / (1 + np.exp(-x))
 
 
+@jit
 def distance_formula(x1: float, y1: float, x2: float, y2: float):
     return np.sqrt(np.power(x2 - x1, 2) + np.power(y2 - y1, 2))
+
+
+@jit
+def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
+    x = rad * np.cos(theta)
+    y = rad * np.sin(theta)
+    return x, y

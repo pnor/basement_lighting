@@ -6,6 +6,7 @@ import numpy as np
 
 from backend.backend_types import RGB
 from backend.led_locations import LEDSpace
+from backend.util import polar_to_cartesian, transform_to_zero_to_one
 
 """
 Abstraction of how indexing gets and sets indeces
@@ -163,24 +164,27 @@ class PolarIndexing(Indexing):
         """
         key: (radius, theta)
         """
-        rad, theta = key
-        x = rad * np.cos(theta)
-        y = rad * np.sin(theta)
-        # convert to 0..1 box space
-        x = (x / 2) + 0.5
-        x += 0.5
-        y = (y / 2) + 0.5
-        y += 0.5
+        x, y = polar_to_cartesian(*key)
+        x, y = transform_to_zero_to_one(x, y)
         # get location in light strip
         indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
         return None if indx is None else self._pixels[indx]
 
-    def set(self, key: Tuple[float, float], newvalue: RGB) -> None:
+    def set(self, key: Union[float, Tuple[float, float]], newvalue: RGB) -> None:
         """
-        key: (radius, theta)
-        """
-        # TODO
-        rad, theta = key
+        key: either a tuple or slice.
+        If tuple, (x, y) are in (0..1)
+        If slice, is 2 tuples, (x1, y1):(x2, y2), and will set box spanning x1..x2 and y1..y2 to
+        same color"""
+        if type(key) is float:
+            pass
+            # TODO
+        else:
+            x, y = polar_to_cartesian(*key)
+            x, y = transform_to_zero_to_one(x, y)
+            indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
+            if indx is not None:
+                self._pixels[indx] = newvalue
 
 
 class FloatCartesianIndexing(Indexing):

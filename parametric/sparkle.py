@@ -34,7 +34,7 @@ DELTA = 1 / FPS
 
 progress_indeces = (((np.arange(100) / 99) ** 10) * 99).astype(int)
 progress_indeces = list(progress_indeces) + list(reversed(progress_indeces))
-progresses = np.random.random_integers(0, 199, ceil.NUMBER_LIGHTS)
+progresses = np.random.randint(0, 199 + 1, ceil.NUMBER_LIGHTS)
 
 cur_time = 0
 

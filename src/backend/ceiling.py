@@ -75,9 +75,13 @@ class Ceiling:
         """Use row based indexing"""
         self._indexing = RowIndexing(self._pixels, lights_per_row)
 
-    def use_cartesian(self, rows: int, cols: int):
+    def use_cartesian(
+        self,
+        lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
+        search_range: float = 0.2,
+    ):
         """Use cartesian indexing"""
-        self._indexing = CartesianIndexing(self._pixels, rows, cols)
+        self._indexing = CartesianIndexing(self._pixels, lights_per_row, search_range)
 
     def use_polar(self, rows: int, cols: int):
         """Use polar indexing"""

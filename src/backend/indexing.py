@@ -95,9 +95,12 @@ class CartesianIndexing(Indexing):
     Indexing will yield the single closest LED to where user specified
     """
 
-    def __init__(self, pixels: NeoPixel, lights_per_row: List[int]):
+    def __init__(
+        self, pixels: NeoPixel, lights_per_row: List[int], search_range: float = 0.2
+    ):
         self._pixels = pixels
         self.rows = lights_per_row
+        self._search_range = search_range
 
         self._led_spacing = LEDSpace()
         self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
@@ -105,14 +108,15 @@ class CartesianIndexing(Indexing):
     def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """key: (x, y), x and y in (0..1)"""
         x, y = key
-        indx = self._led_spacing.get_closest_LED_index(x, y)
+        indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
         return None if indx is None else self._pixels[indx]
 
     def set(self, key: Tuple[int, int], newvalue: RGB) -> None:
         """key: (x, y)"""
         x, y = key
-        indx = self._led_spacing.get_closest_LED_index(x, y)
+        indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
         if indx is not None:
+            print(indx)
             self._pixels[indx] = newvalue
 
 

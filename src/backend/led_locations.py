@@ -69,11 +69,6 @@ class LEDSpace:
             row_height = 1 / (len(lights_per_row) // 2)
 
         for i in range(len(lights_per_row)):
-            # lights = (
-            #     range(lights_per_row[i])
-            #     if i % 2 == 0
-            #     else reversed(range(lights_per_row[i]))
-            # )
             lights = range(lights_per_row[i])
 
             number_lights = lights_per_row[i]
@@ -95,7 +90,7 @@ class LEDSpace:
                 indx += 1
 
     def get_LEDs_around_point(
-        self, x: float, y: float, search_range: float = 0.05
+        self, x: float, y: float, search_range: float = 0.10
     ) -> List[LED]:
         """
         `search_range`: radius around (x, y) that points should be returned
@@ -118,7 +113,7 @@ class LEDSpace:
         return res
 
     def get_closest_LED_index(
-        self, x: float, y: float, max_distance: float = 0.10
+        self, x: float, y: float, max_distance: float = 0.30
     ) -> Optional[int]:
         """
         `max_distance` is the largest distance a point will be returned from the queried point querying for specific
@@ -129,6 +124,7 @@ class LEDSpace:
         closest: Option[LED] = None
         closest_distance = 9999999
         for led in results:
+            print(led)
             distance = distance_formula(x, y, led.get_x(), led.get_y())
             if distance > max_distance:
                 continue

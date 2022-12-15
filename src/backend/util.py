@@ -80,12 +80,15 @@ def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
 
 
 @jit
-def transform_origin_space_to_zero_one(x: float, y: float) -> Tuple[float, float]:
+def transform_unit_circle_to_origin(
+    x: float, y: float, orig_x: float, orig_y: float
+) -> Tuple[float, float]:
     """
-    Transforms coordinates in x: (-1..1), y: (-1..1) to x: (0..1), y: (0..1).
+    Transforms coordinates in x: (-1..1), y: (-1..1) to box with width and height 1 centered on
+    `(orig_x, orig_y)`.
     Mostly for converting the unit circle results in `polar_to_cartesian` to the space used to
     locate LEDs in 2D space.
     """
-    x = (x / 2) + 0.5
-    y = (y / 2) + 0.5
+    x = (x / 2) + orig_x
+    y = (y / 2) + orig_y
     return x, y

@@ -151,9 +151,14 @@ class PolarIndexing(Indexing):
     # it. Have a check if its v out of bounds ofc
 
     def __init__(
-        self, pixels: NeoPixel, lights_per_row: List[int], search_range: float = 0.2
+        self,
+        pixels: NeoPixel,
+        lights_per_row: List[int],
+        origin: Tuple[float, float] = (0.5, 0.5),
+        search_range: float = 0.2,
     ):
         self._pixels = pixels
+        self._origin = origin
         self._lights_per_row = lights_per_row
         self._search_range = search_range
 
@@ -164,24 +169,37 @@ class PolarIndexing(Indexing):
         """
         key: (radius, theta)
         """
-        x, y = polar_to_cartesian(*key)
-        x, y = transform_origin_space_to_zero_one(x, y)
+        r, theta = key
+        theta %= 360
+        x, y = polar_to_cartesian(r, theta)
+        x, y = transform_origin_space_to_zero_one(
+            x, y, self._origin[0], self._origin[1]
+        )
         # get location in light strip
         indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
         return None if indx is None else self._pixels[indx]
 
-    def set(self, key: Union[float, Tuple[float, float]], newvalue: RGB) -> None:
+    def set(
+        self, key: Union[Tuple[float, float, float], Tuple[float, float]], newvalue: RGB
+    ) -> None:
         """
-        key: either a tuple or slice.
-        If tuple, (x, y) are in (0..1)
-        If slice, is 2 tuples, (x1, y1):(x2, y2), and will set box spanning x1..x2 and y1..y2 to
-        same color"""
-        if type(key) is float:
-            pass
-            # TODO
+        key: either a tuple of 2 or 3 elements.
+        If tuple of 2, represents (r, theta)
+        If tuple of 3, represetns (x, y, r) and will fill a circle of radius `r` centered at `(x,
+        y)` with `newvalue`
+        """
+        if len(key) == 3:
+            x, y, r = key
+            leds = self._led_spacing.get_LEDs_in_radius(x, y, r)
+            for l in leds:
+                self._pixels[l._index] = newvalue
         else:
-            x, y = polar_to_cartesian(*key)
-            x, y = transform_origin_space_to_zero_one(x, y)
+            r, theta = key
+            theta %= 360
+            x, y = polar_to_cartesian(r, theta)
+            x, y = transform_origin_space_to_zero_one(
+                x, y, self._origin[0], self._origin[1]
+            )
             indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
             if indx is not None:
                 self._pixels[indx] = newvalue

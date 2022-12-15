@@ -28,7 +28,6 @@ def color_obj_to_rgb(color_obj: colour.Color) -> RGB:
 
 
 def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:
-    print(color)
     if type(color) is list or type(color) is tuple:
         assert len(color) >= 3
         return colour.Color(rgb=color)

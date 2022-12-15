@@ -3,6 +3,7 @@
 import colorama
 from neopixel import NeoPixel
 import truecolor
+from blessings import Terminal
 
 from typing import List
 
@@ -19,6 +20,9 @@ class TestDisplay:
     def __init__(self, lights_per_row: List[int], pixels: NeoPixel) -> None:
         self._lights_per_row = lights_per_row
         self._pixels = pixels
+        self._terminal = Terminal()
+        # Make space for the terminal display
+        print(self._terminal.move_down * (len(lights_per_row)))
 
     def show(self):
         MAX_COLS = max(self._lights_per_row)
@@ -40,4 +44,5 @@ class TestDisplay:
 
             full_output = line + "\n" + full_output
 
+        print((self._terminal.move_up * (len(self._lights_per_row) + 1)), end="")
         print(full_output)

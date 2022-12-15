@@ -108,9 +108,6 @@ class LEDSpace:
             res += [led]
 
         self._quadtree.set_mask(None)
-
-        for l in res:
-            print(l)
         return res
 
     def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:

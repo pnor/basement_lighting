@@ -42,12 +42,13 @@ class Ceiling:
         self._indexing = LinearIndexing(self._pixels)
         self.NUMBER_LIGHTS = NUMBER_LIGHTS
         self._test_display = None
+        self._test_print = False
 
     def clear(self, show=True) -> None:
         """Set every pixel to black (and updates the LEDs)"""
         self.fill([0, 0, 0])
         if show:
-            self._pixels.show()
+            self.show()
 
     def fill(self, clear_color: RGB) -> None:
         """Set every pixel to the given color"""
@@ -56,7 +57,7 @@ class Ceiling:
     def show(self) -> None:
         """Update all pixels with updated colors at once"""
         self._pixels.show()
-        if self._test_display:
+        if self._test_display and self._test_print:
             self._test_display.show()
 
     def set_auto_write(self, auto_write: bool) -> None:
@@ -69,7 +70,10 @@ class Ceiling:
         else:
             return None
 
-    def testing_mode(self, lights_per_row: Optional[List[int]] = None):
+    def testing_mode(
+        self, lights_per_row: Optional[List[int]] = None, print_to_stdout=True
+    ):
+        self._test_print = print_to_stdout
         self._test_display = TestDisplay(
             lights_per_row if lights_per_row else CEILING_ROW_ARRANGEMENT, self._pixels
         )

@@ -120,7 +120,7 @@ class CartesianIndexing(Indexing):
         if type(key) is slice:
             x1, y1 = key.start
             x2, y2 = key.stop
-            epsilon = 0.08  # little extra to get points on the borders
+            epsilon = 0.01  # little extra to get points on the borders
             horiz_dist = abs(x2 - x1) + epsilon
             vert_dist = abs(y2 - y1) + epsilon
             x1 -= epsilon
@@ -137,7 +137,6 @@ class CartesianIndexing(Indexing):
             x, y = key
             indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
             if indx is not None:
-                print(indx)
                 self._pixels[indx] = newvalue
 
 

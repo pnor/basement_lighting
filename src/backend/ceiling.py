@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
-from microcontroller import Pin
-import neopixel
 import board
+import neopixel
+
+from microcontroller import Pin
 from typing import Callable, Any, Optional
+
+from backend.test_display import TestDisplay
 
 from .backend_types import RGB
 
@@ -38,6 +41,7 @@ class Ceiling:
         )
         self._indexing = LinearIndexing(self._pixels)
         self.NUMBER_LIGHTS = NUMBER_LIGHTS
+        self._test_display = None
 
     def clear(self, show=True) -> None:
         """Set every pixel to black (and updates the LEDs)"""
@@ -52,6 +56,8 @@ class Ceiling:
     def show(self) -> None:
         """Update all pixels with updated colors at once"""
         self._pixels.show()
+        if self._test_display:
+            self._test_display.show()
 
     def set_auto_write(self, auto_write: bool) -> None:
         self._pixels.auto_write = auto_write
@@ -62,6 +68,11 @@ class Ceiling:
             return self._indexing.rows
         else:
             return None
+
+    def test_display(self, lights_per_row: Optional[List[int]] = None):
+        self._test_display = TestDisplay(
+            lights_per_row if lights_per_row else CEILING_ROW_ARRANGEMENT, self._pixels
+        )
 
     def indexing(self) -> Indexing:
         """Return the current Indexing object"""

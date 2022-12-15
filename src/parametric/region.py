@@ -13,7 +13,9 @@ if len(sys.argv) != 2:
 color = sys.argv[1]
 
 ceil = Ceiling(number_lights=100, auto_write=True)
-ceil.use_cartesian([14, 18, 16, 22, 15, 14], 0.1)
+# ceil.use_cartesian([14, 18, 16, 22, 15, 14], 0.1)
+ceil.use_cartesian()
+ceil.testing_mode()
 ceil.clear()
 
 print(ceil._indexing._led_spacing._quadtree)

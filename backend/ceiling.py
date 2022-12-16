@@ -39,13 +39,14 @@ class Ceiling:
         `auto_write`: whether every write to the neopixels LED array should update the lights. *False*
         by default(!!!)
 
-        If using testing: (only provide 1 arg)
+        If using testing: (only provide 2 args)
+        `test_mode`: to true
         `number_lights`: number lights in the light strip
         """
-        if len(kwargs) == 1 and kwargs.get("number_lights") is not None:
-            self._pixels = PixelWrapper.init_for_testing(
-                number_leds=kwargs["number_lights"]
-            )
+        if kwargs.get("test_mode") and kwargs.get("number_lights") is not None:
+            self._pixels = init_for_testing(number_leds=kwargs["number_lights"])
+            self._pixels.print_to_stdout = True
+            self.testing_mode_rows()
         else:
             io_pin = kwargs.get("io_pin")
             number_lights: int = (
@@ -84,13 +85,10 @@ class Ceiling:
         else:
             return None
 
-    def testing_mode(
-        self, lights_per_row: Optional[List[int]] = None, print_to_stdout=True
+    def testing_mode_rows(
+        self, lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT, print_to_stdout=True
     ):
-        """Note: to get std output, must explicitly call ceiling.show()"""
-        self._test_display = TestDisplay(
-            lights_per_row if lights_per_row else CEILING_ROW_ARRANGEMENT, self._pixels
-        )
+        self._pixels.set_lights_per_row(lights_per_row)
 
     def indexing(self) -> Indexing:
         """Return the current Indexing object"""

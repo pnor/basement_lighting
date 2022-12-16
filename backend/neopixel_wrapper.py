@@ -24,9 +24,9 @@ class PixelWrapper:
         Use `init_with_real_board` or `init_for_testing`
         """
         self.print_to_stdout = True
-        pixel._auto_write = True
-        pixel._pixels = None
-        pixel._pretend_pixels = None
+        self._auto_write = True
+        self._pixels = None
+        self._pretend_pixels = None
 
     def set_lights_per_row(self, lights_per_row: List[int]) -> None:
         self._lights_per_row = lights_per_row

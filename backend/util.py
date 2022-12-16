@@ -79,7 +79,7 @@ def set_color_luminance(color: Union[RGB, str, colour.Color], luminance: float) 
 def dim_color(color: Union[RGB, str, colour.Color]) -> RGB:
     """Returns an extremely dimmed version of `color`
     `color` can be a hex string or rgb tuple"""
-    return set_color_luminance(0.01)
+    return set_color_luminance(color, 0.01)
 
 
 def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount) -> RGB:

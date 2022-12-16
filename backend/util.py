@@ -6,7 +6,9 @@ import colour
 import copy
 from typing import Union, List, Tuple
 import numpy as np
+import numba
 from numba import jit
+from numpy._typing import NDArray
 
 from backend.backend_types import RGB
 from backend.neopixel_wrapper import PixelWrapper
@@ -144,3 +146,14 @@ def transform_unit_circle_to_origin(
     x = (x / 2) + orig_x
     y = (y / 2) + orig_y
     return x, y
+
+
+def rotate_vector(vector: NDArray[np.float32], theta: float):
+    """
+    theta in degrees
+    """
+    theta = np.radians(theta)
+    rot_mat = np.array(
+        [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
+    )
+    return np.dot(vector, rot_mat)

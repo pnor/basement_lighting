@@ -20,13 +20,13 @@ A layer between the neopixel API and our light scripts to abstract away all that
 # Basement related constants
 NUMBER_LIGHTS = 200
 CEILING_ROW_ARRANGEMENT = [
-    20,  # ---
-    40,  # \
-    20,  # ---
-    40,  # \
-    20,  # ---
-    40,  # \
-    20,  # ---
+    29,  # ---
+    29,  # \
+    29,  # ---
+    29,  # \
+    28,  # ---
+    28,  # \
+    28,  # ---
 ]
 
 
@@ -43,8 +43,13 @@ class Ceiling:
         `test_mode`: to true
         `number_lights`: number lights in the light strip
         """
-        if kwargs.get("test_mode") and kwargs.get("number_lights") is not None:
-            self._pixels = init_for_testing(number_leds=kwargs["number_lights"])
+        if kwargs.get("test_mode"):
+            num_lights = (
+                kwargs.get("number_lights")
+                if kwargs.get("number_lights")
+                else NUMBER_LIGHTS
+            )
+            self._pixels = init_for_testing(number_leds=num_lights)
             self._pixels.print_to_stdout = True
             self.testing_mode_rows()
         else:

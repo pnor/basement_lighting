@@ -101,11 +101,16 @@ class Ceiling:
 
     def use_polar(
         self,
-        origin: Tuple[float, float] = (0.5, 0.5),
+        origin: Tuple[float, float],
         lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
     ):
+        assert len(origin) == 2
         """Use polar indexing"""
-        self._indexing = PolarIndexing(self._pixels, lights_per_row, origin)
+        self._indexing = PolarIndexing(
+            self._pixels,
+            lights_per_row=lights_per_row,
+            origin=origin,
+        )
 
     def use_float_cartesian(self, rows: int, cols: int):
         """Use floating point cartesian indexing"""

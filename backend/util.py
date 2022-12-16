@@ -11,7 +11,8 @@ from numba import jit
 
 from backend.backend_types import RGB
 
-# from backend.led_locations import LEDSpace
+# We import and type LEDSpace due to circular import dependency error /:
+# import backend.led_locations as backend_led_space
 
 
 # ===== Code working with LEDs =========================
@@ -20,7 +21,7 @@ def color_leds_in_area(
     y: float,
     effect_radius: float,
     color: RGB,
-    led_spacing: LEDSpace,
+    led_spacing,
     pixels: NeoPixel,
 ):
     leds = led_spacing.get_LEDs_in_radius(x, y, effect_radius)

@@ -18,7 +18,7 @@ def run(**kwargs):
 
     color = color_format_to_obj(color_input)
 
-    ceil = Ceiling(test_mode=True)
+    ceil = Ceiling()
     ceil.use_float_cartesian(effect_radius=0.3)
     ceil.clear()
 

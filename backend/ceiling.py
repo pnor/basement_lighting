@@ -122,9 +122,16 @@ class Ceiling:
             self._pixels, lights_per_row, effect_radius=effect_radius
         )
 
-    def use_float_polar(self, rows: int, cols: int):
+    def use_float_polar(
+        self,
+        origin: Tuple[float, float],
+        lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
+        effect_radius: float = 0.2,
+    ):
         """Use floating point polar indexing"""
-        self._indexing = FloatPolarIndexing(self._pixels, rows, cols)
+        self._indexing = FloatPolarIndexing(
+            self._pixels, lights_per_row, origin, effect_radius=effect_radius
+        )
 
     def __getitem__(self, key: Any) -> Optional[RGB]:
         return self._indexing.get(key)

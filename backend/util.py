@@ -125,6 +125,7 @@ def distance_formula(x1: float, y1: float, x2: float, y2: float):
 
 @jit
 def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
+    theta = np.radians(theta)
     x = r * np.cos(theta)
     y = r * np.sin(theta)
     return x, y

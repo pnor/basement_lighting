@@ -40,7 +40,9 @@ def set_color_luminance(color: Union[RGB, str, colour.Color], luminance: float) 
     """Returns `color` with its luminance set to `luminance` as a rgb tuple"""
     c = color_format_to_obj(color)
     c.set_luminance(luminance)
-    return c.rgb
+    rgb = c.rgb
+    rgb = (np.array(rgb) * 255).astype(int)
+    return tuple(rgb)
 
 
 def dim_color(color: Union[RGB, str, colour.Color]) -> RGB:

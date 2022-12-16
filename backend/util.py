@@ -10,7 +10,8 @@ import numpy as np
 from numba import jit
 
 from backend.backend_types import RGB
-from backend.led_locations import LEDSpace
+
+# from backend.led_locations import LEDSpace
 
 
 # ===== Code working with LEDs =========================

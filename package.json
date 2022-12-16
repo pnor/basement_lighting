@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "watch": "flask run && ./node_modules/.bin/sass --watch --update --style=expanded --load-path=static/sass/base --load-path=static/sass/common --load-path=static/sass/utils static/sass/main.scss:static/css/main.css"
+    "watch": "./node_modules/.bin/sass --watch --update --style=expanded --load-path=static/sass/base --load-path=static/sass/common --load-path=static/sass/utils static/sass/main.scss:static/css/main.css",
+    "compile": "./node_modules/.bin/sass --style=compressed --no-source-map --load-path=static/sass/base --load-path=static/sass/common --load-path=static/sass/utils static/sass/main.scss:static/css/main.css"
   },
   "repository": {
     "type": "git",

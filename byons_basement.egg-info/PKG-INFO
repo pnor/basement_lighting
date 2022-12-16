@@ -1,9 +1,13 @@
-Metadata-Version: 2.1
+Metadata-Version: 1.2
 Name: byons-basement
 Version: 0.1
 Summary: Mini project to control lights in the basement
+Home-page: UNKNOWN
 Author: 
 Author-email: 
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
 Classifier: Development Status :: 5 - Production
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: BSD License

@@ -36,6 +36,12 @@ class Ceiling:
         number_lights: int = NUMBER_LIGHTS,
         auto_write: bool = False,
     ):
+        """
+        `io_pin`: which GPIO pin neopixels should be initialized for
+        `number_lights`: number lights controlled
+        `auto_write`: whether every write to the neopixels LED array should update the lights. *False*
+        by default(!!!)
+        """
         self._pixels = neopixel.NeoPixel(
             io_pin, number_lights, auto_write=auto_write, pixel_order=neopixel.RGB
         )

@@ -31,22 +31,22 @@ def color_obj_to_rgb(color_obj: colour.Color) -> RGB:
 def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:
     if type(color) is list or type(color) is tuple:
         assert len(color) >= 3
-        return colour.Color(rgb=color)
+        return colour.Color(rgb=tuple(np.array(color) / 255))
     else:
         return colour.Color(color)
+
+
+def set_color_luminance(color: Union[RGB, str, colour.Color], luminance: float) -> RGB:
+    """Returns `color` with its luminance set to `luminance` as a rgb tuple"""
+    c = color_format_to_obj(color)
+    c.set_luminance(luminance)
+    return c.rgb
 
 
 def dim_color(color: Union[RGB, str, colour.Color]) -> RGB:
     """Returns an extremely dimmed version of `color`
     `color` can be a hex string or rgb tuple"""
-    return set_color_luminance(color, 0.01)
-
-
-def set_color_luminance(color: Union[RGB, str, colour.Color], luminance: float) -> RGB:
-    """Sets `color` to luminance `luminanace`"""
-    c = color_format_to_obj(color)
-    c.set_luminance(luminance)
-    return c.rgb
+    return set_color_luminance(0.01)
 
 
 def color_range(

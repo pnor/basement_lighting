@@ -1,8 +1,9 @@
 from multiprocessing import Process
 from typing import Callable, Optional
-import threading
 import importlib
 import json
+import signal
+import threading
 from flask import (
     Blueprint,
     flash,
@@ -73,6 +74,7 @@ def start_script() -> str:
 def stop_script() -> str:
     if state.current_process:
         state.current_process.terminate()
+        state.current_process = None
     return json.dumps({"ok": True})
 
 
@@ -95,7 +97,15 @@ def get_state() -> str:
 
 
 def function_wrapper(f: Callable) -> Callable[[str, float], None]:
+    """Wraps the function in another function that doesn't use keyword arguements.
+    Also catches interrupts from `process.terminate()` to distinguish from actually crashing
+    """
+
+    def _exit_gracefully():
+        exit(0)
+
     def _function_wrapper(color: str, interval: float):
+        signal.signal(signal.SIGTERM, _exit_gracefully)
         f(color=color, interval=interval)
 
     return _function_wrapper

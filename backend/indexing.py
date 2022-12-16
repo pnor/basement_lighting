@@ -263,7 +263,7 @@ class FloatCartesianIndexing(Indexing):
                 dist = distance_formula(l.get_x(), l.get_y(), x, y)
                 amp = max(0, 1 - (dist / self._effect_radius))
 
-                res = set_color_luminance(amp)
+                res = set_color_luminance(newvalue, amp)
                 cur = self._pixels[l._index]
                 final_color = (
                     max(res[0], cur[0]),

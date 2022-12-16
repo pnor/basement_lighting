@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 
 from typing import Callable, Any, Optional
-from backend.neopixel_wrapper import PixelWrapper
+from backend.neopixel_wrapper import (
+    PixelWrapper,
+    init_for_testing,
+    init_with_real_board,
+)
 
 from backend.test_display import TestDisplay
 
@@ -38,15 +42,23 @@ class Ceiling:
         If using testing: (only provide 1 arg)
         `number_lights`: number lights in the light strip
         """
-        if len(kwargs) == 1 and kwargs["number_lights"] is not None:
-            self._pixels = PixelWrapper.init_for_testing(kwargs["number_lights"])
-        else:
-            io_pin: Pin = kwargs["io_pin"] if kwargs["io_pin"] else board.D21
-            number_lights: int = (
-                kwargs["number_lights"] if kwargs["number_lights"] else NUMBER_LIGHTS
+        if len(kwargs) == 1 and kwargs.get("number_lights") is not None:
+            self._pixels = PixelWrapper.init_for_testing(
+                number_leds=kwargs["number_lights"]
             )
-            auto_write: bool = kwargs["auto_write"] if kwargs["auto_write"] else False
-            self._pixels = PixelWrapper(io_pin, number_lights, auto_write=auto_write)
+        else:
+            io_pin = kwargs.get("io_pin")
+            number_lights: int = (
+                kwargs.get("number_lights")
+                if kwargs.get("number_lights")
+                else NUMBER_LIGHTS
+            )
+            auto_write: bool = (
+                kwargs.get("auto_write") if kwargs.get("auto_write") else False
+            )
+            self._pixels = init_with_real_board(
+                io_pin, number_lights, auto_write=auto_write
+            )
 
         self._indexing = LinearIndexing(self._pixels)
         self.NUMBER_LIGHTS = NUMBER_LIGHTS

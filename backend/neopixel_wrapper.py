@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
-import board
-import neopixel
+try:
+    import board
+    import neopixel
+except:
+    print("running not on a rasberry pi")
 
 from microcontroller import Pin
-from typing import Optional, List
+from typing import Optional, List, Any
 
 from backend.test_display import TestDisplay
+from backend.backend_types import RGB
 
 """
 Wrapper around the neopixel api to allow for testing without the rasberry pi
@@ -14,32 +18,12 @@ Wrapper around the neopixel api to allow for testing without the rasberry pi
 
 
 class PixelWrapper:
-    def __init__(self, *args) -> None:
+    def __init__(self) -> None:
         """
-        If using real neopixel strip:
-        `io_pin`: which GPIO pin neopixels should be initialized for
-        `number_lights`: number lights controlled
-        `auto_write`: whether every write to the neopixels LED array should update the lights. *False*
-
-        If using testing mode:
-        `number_lights`:
+        Should not be called directly
+        Use `init_with_real_board` or `init_for_testing`
         """
         self.print_to_stdout = True
-        if len(args) == 3:
-            self.init_with_real_board(*args)
-        else:
-            self.init_for_testing(*args)
-
-    def init_with_real_board(
-        self, io_pin: Pin, number_lights: int, auto_write: bool
-    ) -> None:
-        self._auto_write = auto_write
-        self._pixels = neopixel.NeoPixel(
-            io_pin, number_lights, auto_write=auto_write, pixel_order=neopixel.RGB
-        )
-
-    def init_for_testing(self, number_leds: int) -> None:
-        self._pretend_pixels = [(0, 0, 0)] * number_leds
 
     def set_lights_per_row(self, lights_per_row: List[int]) -> None:
         self._lights_per_row = lights_per_row
@@ -63,3 +47,23 @@ class PixelWrapper:
     def show(self):
         if self._test_display and self.print_to_stdout:
             self._test_display.show()
+
+
+def init_with_real_board(
+    io_pin: Optional[Pin], number_lights: int, auto_write: bool
+) -> PixelWrapper:
+    pixel = PixelWrapper()
+    pixel._auto_write = auto_write
+    pixel._pixels = neopixel.NeoPixel(
+        (io_pin if io_pin else board.D21),
+        number_lights,
+        auto_write=auto_write,
+        pixel_order=neopixel.RGB,
+    )
+    return pixel
+
+
+def init_for_testing(number_leds: int) -> PixelWrapper:
+    pixel = PixelWrapper()
+    pixel._pretend_pixels = [(0, 0, 0)] * number_leds
+    return pixel

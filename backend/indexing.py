@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from neopixel import NeoPixel
 from typing import Any, Tuple, List, Union, Optional
 import numpy as np
 
+from backend.neopixel_wrapper import PixelWrapper
 from backend.backend_types import RGB
 from backend.led_locations import LEDSpace
 from backend.util import (
@@ -41,7 +41,7 @@ class LinearIndexing(Indexing):
     """Index into the light strip based on their order in sequence.
     This is the default way NeoPixels indexes the lights."""
 
-    def __init__(self, pixels: NeoPixel):
+    def __init__(self, pixels: PixelWrapper):
         self._pixels = pixels
 
     def get(self, key: int) -> Optional[RGB]:
@@ -63,7 +63,7 @@ class RowIndexing(Indexing):
     Index into the light strip based on how they are arranged into rows.
     """
 
-    def __init__(self, pixels: NeoPixel, lights_per_row: List[int]):
+    def __init__(self, pixels: PixelWrapper, lights_per_row: List[int]):
         self._pixels = pixels
         self.rows = lights_per_row
 
@@ -112,7 +112,7 @@ class CartesianIndexing(Indexing):
     """
 
     def __init__(
-        self, pixels: NeoPixel, lights_per_row: List[int], search_range: float = 0.2
+        self, pixels: PixelWrapper, lights_per_row: List[int], search_range: float = 0.2
     ):
         self._pixels = pixels
         self._lights_per_row = lights_per_row
@@ -166,7 +166,7 @@ class PolarIndexing(Indexing):
 
     def __init__(
         self,
-        pixels: NeoPixel,
+        pixels: PixelWrapper,
         lights_per_row: List[int],
         origin: Tuple[float, float] = (0.5, 0.5),
         search_range: float = 0.2,
@@ -222,7 +222,10 @@ class FloatCartesianIndexing(Indexing):
     Setting a decimal index will spread the light effect on nearby lights"""
 
     def __init__(
-        self, pixels: NeoPixel, lights_per_row: List[int], effect_radius: float = 0.2
+        self,
+        pixels: PixelWrapper,
+        lights_per_row: List[int],
+        effect_radius: float = 0.2,
     ):
         """
         `effect_range`: radius around point that will be affected
@@ -282,7 +285,7 @@ class FloatPolarIndexing(Indexing):
 
     def __init__(
         self,
-        pixels: NeoPixel,
+        pixels: PixelWrapper,
         lights_per_row: List[int],
         origin: Tuple[float, float] = (0.5, 0.5),
         effect_radius: float = 0.2,

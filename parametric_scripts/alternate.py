@@ -20,6 +20,7 @@ def run(**kwargs):
     off_rgb = [0] * len(on_rgb)
 
     ceil = Ceiling()
+    ceil.testing_mode()
     ceil.clear()
 
     on = True

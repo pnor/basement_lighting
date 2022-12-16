@@ -34,9 +34,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(
-            "Usage: python alternate.py [color hex string] [blink interval in seconds]"
-        )
-
     run(color=sys.argv[1], interval=sys.argv[2])

@@ -14,10 +14,7 @@ import time
 from backend.ceiling import Ceiling
 from backend.util import (
     clamp,
-    color_obj_to_rgb,
     dim_color,
-    hex_to_color_obj,
-    hex_to_rgb,
     sigmoid,
     color_range,
 )
@@ -29,33 +26,43 @@ if len(sys.argv) != 3:
 color_input = sys.argv[1]
 interval = int(sys.argv[2])
 
-ceil = Ceiling(auto_write=True)
-ceil.clear()
 
-cycle_colors = color_range(color_input, dim_color(color_input), 100)
+def run(**kwargs):
+    color_input = kwargs["color"]
+    interval = int(kwargs["interval"])
 
-FPS = 30
-DELTA = 1 / FPS
-cur_time = 0
-forward = True
-while True:
-    if forward:
-        cur_time = clamp(cur_time + DELTA, 0, interval)
-        if cur_time >= interval:
-            forward = False
-    else:
-        cur_time = clamp(cur_time - DELTA, 0, interval)
-        if cur_time <= 0:
-            forward = True
+    ceil = Ceiling()
+    ceil.clear()
 
-    prog = cur_time / interval
-    # use sigmoid to get better pulsing
-    LARGE_NUM = 8
-    sigmoid_input = (prog - 0.5) * LARGE_NUM
-    prog = sigmoid(sigmoid_input)
+    cycle_colors = color_range(color_input, dim_color(color_input), 100)
 
-    i = int(prog * 99)
+    FPS = 30
+    DELTA = 1 / FPS
+    cur_time = 0
+    forward = True
+    while True:
+        if forward:
+            cur_time = clamp(cur_time + DELTA, 0, interval)
+            if cur_time >= interval:
+                forward = False
+        else:
+            cur_time = clamp(cur_time - DELTA, 0, interval)
+            if cur_time <= 0:
+                forward = True
 
-    ceil.fill(cycle_colors[i])
+        prog = cur_time / interval
+        # use sigmoid to get better pulsing
+        LARGE_NUM = 8
+        sigmoid_input = (prog - 0.5) * LARGE_NUM
+        prog = sigmoid(sigmoid_input)
 
-    time.sleep(DELTA)
+        i = int(prog * 99)
+
+        ceil.fill(cycle_colors[i])
+        ceil.show()
+
+        time.sleep(DELTA)
+
+
+if __name__ == "__main__":
+    run(color=sys.argv[1], interval=sys.argv[2])

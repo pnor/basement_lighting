@@ -7,6 +7,7 @@ import numpy as np
 from backend.backend_types import RGB
 from backend.led_locations import LEDSpace
 from backend.util import (
+    color_leds_in_area,
     dim_color,
     distance_formula,
     polar_to_cartesian,
@@ -258,19 +259,9 @@ class FloatCartesianIndexing(Indexing):
 
         else:
             x, y = key
-            leds = self._led_spacing.get_LEDs_in_radius(x, y, self._effect_radius)
-            for l in leds:
-                dist = distance_formula(l.get_x(), l.get_y(), x, y)
-                amp = max(0, 1 - (dist / self._effect_radius))
-
-                res = dim_color_by_amount(newvalue, amp)
-                cur = self._pixels[l._index]
-                final_color = (
-                    max(res[0], cur[0]),
-                    max(res[1], cur[1]),
-                    max(res[2], cur[2]),
-                )
-                self._pixels[l._index] = final_color
+            color_leds_in_area(
+                x, y, self._effect_radius, newvalue, self._led_spacing, self._pixels
+            )
 
 
 class FloatPolarIndexing(Indexing):
@@ -282,22 +273,53 @@ class FloatPolarIndexing(Indexing):
     # NOTE: thinking, wherever the polar coords end up, select the closest of the 4 points around
     # it. Have a check if its v out of bounds ofc
 
-    def __init__(self, pixels: NeoPixel, rows: int, cols: int):
+    def __init__(
+        self,
+        pixels: NeoPixel,
+        lights_per_row: List[int],
+        origin: Tuple[float, float] = (0.5, 0.5),
+        effect_radius: float = 0.2,
+    ):
         self._pixels = pixels
-        self.ROWS = rows
-        self.COLS = cols
+        self._origin = origin
+        self._lights_per_row = lights_per_row
+        self._effect_radius = effect_radius
+
+        self._led_spacing = LEDSpace()
+        self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
 
     def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """
         key: (radius, theta)
         """
-        # TODO
-        rad, theta = key
-        return [0, 0, 0]
+        r, theta = key
+        theta %= 360
+        x, y = polar_to_cartesian(r, theta)
+        x, y = transform_unit_circle_to_origin(x, y, self._origin[0], self._origin[1])
+        # get location in light strip
+        indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
+        return None if indx is None else self._pixels[indx]
 
     def set(self, key: Tuple[float, float], newvalue: RGB) -> None:
         """
-        key: (radius, theta)
+        key: either a tuple of 2 or 3 elements.
+        If tuple of 2, represents (r, theta). Will set values with varying intensities of `newvalue` based
+        on the point's distance from (r, theta).
+        If tuple of 3, represetns (x, y, r) and will fill a circle of radius `r` centered at `(x,
+        y)` with `newvalue`. When doing this, `(x, y)` ignore origin, and are based in (0..1, 0..1)
         """
-        # TODO
-        rad, theta = key
+        if len(key) == 3:
+            x, y, r = key
+            leds = self._led_spacing.get_LEDs_in_radius(x, y, r)
+            for l in leds:
+                self._pixels[l._index] = newvalue
+        else:
+            r, theta = key
+            theta %= 360
+            x, y = polar_to_cartesian(r, theta)
+            x, y = transform_unit_circle_to_origin(
+                x, y, self._origin[0], self._origin[1]
+            )
+            color_leds_in_area(
+                x, y, self._effect_radius, newvalue, self._led_spacing, self._pixels
+            )

@@ -5,10 +5,39 @@
 import colour
 import copy
 from typing import Union, List, Tuple
+from neopixel import NeoPixel
 import numpy as np
 from numba import jit
 
 from backend.backend_types import RGB
+from backend.led_locations import LEDSpace
+
+
+# ===== Code working with LEDs =========================
+def color_leds_in_area(
+    x: float,
+    y: float,
+    effect_radius: float,
+    color: RGB,
+    led_spacing: LEDSpace,
+    pixels: NeoPixel,
+):
+    leds = led_spacing.get_LEDs_in_radius(x, y, effect_radius)
+    for l in leds:
+        dist = distance_formula(l.get_x(), l.get_y(), x, y)
+        amp = max(0, 1 - (dist / effect_radius))
+
+        res = dim_color_by_amount(color, amp)
+        cur = pixels[l._index]
+        final_color = (
+            max(res[0], cur[0]),
+            max(res[1], cur[1]),
+            max(res[2], cur[2]),
+        )
+        pixels[l._index] = final_color
+
+
+# ===== Color Math =========================
 
 
 def hex_to_rgb(hex_str: str) -> RGB:
@@ -71,6 +100,9 @@ def color_range(
     c2 = color_format_to_obj(color_end)
     colors_spanning = list(c1.range_to(c2, number))
     return [color_obj_to_rgb(c) for c in colors_spanning]
+
+
+# ===== Math =========================
 
 
 @jit

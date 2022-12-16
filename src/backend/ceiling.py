@@ -112,15 +112,9 @@ class Ceiling:
             origin=origin,
         )
 
-    def use_float_cartesian(
-        self,
-        lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
-        effect_radius: float = 0.2,
-    ):
+    def use_float_cartesian(self, rows: int, cols: int):
         """Use floating point cartesian indexing"""
-        self._indexing = FloatCartesianIndexing(
-            self._pixels, lights_per_row, effect_radius=effect_radius
-        )
+        self._indexing = FloatCartesianIndexing(self._pixels, rows, cols)
 
     def use_float_polar(self, rows: int, cols: int):
         """Use floating point polar indexing"""

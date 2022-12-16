@@ -6,13 +6,7 @@ import numpy as np
 
 from backend.backend_types import RGB
 from backend.led_locations import LEDSpace
-from backend.util import (
-    dim_color,
-    distance_formula,
-    polar_to_cartesian,
-    set_color_luminance,
-    transform_unit_circle_to_origin,
-)
+from backend.util import polar_to_cartesian, transform_unit_circle_to_origin
 
 """
 Abstraction of how indexing gets and sets indeces
@@ -128,8 +122,8 @@ class CartesianIndexing(Indexing):
             x1, y1 = key.start
             x2, y2 = key.stop
             epsilon = 0.01  # little extra to get points on the borders
-            horiz_dist = abs(x2 - x1)
-            vert_dist = abs(y2 - y1)
+            horiz_dist = abs(x2 - x1) + epsilon
+            vert_dist = abs(y2 - y1) + epsilon
             x1 -= epsilon
             y1 -= epsilon
 
@@ -190,7 +184,7 @@ class PolarIndexing(Indexing):
         key: either a tuple of 2 or 3 elements.
         If tuple of 2, represents (r, theta)
         If tuple of 3, represetns (x, y, r) and will fill a circle of radius `r` centered at `(x,
-        y)` with `newvalue`. When doing this, `(x, y)` ignore origin, and are based in (0..1, 0..1)
+        y)` with `newvalue`
         """
         if len(key) == 3:
             x, y, r = key
@@ -213,64 +207,20 @@ class FloatCartesianIndexing(Indexing):
     """Index into the light strip with floats as a grid on 2D space.
     Setting a decimal index will spread the light effect on nearby lights"""
 
-    def __init__(
-        self, pixels: NeoPixel, lights_per_row: List[int], effect_radius: float = 0.2
-    ):
-        """
-        `effect_range`: radius around point that will be affected
-        """
+    def __init__(self, pixels: NeoPixel, rows: int, cols: int):
         self._pixels = pixels
-        self._lights_per_row = lights_per_row
-        self._effect_radius = effect_radius
-
-        self._led_spacing = LEDSpace()
-        self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
+        self.ROWS = rows
+        self.COLS = cols
 
     def get(self, key: Tuple[float, float]) -> Optional[RGB]:
-        """key: (x, y), x and y in (0..1)
-        Returns nearest LED within `self._effect_radius` or None
-        """
-        x, y = key
-        indx = self._led_spacing.get_closest_LED_index(x, y, self._effect_radius)
-        return None if indx is None else self._pixels[indx]
+        """key: (x, y)"""
+        # TODO
+        return [0, 0, 0]
 
-    def set(self, key: Union[Tuple[float, float], slice], newvalue: RGB) -> None:
-        """key: either a tuple or slice.
-        If tuple, (x, y) are in (0..1). Will set values with varying intensities of `newvalue` based
-        on the point's distance from (x, y).
-        If slice, is 2 tuples, (x1, y1):(x2, y2), and will set box spanning x1..x2 and y1..y2 to
-        same color"""
-        if type(key) is slice:
-            x1, y1 = key.start
-            x2, y2 = key.stop
-            epsilon = 0.01  # little extra to get points on the borders
-            horiz_dist = abs(x2 - x1)
-            vert_dist = abs(y2 - y1)
-            x1 -= epsilon
-            y1 -= epsilon
-
-            x = min(x1, x2) + (horiz_dist / 2)
-            y = min(y1, y2) + (vert_dist / 2)
-
-            leds = self._led_spacing.get_LEDs_in_area(x, y, horiz_dist, vert_dist)
-            for l in leds:
-                self._pixels[l._index] = newvalue
-
-        else:
-            x, y = key
-            leds = self._led_spacing.get_LEDs_in_radius(x, y, self._effect_radius)
-            for l in leds:
-                dist = distance_formula(l.get_x(), l.get_y(), x, y)
-                amp = max(0, 1 - (dist / self._effect_radius))
-
-                res = set_color_luminance(amp)
-                cur = self._pixels[l._index]
-                final_color = (
-                    max(res[0], cur[0]),
-                    max(res[1], cur[1]),
-                    max(res[2], cur[2]),
-                )
-                self._pixels[l._index] = final_color
+    def set(self, key: Tuple[float, float], newvalue: RGB) -> None:
+        """key: (x, y)"""
+        # TODO
+        pass
 
 
 class FloatPolarIndexing(Indexing):

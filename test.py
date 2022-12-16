@@ -20,5 +20,13 @@ def function_from_file(file: str) -> Callable:
     return mod.run
 
 
-run_script("./parametric_scripts/fill.py")
-run_script("./parametric_scripts/bouncing_dvd.py")
+# run_script("./parametric_scripts/fill.py")
+# run_script("./parametric_scripts/bouncing_dvd.py")
+
+
+def on_god(**kwargs):
+    print(kwargs)
+
+
+d = {1: 1, 2: 2}
+on_god(kwargs=d)

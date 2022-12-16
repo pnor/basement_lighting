@@ -39,8 +39,13 @@ def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:
 def dim_color(color: Union[RGB, str, colour.Color]) -> RGB:
     """Returns an extremely dimmed version of `color`
     `color` can be a hex string or rgb tuple"""
+    return set_color_luminance(color, 0.01)
+
+
+def set_color_luminance(color: Union[RGB, str, colour.Color], luminance: float) -> RGB:
+    """Sets `color` to luminance `luminanace`"""
     c = color_format_to_obj(color)
-    c.set_luminance(0.001)
+    c.set_luminance(luminance)
     return c.rgb
 
 

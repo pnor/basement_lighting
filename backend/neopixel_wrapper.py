@@ -49,7 +49,7 @@ class PixelWrapper:
 
     def fill(self, color: RGB) -> None:
         if self._pixels:
-            self._pixels.show(value)
+            self._pixels.show(color)
         else:
             for i in range(len(self._pretend_pixels)):
                 self._pretend_pixels[i] = color

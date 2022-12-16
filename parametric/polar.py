@@ -21,8 +21,8 @@ CEILING_ROW_ARRANGEMENT = [
     20,  # ---
 ]
 ceil = Ceiling(auto_write=False)
-ceil.use_polar(CEILING_ROW_ARRANGEMENT)
-ceil.testing_mode(CEILING_ROW_ARRANGEMENT)
+ceil.use_polar((0.5, 0.5), lights_per_row=CEILING_ROW_ARRANGEMENT)
+ceil.testing_mode(CEILING_ROW_ARRANGEMENT, print_to_stdout=True)
 ceil.clear()
 
 # print(ceil._indexing._led_spacing._quadtree)
@@ -31,14 +31,13 @@ ceil.clear()
 # print(list(ceil._indexing._led_spacing._quadtree.elements()))
 
 # circle of radius
-ceil[0.5, 0.5, 0.4] = (0, 0, 255)
+ceil[0.5, 0.5, 0.5] = (0, 0, 255)
 
 # polar points
 for theta in range(0, 360, 10):
-    ceil[0.8, theta] = (255, 0, 0)
+    ceil[0.4, theta] = (255, 0, 0)
 
 
-ceil.show()
 # corners test
 # TODO
 

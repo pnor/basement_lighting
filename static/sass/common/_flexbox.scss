@@ -1,0 +1,52 @@
+// Flexbox container block
+@use "spacing" as *;
+
+.flexbox {
+    display: flex; 
+
+    &--col {
+        flex-direction: column;
+    }
+
+    &--row {
+        flex-direction: row;
+    }
+
+    &--a--center {
+        align-items: center;
+    }
+
+    &--j--start {
+        justify-content: flex-start;
+    }
+
+    &--j--center {
+        justify-content: center;
+    }
+
+    &--j--spaced {
+        justify-content: space-between;
+    }
+
+    &--j--end {
+        justify-content: flex-end;
+    }
+
+    &--wrap {
+        flex-wrap: wrap;
+    }
+
+    &--wrap-reverse {
+        flex-wrap: wrap-reverse;
+    }
+}
+
+@each $i, $s in $spacing {
+    .flexbox--rg--#{$i} {
+        row-gap: $s;
+    }
+
+    .flexbox--cg--#{$i} {
+        column-gap: $s;
+    }
+}

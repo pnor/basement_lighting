@@ -1,0 +1,15 @@
+// Utility mixins
+@mixin clearfix {
+    &::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+}
+
+@mixin p-spacing {
+    &:not(:last-child) {
+        margin-bottom: 1.5rem;
+    }
+}
+

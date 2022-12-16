@@ -1,0 +1,39 @@
+// Defaults for everything
+@use 'sass:map';
+
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=VT323&display=swap&family=Inconsolata:wght@400;700&display=swap');
+
+@font-face {
+    font-family: 'Cozette', monospace;
+    src: url("../../fonts/cozette_bitmap.ttf") format("truetype");
+}
+
+$font-body: 'Courier Prime', monospace;
+$font-head: 'VT323', serif;
+$font-monospace: 'Inconsolata', monospace;
+
+$font-sizes: (
+    "0": 1rem,
+    "1": 1.25rem,
+    "2": 1.5rem,
+    "3": 2rem,
+    "4": 2.5rem,
+    "5": 3rem,
+);
+
+// Default font
+html {
+    font-family: $font-body;
+}
+
+// Header
+h1, h2, h3 {
+    font-family: $font-head;
+    font-size: map.get($font-sizes, "4");
+}
+
+h4, h5, h6 {
+    font-family: $font-body;
+    font-weight: bold;
+    font-size: map.get($font-sizes, "2");
+}

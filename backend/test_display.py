@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import colorama
-from neopixel import NeoPixel
 import truecolor
+
 from blessings import Terminal
 
 from typing import List
@@ -17,7 +17,7 @@ class TestDisplay:
     Class that prints the arrangment of LEDs in stdout to debug
     """
 
-    def __init__(self, lights_per_row: List[int], pixels: NeoPixel) -> None:
+    def __init__(self, lights_per_row: List[int], pixels) -> None:
         self._lights_per_row = lights_per_row
         self._pixels = pixels
         self._terminal = Terminal()

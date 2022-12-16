@@ -27,6 +27,7 @@ class PixelWrapper:
         self._auto_write = True
         self._pixels = None
         self._pretend_pixels = None
+        self._test_display = None
 
     def set_lights_per_row(self, lights_per_row: List[int]) -> None:
         self._lights_per_row = lights_per_row

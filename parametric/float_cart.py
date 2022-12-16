@@ -22,7 +22,7 @@ CEILING_ROW_ARRANGEMENT = [
     20,  # ---
 ]
 ceil = Ceiling(auto_write=False)
-ceil.use_float_cartesian(CEILING_ROW_ARRANGEMENT, 0.4)
+ceil.use_float_cartesian(CEILING_ROW_ARRANGEMENT, 0.2)
 ceil.testing_mode(CEILING_ROW_ARRANGEMENT)
 ceil.clear()
 
@@ -33,7 +33,10 @@ ceil.clear()
 
 
 # point test
-ceil[0.5, 0.5] = (255, 0, 0)
+ceil[0.6, 0.4] = (255, 0, 0)
+ceil[0.4, 0.6] = (0, 255, 0)
+
+ceil[(0, 0):(0.2, 0.2)] = (255, 0, 255)
 
 # unit circle
 ceil.show()

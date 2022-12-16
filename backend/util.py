@@ -51,6 +51,16 @@ def dim_color(color: Union[RGB, str, colour.Color]) -> RGB:
     return set_color_luminance(0.01)
 
 
+def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount) -> RGB:
+    """Dims a color by a percentage of its current luminance"""
+    c = color_format_to_obj(color)
+    l = c.get_luminance()
+    c.set_luminance(l * dim_amount)
+    rgb = c.rgb
+    rgb = (np.array(rgb) * 255).astype(int)
+    return tuple(rgb)
+
+
 def color_range(
     color_start: Union[RGB, str, colour.Color],
     color_end: Union[RGB, str, colour.Color],

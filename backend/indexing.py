@@ -10,7 +10,7 @@ from backend.util import (
     dim_color,
     distance_formula,
     polar_to_cartesian,
-    set_color_luminance,
+    dim_color_by_amount,
     transform_unit_circle_to_origin,
 )
 
@@ -263,7 +263,7 @@ class FloatCartesianIndexing(Indexing):
                 dist = distance_formula(l.get_x(), l.get_y(), x, y)
                 amp = max(0, 1 - (dist / self._effect_radius))
 
-                res = set_color_luminance(newvalue, amp)
+                res = dim_color_by_amount(newvalue, amp)
                 cur = self._pixels[l._index]
                 final_color = (
                     max(res[0], cur[0]),

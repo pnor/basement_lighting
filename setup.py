@@ -29,8 +29,8 @@ setup(
     description="Mini project to control lights in the basement",
     author="",
     author_email="",
-    packages=find_packages("src"),
-    package_dir={"": "src"},
+    packages=find_packages("."),
+    package_dir={"": "."},
     include_package_data=True,
     zip_safe=False,
     classifiers=[
@@ -48,10 +48,8 @@ setup(
     python_requires=">=3.9",
     install_requires=[],
     extras_require={},
-    sass_manifests={
-        'byronsbasement': ('static/sass', 'static/css')
-    },
-    setup_requires=['libsass >= 0.6.0'],
+    sass_manifests={"byronsbasement": ("static/sass", "static/css")},
+    setup_requires=["libsass >= 0.6.0"],
     entry_points={
         "console_scripts": [
             #            "api = api.api:main",

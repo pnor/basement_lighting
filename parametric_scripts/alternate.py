@@ -3,7 +3,7 @@
 # Blinks every other LED to the same color
 #
 # Usage:
-# python blink.py [color hex string] [blink interval in seconds]
+# python alternate.py [color hex string] [blink interval in seconds]
 
 import sys
 import time
@@ -14,7 +14,7 @@ from backend.util import hex_to_rgb
 
 def run(**kwargs):
     color_input = kwargs["color"]
-    interval = kwargs["interval"]
+    interval = int(kwargs["interval"])
 
     on_rgb = hex_to_rgb(color_input)
     off_rgb = [0] * len(on_rgb)
@@ -26,18 +26,11 @@ def run(**kwargs):
     on = True
 
     while True:
-        # ceil doesn't support slicing (yet??)
-        for i in range(ceil.NUMBER_LIGHTS):
-            if i % 2 == 0:
-                ceil[i] = on_rgb if on else off_rgb
-            else:
-                ceil[i] = off_rgb if on else on_rgb
-
-            # ceil._pixels[::2] = on_rgb if on else off_rgb
-            # ceil._pixels[1::2] = off_rgb if on else on_rgb
-            ceil.show()
-            on = not on
-            time.sleep(interval)
+        ceil[::2] = on_rgb if on else off_rgb
+        ceil[1::2] = off_rgb if on else on_rgb
+        ceil.show()
+        on = not on
+        time.sleep(interval)
 
 
 if __name__ == "__main__":
@@ -46,4 +39,4 @@ if __name__ == "__main__":
             "Usage: python alternate.py [color hex string] [blink interval in seconds]"
         )
 
-    run(color_input=sys.argv[1], interval=sys.argv[2])
+    run(color=sys.argv[1], interval=sys.argv[2])

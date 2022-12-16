@@ -47,8 +47,15 @@ class LinearIndexing(Indexing):
     def get(self, key: int) -> Optional[RGB]:
         return self._pixels[key]
 
-    def set(self, key: int, newvalue: RGB) -> None:
-        self._pixels[key] = newvalue
+    def set(self, key: Union[int, slice], newvalue: RGB) -> None:
+        if type(key) is slice:
+            start = key.start if key.start else 0
+            stop = key.stop if key.stop else len(self._pixels)
+            step = key.step if key.step else 1
+            for i in range(start, stop, step):
+                self._pixels[i] = newvalue
+        else:
+            self._pixels[key] = newvalue
 
 
 class RowIndexing(Indexing):

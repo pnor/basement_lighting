@@ -3,21 +3,15 @@
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     </head>
-    <body>
+    <body class="content"
         <header>
             This is a title
         </header>
         <main>
             <div>
-                <button type="button">Light Option</button>
-                <button type="button">Light Option</button>
-                <button type="button">Light Option</button>
-                <button type="button">Light Option</button>
-                <button type="button">Light Option</button>
-                <button type="button">Light Option</button>
-                <button type="button">Light Option</button>
-                <button type="button">Light Option</button>
-                <button type="button">Light Option</button>
+                {% for pattern in patterns %}
+                <button type="button">{{ pattern }}</button>
+                {% endfor %}
             </div>
         </main>
         <footer>

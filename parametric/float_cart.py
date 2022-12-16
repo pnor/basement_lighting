@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import pdb
 import colour
 import sys
 
@@ -32,6 +33,7 @@ ceil.clear()
 
 
 # point test
+pdb.set_trace()
 ceil[0.5, 0.5] = (255, 0, 0)
 
 # unit circle

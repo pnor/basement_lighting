@@ -70,4 +70,13 @@ You can set circles of LEDs by providing a tuple of 3 elements: (x, y, radius)
 `ceil.use_float_polar(origin=, effect_radius=)`: Same as `use_float_cartesian` but uses polar coordinate system.
 
 
+## Tesintg
+You can test scripts without a rasberry pi right in your terminal
+A quick way of doing this is to do this in the constructor:
+
+``` python
+ceil = Ceiling(test_mode=True)
+```
+
+This will avoid importing rasberry pi specific libraries and print the light show to the terminal. Make sure true color terminal is enabled.
 

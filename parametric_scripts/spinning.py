@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-# Runs a single LED throughout the light strip
-#
-# Usage:
-# python runthrough.py [color hex string] [speed to traverse seconds]
+# Do a circular running motion
 
 import sys
 import time
@@ -17,7 +14,7 @@ def run(**kwargs):
     interval = int(kwargs["interval"])
 
     ceil = Ceiling()
-    ceil.use_linear()
+    ceil.use_polar((0.5, 0.5))
     ceil.clear()
 
     # Getting range of colors for all LEDs to cycle through
@@ -29,11 +26,11 @@ def run(**kwargs):
     cur_time = 0
     while True:
         cur_time = (cur_time + DELTA) % interval
-        indx = int((cur_time / interval) * ceil.NUMBER_LIGHTS)
+        theta = (cur_time / interval) * 360
 
         ceil.clear(False)
         for i in range(0, TAIL_LENGTH):
-            ceil[indx - i] = colors[i]
+            ceil[0.6, theta - (i * 20)] = colors[i]
         ceil.show()
 
         time.sleep(DELTA)

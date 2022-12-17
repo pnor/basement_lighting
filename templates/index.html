@@ -5,8 +5,8 @@
     </head>
     <body class="body flexbox flexbox--col">
         <header class="header mb-5">
-            <div class="header__content mx-auto my-3">
-                <p>Now Showing:</p>
+            <div class="header__content mx-auto my-4">
+                <p class="mb-3">Now Showing:</p>
                 <h1 id="nowShowing" class="mx-3">N/A</h1>
                 <a class="stop text-size-2">X</a>
             </div>
@@ -14,12 +14,12 @@
         <main class="content mx-auto mt-5">
             <div class="flexbox flexbox--j--center flexbox--wrap buttons-grid">
                 {% for pattern in patterns %}
-                <a class="button">{{ pattern }}</a>
+                <a class="button p-3">{{ pattern }}</a>
                 {% endfor %}
             </div>
         </main>
-        <footer class="mt-auto">
-            This is a footer
+        <footer class="p-3 mt-auto">
+            Made by Phillip O'Reggio and Jared Tulayan
         </footer>
     </body>
 </html>

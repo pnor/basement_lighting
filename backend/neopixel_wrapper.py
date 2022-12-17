@@ -24,7 +24,7 @@ class PixelWrapper:
         Use `init_with_real_board` or `init_for_testing`
         """
         self.print_to_stdout = True
-        self._auto_write = True
+        self._auto_write = False
         self._pixels = None
         self._pretend_pixels = None
         self._test_display = None
@@ -50,7 +50,7 @@ class PixelWrapper:
 
     def fill(self, color: RGB) -> None:
         if self._pixels:
-            self._pixels.show()
+            self._pixels.fill(color)
         elif self._pretend_pixels:
             for i in range(len(self._pretend_pixels)):
                 self._pretend_pixels[i] = color
@@ -77,7 +77,9 @@ def init_with_real_board(
     return pixel
 
 
-def init_for_testing(number_leds: int) -> PixelWrapper:
+def init_for_testing(number_leds: int, print_to_stdout: bool = True) -> PixelWrapper:
     pixel = PixelWrapper()
     pixel._pretend_pixels = [(0, 0, 0)] * number_leds
+    pixel._auto_write = False
+    pixel.print_to_stdout = print_to_stdout
     return pixel

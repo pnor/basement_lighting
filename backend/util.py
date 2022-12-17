@@ -100,6 +100,19 @@ def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount) -> RGB
     return tuple(rgb)
 
 
+def interpolate_colors(
+    col_a: Union[RGB, str, colour.Color],
+    col_b: Union[RGB, str, colour.Color],
+    progress: float,
+) -> RGB:
+    """Linearlly Interpolates `col_a` and `col_b` using `progress`"""
+    color_a = color_format_to_obj(col_a)
+    color_b = color_format_to_obj(col_b)
+    prog_indx = int(clamp(progress, 0, 1) * 99)
+    res_color = list(color_a.range_to(color_b, 100))[prog_indx]
+    return colour_rgb_to_neopixel_rgb(res_color.rgb)
+
+
 def color_range(
     color_start: Union[RGB, str, colour.Color],
     color_end: Union[RGB, str, colour.Color],

@@ -11,11 +11,10 @@ from backend.util import hex_to_rgb
 
 def run(**kwargs):
     color_input = kwargs["color"]
-    interval = int(kwargs["interval"])
+    interval = float(kwargs["interval"])
 
     ceil = Ceiling(test_mode=True)
     ceil.use_polar((0.5, 0.5))
-    ceil.clear()
 
     color = hex_to_rgb(color_input)
 

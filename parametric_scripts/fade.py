@@ -20,16 +20,9 @@ from backend.util import (
 )
 
 
-if len(sys.argv) != 3:
-    print("Usage: python fade.py [color hex string] [entire fade interval in seconds]")
-
-color_input = sys.argv[1]
-interval = int(sys.argv[2])
-
-
 def run(**kwargs):
     color_input = kwargs["color"]
-    interval = int(kwargs["interval"])
+    interval = float(kwargs["interval"])
 
     ceil = Ceiling()
     ceil.clear()

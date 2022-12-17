@@ -14,7 +14,7 @@ from backend.util import hex_to_rgb
 
 def run(**kwargs):
     color_input = kwargs["color"]
-    interval = int(kwargs["interval"])
+    interval = float(kwargs["interval"])
 
     on_rgb = hex_to_rgb(color_input)
     off_rgb = [0] * len(on_rgb)

@@ -14,7 +14,7 @@ from backend.util import color_range, dim_color
 
 def run(**kwargs):
     color_input = kwargs["color"]
-    interval = int(kwargs["interval"])
+    interval = float(kwargs["interval"])
 
     ceil = Ceiling()
     ceil.use_linear()

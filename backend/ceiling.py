@@ -42,6 +42,7 @@ class Ceiling:
         If using testing: (only provide 2 args)
         `test_mode`: to true
         `number_lights`: number lights in the light strip
+        `print_to_stdout`: whether to print to stdout. Default true
         """
         if kwargs.get("test_mode"):
             num_lights = (
@@ -49,8 +50,14 @@ class Ceiling:
                 if kwargs.get("number_lights")
                 else NUMBER_LIGHTS
             )
-            self._pixels = init_for_testing(number_leds=num_lights)
-            self._pixels.print_to_stdout = True
+            print_to_stdout = (
+                kwargs.get("print_to_stdout")
+                if kwargs.get("print_to_stdout") is not None
+                else True
+            )
+            self._pixels = init_for_testing(
+                number_leds=num_lights, print_to_stdout=print_to_stdout
+            )
             self.testing_mode_rows()
         else:
             io_pin = kwargs.get("io_pin")

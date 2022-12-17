@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # Fill all LEDs with changing colors based off the rainbow
+
 import time
 import numpy as np
 import colour

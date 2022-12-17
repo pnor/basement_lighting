@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-# Sets every LED to the same color
-#
-# Usage:
-# python fill.py [color hex string]
+# Sets a circle to a solid color
 
 import sys
 
@@ -15,7 +12,8 @@ def run(**kwargs):
     color = kwargs["color"]
 
     ceil = Ceiling()
-    ceil.fill(hex_to_rgb(color))
+    ceil.use_polar((0.5, 0.5))
+    ceil[0.5, 0.5, 0.35] = hex_to_rgb(color)
     ceil.show()
 
 

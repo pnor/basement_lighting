@@ -112,14 +112,21 @@ class CartesianIndexing(Indexing):
     """
 
     def __init__(
-        self, pixels: PixelWrapper, lights_per_row: List[int], search_range: float = 0.2
+        self,
+        pixels: PixelWrapper,
+        lights_per_row: List[int],
+        search_range: float = 0.2,
+        cached_led_spacing: Optional[LEDSpace] = None,
     ):
         self._pixels = pixels
         self._lights_per_row = lights_per_row
         self._search_range = search_range
 
-        self._led_spacing = LEDSpace()
-        self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
+        if cached_led_spacing:
+            self._led_spacing = cached_led_spacing
+        else:
+            self._led_spacing = LEDSpace()
+            self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
 
     def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """key: (x, y), x and y in (0..1)"""
@@ -161,23 +168,24 @@ class PolarIndexing(Indexing):
     Will select the single nearest LED, assuming origin is at the center of the grid formed by the LEDs
     """
 
-    # NOTE: thinking, wherever the polar coords end up, select the closest of the 4 points around
-    # it. Have a check if its v out of bounds ofc
-
     def __init__(
         self,
         pixels: PixelWrapper,
         lights_per_row: List[int],
         origin: Tuple[float, float] = (0.5, 0.5),
         search_range: float = 0.2,
+        cached_led_spacing: Optional[LEDSpace] = None,
     ):
         self._pixels = pixels
         self._origin = origin
         self._lights_per_row = lights_per_row
         self._search_range = search_range
 
-        self._led_spacing = LEDSpace()
-        self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
+        if cached_led_spacing:
+            self._led_spacing = cached_led_spacing
+        else:
+            self._led_spacing = LEDSpace()
+            self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
 
     def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """
@@ -226,6 +234,7 @@ class FloatCartesianIndexing(Indexing):
         pixels: PixelWrapper,
         lights_per_row: List[int],
         effect_radius: float = 0.2,
+        cached_led_spacing: Optional[LEDSpace] = None,
     ):
         """
         `effect_range`: radius around point that will be affected
@@ -234,8 +243,11 @@ class FloatCartesianIndexing(Indexing):
         self._lights_per_row = lights_per_row
         self._effect_radius = effect_radius
 
-        self._led_spacing = LEDSpace()
-        self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
+        if cached_led_spacing:
+            self._led_spacing = cached_led_spacing
+        else:
+            self._led_spacing = LEDSpace()
+            self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
 
     def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """key: (x, y), x and y in (0..1)
@@ -289,14 +301,18 @@ class FloatPolarIndexing(Indexing):
         lights_per_row: List[int],
         origin: Tuple[float, float] = (0.5, 0.5),
         effect_radius: float = 0.2,
+        cached_led_spacing: Optional[LEDSpace] = None,
     ):
         self._pixels = pixels
         self._origin = origin
         self._lights_per_row = lights_per_row
         self._effect_radius = effect_radius
 
-        self._led_spacing = LEDSpace()
-        self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
+        if cached_led_spacing:
+            self._led_spacing = cached_led_spacing
+        else:
+            self._led_spacing = LEDSpace()
+            self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
 
     def get(self, key: Tuple[float, float]) -> Optional[RGB]:
         """

@@ -12,7 +12,7 @@ from numba import jit
 
 
 def run(**kwargs):
-    ceil = Ceiling(test_mode=True)
+    ceil = Ceiling()
     ceil.use_float_cartesian(effect_radius=0.3)
     ceil.clear()
 

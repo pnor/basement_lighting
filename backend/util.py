@@ -69,6 +69,12 @@ def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:
         return colour.Color(color)
 
 
+def hsl_to_rgb(hue: float, sat: float, lum: float):
+    """`hue`, `sat` and `lum` should all be 0..1"""
+    colors_obj = colour.Color(hsl=(hue, sat, lum))
+    return colors_obj.rgb
+
+
 def set_color_luminance(color: Union[RGB, str, colour.Color], luminance: float) -> RGB:
     """Returns `color` with its luminance set to `luminance` as a rgb tuple"""
     c = color_format_to_obj(color)
@@ -104,6 +110,12 @@ def color_range(
     c2 = color_format_to_obj(color_end)
     colors_spanning = list(c1.range_to(c2, number))
     return [color_obj_to_rgb(c) for c in colors_spanning]
+
+
+def colour_rgb_to_neopixel_rgb(rgb: Tuple[float, float, float]) -> RGB:
+    """Convert the colour library's `rgb` which has componenets from 0..1 to neopixel's rgb which
+    is 0..255"""
+    return tuple((np.array(rgb) * 255).astype(int))
 
 
 # ===== Math =========================

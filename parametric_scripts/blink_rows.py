@@ -2,6 +2,7 @@
 
 # Blinks rows
 
+import pdb
 import sys
 import time
 
@@ -19,6 +20,7 @@ def run(**kwargs):
     off_rgb = [0] * len(on_rgb)
 
     ceil = Ceiling()
+    pdb.set_trace()
     ceil.use_row()
     ceil.clear()
 

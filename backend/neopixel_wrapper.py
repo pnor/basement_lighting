@@ -41,7 +41,8 @@ class PixelWrapper:
 
     def __setitem__(self, key: Any, value: RGB) -> None:
         if self._pixels:
-            self._pixels.__setitem__(key, value)
+            # self._pixels.__setitem__(key, value)
+            self._pixels[key] = value
         else:
             self._pretend_pixels[key] = value
 
@@ -61,6 +62,8 @@ class PixelWrapper:
     def show(self):
         if self._test_display and self.print_to_stdout:
             self._test_display.show()
+        else:
+            self._pixels.show()
 
 
 def init_with_real_board(

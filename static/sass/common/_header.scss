@@ -1,0 +1,39 @@
+@use 'sass:color';
+
+@use 'colors' as *;
+
+@mixin shadow($color) {
+    filter: 
+        drop-shadow(0 2em 0 color.scale($color, $lightness: -20%)) 
+        drop-shadow(0 1em 0 color.scale($color, $lightness: -25%));
+}
+
+// Header
+.header {
+    position: sticky;
+    
+    background: $color-inactive;
+    @include shadow($color-inactive);
+
+    &--active {
+        background: $color-primary;
+        @include shadow($color-primary);
+    }
+
+    &--error {
+        background: $color-warn;
+        @include shadow($color-warn);
+    }
+
+
+}
+
+.header__content {
+    max-width: 75vw;
+}
+
+@media screen and (max-width: 640px) {
+    .header__content {
+        max-width: 90vw;
+    }
+}

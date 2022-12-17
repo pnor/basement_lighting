@@ -9,11 +9,24 @@
     @include control;
 
     padding: $spacing-p-button;
-    background: $color-bg;
+    background: $color-inactive;
     color: $color-fg;
 
-    &:hover, :active {
+    width: 30%;
+
+    &:hover{
         background: $color-fg;
-        color: $color-bg;
+        color: $color-inactive;
     }
+
+    &:active {
+        background: $color-primary;
+        color: $color-fg;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .button {
+        width: 100%;
+    }    
 }

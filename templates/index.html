@@ -3,18 +3,22 @@
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     </head>
-    <body class="content"
-        <header>
-            This is a title
+    <body class="body flexbox flexbox--col">
+        <header class="header mb-5">
+            <div class="header__content mx-auto my-3">
+                <p>Now Showing:</p>
+                <h1 id="nowShowing" class="mx-3">N/A</h1>
+                <a class="stop text-size-2">X</a>
+            </div>
         </header>
-        <main>
-            <div>
+        <main class="content mx-auto mt-5">
+            <div class="flexbox flexbox--j--center flexbox--wrap buttons-grid">
                 {% for pattern in patterns %}
-                <button type="button">{{ pattern }}</button>
+                <a class="button">{{ pattern }}</a>
                 {% endfor %}
             </div>
         </main>
-        <footer>
+        <footer class="mt-auto">
             This is a footer
         </footer>
     </body>

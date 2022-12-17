@@ -1,12 +1,7 @@
 // Control Default
 @use 'colors' as *;
 
-$control-border-size: 3px;
-
 @mixin control {
-    border: $control-border-size solid $color-fg;
-    box-shadow: 4px 4px $color-shadow;
-
     &--borderless {
         border: none;
     }

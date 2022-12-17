@@ -26,12 +26,16 @@ $opacity: (
     "8": 1,
 );
 
-$color-fg: map.get($colors, "black");
-$color-bg: map.get($colors, "white");
+$color-fg: #fefefe;
+$color-bg: #222222;
+
+$color-inactive: color.change(#777777, $lightness: 25%);
+
 $color-primary: map.get($colors, "blue");
 $color-warn: map.get($colors, "red");
 $color-ok: map.get($colors, "green");
 $color-important: map.get($colors, "yellow");
+
 $color-link: color.scale($color-primary, $lightness: -50%);
 $color-link-hover: color.scale($color-link, $lightness: 25%);
 $color-link-active: color.scale($color-link, $lightness: 40%);
@@ -39,12 +43,9 @@ $color-link-active: color.scale($color-link, $lightness: 40%);
 $color-gradient-1: map.get($colors, "orange");
 $color-gradient-2: map.get($colors, "blue");
 
-$color-shadow: color.change(map.get($colors, "black"), $alpha: map.get($opacity, "2"));
-
 // Overall coloring
 html {
-    background-image: url("../images/background.jpg");
-    background-size: cover;
+    background-color: $color-bg;
     color: $color-fg;
 }
 

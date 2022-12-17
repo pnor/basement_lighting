@@ -1,0 +1,15 @@
+@use 'colors' as *;
+
+// Stop button
+.stop {
+    position: absolute;
+    top: 1.5rem;
+    right: 12.5vw;
+    color: $color-fg;
+}
+
+@media screen and (max-width: 640px) {
+    .stop {
+        right: 5vw;
+    }
+}

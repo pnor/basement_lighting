@@ -9,6 +9,7 @@ import colour
 from backend.ceiling import Ceiling
 from backend.util import colour_rgb_to_neopixel_rgb, rotate_vector
 from numba import jit
+from backend.led_locations import LEDSpace
 
 
 def run(**kwargs):
@@ -32,8 +33,7 @@ def run(**kwargs):
     FPS = 60
     DELTA = 1 / 60
 
-    iter = 0
-    while iter < 10:
+    while True:
         iter += 1
         point_1 += velocity_1 * DELTA
         point_2 += velocity_2 * DELTA

@@ -8,6 +8,8 @@ import time
 from backend.ceiling import Ceiling
 from backend.util import hex_to_rgb
 
+from backend.led_locations import LEDSpace
+
 
 def run(**kwargs):
     color_input = kwargs["color"]
@@ -33,6 +35,10 @@ def run(**kwargs):
         ceil.show()
 
         time.sleep(DELTA)
+
+    print(LEDSpace.get_LEDs_in_area.cache_info())
+    print()
+    print(LEDSpace.get_LEDs_in_radius.cache_info())
 
 
 if __name__ == "__main__":

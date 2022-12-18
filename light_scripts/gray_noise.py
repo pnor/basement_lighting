@@ -12,14 +12,15 @@ from backend.util import clamp, colour_rgb_to_neopixel_rgb
 
 
 def rand_func(size: int):
-    return np.random.beta(a=2, b=5, size=(size, size))
+    return np.random.beta(a=2, b=15, size=(size, size))
+    # return np.random.beta(a=2, b=10, size=(size, size))
 
 
 def run(**kwargs):
     # Number of points used to generate colors (size by size)
     RANDOM_SIZE = 10
     # Brightest color this will yield
-    color = np.array([200, 200, 200])
+    color = np.array([100, 100, 100])
 
     ceil = Ceiling()
     ceil.use_float_cartesian(effect_radius=0.15)

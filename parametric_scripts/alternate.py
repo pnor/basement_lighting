@@ -12,6 +12,9 @@ from backend.ceiling import Ceiling
 from backend.util import hex_to_rgb
 
 
+# TODO fix
+
+
 def run(**kwargs):
     color_input = kwargs["color"]
     interval = float(kwargs["interval"])
@@ -20,7 +23,6 @@ def run(**kwargs):
     off_rgb = [0] * len(on_rgb)
 
     ceil = Ceiling()
-    ceil.testing_mode()
     ceil.clear()
 
     on = True

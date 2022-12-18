@@ -19,15 +19,7 @@ A layer between the neopixel API and our light scripts to abstract away all that
 
 # Basement related constants
 NUMBER_LIGHTS = 200
-CEILING_ROW_ARRANGEMENT = [
-    29,  # ---
-    29,  # \
-    29,  # ---
-    29,  # \
-    28,  # ---
-    28,  # \
-    28,  # ---
-]
+CEILING_ROW_ARRANGEMENT = [29, 29, 32, 29, 32, 28, 20]
 
 
 class Ceiling:

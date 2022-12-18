@@ -4,6 +4,7 @@
 Estimate the location of LEDs in 2D space based on how they are arranged
 """
 
+from functools import lru_cache
 from typing import List, Optional
 from smartquadtree import Quadtree
 
@@ -95,6 +96,7 @@ class LEDSpace:
 
                 indx += 1
 
+    @lru_cache(maxsize=100)
     def get_LEDs_in_area(
         self, x: float, y: float, width: float, height: float
     ) -> List[LED]:
@@ -129,6 +131,7 @@ class LEDSpace:
 
         return res
 
+    @lru_cache(maxsize=100)
     def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:
         """
         `radius` around (x, y) of points should be returned
@@ -140,6 +143,7 @@ class LEDSpace:
             )
         )
 
+    @lru_cache(maxsize=100)
     def get_closest_LED_index(
         self, x: float, y: float, max_distance: float = 0.30
     ) -> Optional[int]:
@@ -161,3 +165,11 @@ class LEDSpace:
         self._quadtree.set_mask(None)
 
         return None if closest is None else closest._index
+
+    def clear_caches(self) -> None:
+        """
+        Clear cached values
+        """
+        LEDSpace.get_LEDs_in_area.cache_clear()
+        LEDSpace.get_closest_LED_index.cache_clear()
+        LEDSpace.get_LEDs_in_radius.cache_clear()

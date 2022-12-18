@@ -8,10 +8,7 @@ from backend.backend_types import RGB
 from backend.led_locations import LEDSpace
 from backend.util import (
     color_leds_in_area,
-    dim_color,
-    distance_formula,
     polar_to_cartesian,
-    dim_color_by_amount,
     transform_unit_circle_to_origin,
 )
 
@@ -30,11 +27,9 @@ class Indexing:
 
     def get(self, key: Any) -> Optional[RGB]:
         raise NotImplementedError("'Indexing' class is abstract and should not be used")
-        return (0, 0, 0)
 
     def set(self, key: Any, newvalue: RGB) -> None:
         raise NotImplementedError("'Indexing' class is abstract and should not be used")
-        pass
 
 
 class LinearIndexing(Indexing):
@@ -124,6 +119,7 @@ class CartesianIndexing(Indexing):
 
         if cached_led_spacing:
             self._led_spacing = cached_led_spacing
+            self._led_spacing.clear_caches()
         else:
             self._led_spacing = LEDSpace()
             self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
@@ -183,6 +179,7 @@ class PolarIndexing(Indexing):
 
         if cached_led_spacing:
             self._led_spacing = cached_led_spacing
+            self._led_spacing.clear_caches()
         else:
             self._led_spacing = LEDSpace()
             self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
@@ -245,6 +242,7 @@ class FloatCartesianIndexing(Indexing):
 
         if cached_led_spacing:
             self._led_spacing = cached_led_spacing
+            self._led_spacing.clear_caches()
         else:
             self._led_spacing = LEDSpace()
             self._led_spacing.map_LEDs_in_zigzag(lights_per_row)
@@ -310,6 +308,7 @@ class FloatPolarIndexing(Indexing):
 
         if cached_led_spacing:
             self._led_spacing = cached_led_spacing
+            self._led_spacing.clear_caches()
         else:
             self._led_spacing = LEDSpace()
             self._led_spacing.map_LEDs_in_zigzag(lights_per_row)

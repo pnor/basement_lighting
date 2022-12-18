@@ -9,6 +9,12 @@ from smartquadtree import Quadtree
 
 from backend.util import distance_formula
 
+# ====
+import cProfile, pstats, io
+from pstats import SortKey
+
+# ====
+
 
 class LED:
     def __init__(self, x: float, y: float, index: int):
@@ -96,6 +102,11 @@ class LEDSpace:
         `width`: width of box centered on `(x, y)`
         `height`: height of box centered on `(x, y)`
         """
+
+        # pr = cProfile.Profile()
+        # pr.enable()
+        # # ... do something ...
+
         left = x - (width / 2)
         right = x + (width / 2)
         bot = y - (height / 2)
@@ -108,6 +119,14 @@ class LEDSpace:
             res += [led]
 
         self._quadtree.set_mask(None)
+
+        # pr.disable()
+        # s = io.StringIO()
+        # sortby = SortKey.CUMULATIVE
+        # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        # ps.print_stats()
+        # print(s.getvalue())
+
         return res
 
     def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:

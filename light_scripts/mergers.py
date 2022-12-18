@@ -31,7 +31,10 @@ def run(**kwargs):
 
     FPS = 60
     DELTA = 1 / 60
-    while True:
+
+    iter = 0
+    while iter < 10:
+        iter += 1
         point_1 += velocity_1 * DELTA
         point_2 += velocity_2 * DELTA
 

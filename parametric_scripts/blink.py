@@ -18,7 +18,7 @@ def run(**kwargs):
     on_rgb = hex_to_rgb(color_input)
     off_rgb = [0] * len(on_rgb)
 
-    ceil = Ceiling()
+    ceil = kwargs["ceiling"]
     ceil.clear()
 
     on = True
@@ -31,9 +31,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(
-            "Usage: python alternate.py [color hex string] [blink interval in seconds]"
-        )
-
-    run(color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])

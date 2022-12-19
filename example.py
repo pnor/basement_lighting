@@ -6,7 +6,7 @@ from backend.ceiling import Ceiling
 
 
 def run(**kwargs):
-    ceil = Ceiling()
+    ceil: Ceiling = kwargs["ceiling"]
     ceil.clear()
 
     # (Do some stuff)
@@ -14,4 +14,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run()
+    run(ceiling=Ceiling())

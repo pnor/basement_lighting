@@ -7,10 +7,10 @@ from backend.ceiling import Ceiling
 
 
 def run(**kwargs):
-    ceil = Ceiling()
+    ceil = kwargs["ceiling"]
     ceil.fill([255, 255, 255])
     ceil.show()
 
 
 if __name__ == "__main__":
-    run()
+    run(ceiling=Ceiling())

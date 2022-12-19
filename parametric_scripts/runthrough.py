@@ -14,7 +14,7 @@ def run(**kwargs):
     color_input = kwargs["color"]
     interval = float(kwargs["interval"])
 
-    ceil = Ceiling(test_mode=True)
+    ceil = kwargs["ceiling"]
     ceil.use_linear()
     ceil.clear()
 
@@ -38,4 +38,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])

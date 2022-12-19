@@ -21,7 +21,7 @@ def run(**kwargs):
     # Number of points used to sample the perlin noise obj
     SAMPLE_SIZE = 20
 
-    ceil = Ceiling()
+    ceil = kwargs["ceiling"]
     ceil.use_float_cartesian(effect_radius=0.1)
     ceil.clear()
 
@@ -67,4 +67,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(color=None, interval=sys.argv[1])
+    run(ceiling=Ceiling())

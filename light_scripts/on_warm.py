@@ -8,11 +8,11 @@ from backend.util import hex_to_rgb
 
 
 def run(**kwargs):
-    ceil = Ceiling()
+    ceil = kwargs["ceiling"]
     color = hex_to_rgb("#FCEEA7")
     ceil.fill(color)
     ceil.show()
 
 
 if __name__ == "__main__":
-    run()
+    run(ceiling=Ceiling())

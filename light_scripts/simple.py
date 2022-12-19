@@ -11,7 +11,7 @@ from backend.util import colour_rgb_to_neopixel_rgb, rotate_vector
 
 
 def run(**kwargs):
-    ceil = Ceiling()
+    ceil = kwargs["ceiling"]
     ceil.clear()
     # pdb.set_trace()
     ceil[:29] = (255, 0, 0)
@@ -25,4 +25,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run()
+    run(ceiling=Ceiling())

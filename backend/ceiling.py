@@ -7,8 +7,6 @@ from backend.neopixel_wrapper import (
     init_with_real_board,
 )
 
-from backend.test_display import TestDisplay
-
 from .backend_types import RGB
 
 from .indexing import *
@@ -98,6 +96,14 @@ class Ceiling:
     def indexing(self) -> Indexing:
         """Return the current Indexing object"""
         return self._indexing
+
+    def prepare_to_send(self) -> None:
+        """
+        Prepares the ceiling object to be sent between processes with `Pipe`
+        Must call this before sending this with `pipe.send(ceiling)`!
+        """
+        self._pixels.prepare_to_send()
+        self._indexing.prepare_to_send()
 
     def use_linear(self):
         "Use linear indexing"

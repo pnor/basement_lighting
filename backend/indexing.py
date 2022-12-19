@@ -31,6 +31,14 @@ class Indexing:
     def set(self, key: Any, newvalue: RGB) -> None:
         raise NotImplementedError("'Indexing' class is abstract and should not be used")
 
+    def prepare_to_send(self):
+        """Function called to prepare indexing objects to be pickled if they are using objects that
+        do not handle pickling well.
+
+        One primary example is the quadtree object
+        """
+        raise NotImplementedError("'Indexing' class is abstract and should not be used")
+
 
 class LinearIndexing(Indexing):
     """Index into the light strip based on their order in sequence.
@@ -51,6 +59,9 @@ class LinearIndexing(Indexing):
                 self._pixels[i] = newvalue
         else:
             self._pixels[key] = newvalue
+
+    def prepare_to_send(self):
+        pass
 
 
 class RowIndexing(Indexing):
@@ -92,6 +103,9 @@ class RowIndexing(Indexing):
         else:
             indx += self.rows[row] - col
         return indx
+
+    def prepare_to_send(self):
+        pass
 
 
 class CartesianIndexing(Indexing):
@@ -167,6 +181,9 @@ class CartesianIndexing(Indexing):
             indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
             if indx is not None:
                 self._pixels[indx] = newvalue
+
+    def prepare_to_send(self):
+        self._led_spacing.save_quadtree_values_in_list()
 
 
 class PolarIndexing(Indexing):
@@ -248,6 +265,9 @@ class PolarIndexing(Indexing):
             if indx is not None:
                 self._pixels[indx] = newvalue
 
+    def prepare_to_send(self):
+        self._led_spacing.save_quadtree_values_in_list()
+
 
 class FloatCartesianIndexing(Indexing):
     """Index into the light strip with floats as a grid on 2D space.
@@ -325,6 +345,9 @@ class FloatCartesianIndexing(Indexing):
             color_leds_in_area(
                 x, y, self._effect_radius, newvalue, self._led_spacing, self._pixels
             )
+
+    def prepare_to_send(self):
+        self._led_spacing.save_quadtree_values_in_list()
 
 
 class FloatPolarIndexing(Indexing):
@@ -405,3 +428,6 @@ class FloatPolarIndexing(Indexing):
             color_leds_in_area(
                 x, y, self._effect_radius, newvalue, self._led_spacing, self._pixels
             )
+
+    def prepare_to_send(self):
+        self._led_spacing.save_quadtree_values_in_list()

@@ -5,7 +5,7 @@ import truecolor
 
 from blessings import Terminal
 
-from typing import List
+from typing import List, Optional
 
 """
 Print the LED pattern to terminal to test how a display will look
@@ -20,11 +20,21 @@ class TestDisplay:
     def __init__(self, lights_per_row: List[int], pixels) -> None:
         self._lights_per_row = lights_per_row
         self._pixels = pixels
-        self._terminal = Terminal()
-        # Make space for the terminal display
-        print(self._terminal.move_down * (len(lights_per_row)))
+
+        # For moving the cursor down to make space for the display
+        self._first_draw = True
+
+        # Terminal does not pickle well (inf recursion bug), so we set this to none right before we send it between threads
+        # However, when we need it, we initialize it
+        self._terminal: Optional[Terminal] = None
 
     def show(self):
+        if self._terminal is None:
+            self._terminal = Terminal()
+        if self._first_draw:
+            self._first_draw = False
+            print(self._terminal.move_down * (len(self._lights_per_row)))
+
         MAX_COLS = max(self._lights_per_row)
         indx = 0
 

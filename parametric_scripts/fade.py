@@ -21,7 +21,7 @@ def run(**kwargs):
     color_input = kwargs["color"]
     interval = float(kwargs["interval"])
 
-    ceil = Ceiling()
+    ceil = kwargs["ceiling"]
     ceil.clear()
 
     cycle_colors = color_range(color_input, dim_color(color_input), 100)
@@ -53,4 +53,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])

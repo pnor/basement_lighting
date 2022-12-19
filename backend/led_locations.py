@@ -40,6 +40,8 @@ class LEDSpace:
 
     def __init__(self) -> None:
         self._quadtree = Quadtree(0.5, 0.5, 1, 1)
+        # pickling
+        self._saved_values: Optional[List[LED]] = None
 
     def map_LEDs_in_zigzag(self, lights_per_row: List[int]) -> None:
         """
@@ -62,6 +64,7 @@ class LEDSpace:
 
         This is done to compensate for the fact that the first and last LED technically are in 2 rows
         """
+        self._quadtree = Quadtree(0.5, 0.5, 1, 1)
         indx = 0
 
         if len(lights_per_row) == 1:
@@ -104,6 +107,9 @@ class LEDSpace:
         bot = y - (height / 2)
         top = y + (height / 2)
 
+        if self._quadtree is None:
+            self.restore_quadtree()
+
         self._quadtree.set_mask([(left, bot), (left, top), (right, top), (right, bot)])
 
         res: List[LED] = []
@@ -145,9 +151,28 @@ class LEDSpace:
             if closest is None or distance < closest_distance:
                 closest = led
                 closest_distance = distance
-        self._quadtree.set_mask(None)
 
         return None if closest is None else closest._index
+
+    def save_quadtree_values_in_list(self) -> None:
+        """Save all the values in the quadtree to a python list
+        Quadtree cannot be pickled, so this function allows this object to be pickled by unsetting
+        the quadtree temoproraily and restoring it when used
+        """
+        self._quadtree.set_mask(None)
+        self._saved_values = []
+        for led in self._quadtree.elements():
+            self._saved_values += [led]
+        self._quadtree = None
+
+    def restore_quadtree(self) -> None:
+        """Restores the quadtree from saved values in `self._saved_values`."""
+        if self._saved_values is None:
+            return
+        self._quadtree = Quadtree(0.5, 0.5, 1, 1)
+        for v in self._saved_values:
+            self._quadtree.insert(v)
+        self._saved_values = None
 
     def clear_caches(self) -> None:
         """

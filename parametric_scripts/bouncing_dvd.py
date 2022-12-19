@@ -24,7 +24,7 @@ def run(**kwargs):
 
     color = color_format_to_rgb(color_input)
 
-    ceil = Ceiling()
+    ceil = kwargs["ceiling"]
     ceil.use_float_cartesian(effect_radius=0.3)
     ceil.clear()
 
@@ -51,4 +51,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])

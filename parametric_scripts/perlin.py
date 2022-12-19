@@ -24,7 +24,7 @@ def run(**kwargs):
     # Brightest color this will yield
     color = np.array(color_input)
 
-    ceil = Ceiling()
+    ceil = kwargs["ceiling"]
     ceil.use_float_cartesian(effect_radius=0.1)
     ceil.clear()
 
@@ -68,4 +68,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=Ceiling(test_mode=True), color=sys.argv[1], interval=sys.argv[2])

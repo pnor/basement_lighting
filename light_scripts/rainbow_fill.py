@@ -14,7 +14,7 @@ from numba import jit
 
 
 def run(**kwargs):
-    ceil = Ceiling()
+    ceil = kwargs["ceiling"]
     ceil.clear()
 
     prog = np.random.random()
@@ -34,4 +34,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run()
+    run(ceiling=Ceiling())

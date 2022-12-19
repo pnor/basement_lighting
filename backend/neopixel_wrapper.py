@@ -33,6 +33,13 @@ class PixelWrapper:
         self._lights_per_row = lights_per_row
         self._test_display = TestDisplay(lights_per_row, self)
 
+    def prepare_to_send(self) -> None:
+        """Prepares wrapper object to be sent between processes with `Pipe`
+        Here used to set the test display's `Terminal` to None
+        """
+        if self._test_display:
+            self._test_display._terminal = None
+
     def __getitem__(self, key: Any) -> Optional[RGB]:
         if self._pixels:
             return self._pixels.__getitem__(key)

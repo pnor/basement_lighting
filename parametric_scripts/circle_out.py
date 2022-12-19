@@ -3,20 +3,19 @@
 # NAME: Circle Out
 # Create ripples outward
 
+
 import sys
 import time
 
 from backend.ceiling import Ceiling
 from backend.util import hex_to_rgb
 
-from backend.led_locations import LEDSpace
-
 
 def run(**kwargs):
     color_input = kwargs["color"]
     interval = float(kwargs["interval"])
 
-    ceil = Ceiling()
+    ceil = Ceiling(test_mode=True)
     ceil.use_polar((0.5, 0.5))
 
     color = hex_to_rgb(color_input)
@@ -26,6 +25,7 @@ def run(**kwargs):
     FPS = 60
     DELTA = 1 / FPS
     cur_time = 0
+
     while True:
         cur_time = (cur_time + DELTA) % interval
         rad = (cur_time / interval) * max_radius

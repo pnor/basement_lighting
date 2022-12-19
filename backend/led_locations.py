@@ -10,12 +10,6 @@ from smartquadtree import Quadtree
 
 from backend.util import distance_formula
 
-# ====
-import cProfile, pstats, io
-from pstats import SortKey
-
-# ====
-
 
 class LED:
     def __init__(self, x: float, y: float, index: int):
@@ -96,7 +90,7 @@ class LEDSpace:
 
                 indx += 1
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=1000)
     def get_LEDs_in_area(
         self, x: float, y: float, width: float, height: float
     ) -> List[LED]:
@@ -120,7 +114,7 @@ class LEDSpace:
 
         return res
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=1000)
     def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:
         """
         `radius` around (x, y) of points should be returned
@@ -132,7 +126,7 @@ class LEDSpace:
             )
         )
 
-    # @lru_cache(maxsize=100)
+    @lru_cache(maxsize=1000)
     def get_closest_LED_index(
         self, x: float, y: float, max_distance: float = 0.30
     ) -> Optional[int]:

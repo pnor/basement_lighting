@@ -9,7 +9,12 @@ import time
 import numpy as np
 
 from backend.ceiling import Ceiling
-from backend.util import color_format_to_obj, rotate_vector
+from backend.util import (
+    color_format_to_obj,
+    color_format_to_rgb,
+    hex_to_rgb,
+    rotate_vector,
+)
 from numba import jit
 
 
@@ -17,7 +22,7 @@ def run(**kwargs):
     color_input = kwargs["color"]
     speed = int(kwargs["interval"])
 
-    color = color_format_to_obj(color_input)
+    color = color_format_to_rgb(color_input)
 
     ceil = Ceiling()
     ceil.use_float_cartesian(effect_radius=0.3)
@@ -46,9 +51,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(
-            "Usage: python alternate.py [color hex string] [blink interval in seconds]"
-        )
-
     run(color=sys.argv[1], interval=sys.argv[2])

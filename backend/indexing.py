@@ -147,12 +147,23 @@ class CartesianIndexing(Indexing):
             x = min(x1, x2) + (horiz_dist / 2)
             y = min(y1, y2) + (vert_dist / 2)
 
+            # Round to improve caching ability of led spacing
+            x = np.around(x, 3)
+            y = np.around(y, 3)
+            horiz_dist = np.around(horiz_dist, 3)
+            vert_dist = np.around(vert_dist, 3)
+
             leds = self._led_spacing.get_LEDs_in_area(x, y, horiz_dist, vert_dist)
             for l in leds:
                 self._pixels[l._index] = newvalue
 
         else:
             x, y = key
+
+            # Round to improve caching ability of led spacing
+            x = np.around(x, 3)
+            y = np.around(y, 3)
+
             indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
             if indx is not None:
                 self._pixels[indx] = newvalue
@@ -192,6 +203,11 @@ class PolarIndexing(Indexing):
         theta %= 360
         x, y = polar_to_cartesian(r, theta)
         x, y = transform_unit_circle_to_origin(x, y, self._origin[0], self._origin[1])
+
+        # Round to improve caching ability of led spacing
+        x = np.around(x, 3)
+        y = np.around(y, 3)
+
         # get location in light strip
         indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
         return None if indx is None else self._pixels[indx]
@@ -207,6 +223,12 @@ class PolarIndexing(Indexing):
         """
         if len(key) == 3:
             x, y, r = key
+
+            # Round to improve caching ability of led spacing
+            x = np.around(x, 2)
+            y = np.around(y, 2)
+            r = np.around(r, 2)
+
             leds = self._led_spacing.get_LEDs_in_radius(x, y, r)
             for l in leds:
                 self._pixels[l._index] = newvalue
@@ -217,6 +239,11 @@ class PolarIndexing(Indexing):
             x, y = transform_unit_circle_to_origin(
                 x, y, self._origin[0], self._origin[1]
             )
+
+            # Round to improve caching ability of led spacing
+            x = np.around(x, 3)
+            y = np.around(y, 3)
+
             indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
             if indx is not None:
                 self._pixels[indx] = newvalue
@@ -252,6 +279,11 @@ class FloatCartesianIndexing(Indexing):
         Returns nearest LED within `self._effect_radius` or None
         """
         x, y = key
+
+        # Round to improve caching ability of led spacing
+        x = np.around(x, 3)
+        y = np.around(y, 3)
+
         indx = self._led_spacing.get_closest_LED_index(x, y, self._effect_radius)
         return None if indx is None else self._pixels[indx]
 
@@ -273,12 +305,23 @@ class FloatCartesianIndexing(Indexing):
             x = min(x1, x2) + (horiz_dist / 2)
             y = min(y1, y2) + (vert_dist / 2)
 
+            # Round to improve caching ability of led spacing
+            x = np.around(x, 3)
+            y = np.around(y, 3)
+            horiz_dist = np.around(horiz_dist, 3)
+            vert_dist = np.around(vert_dist, 3)
+
             leds = self._led_spacing.get_LEDs_in_area(x, y, horiz_dist, vert_dist)
             for l in leds:
                 self._pixels[l._index] = newvalue
 
         else:
             x, y = key
+
+            # Round to improve caching ability of led spacing
+            x = np.around(x, 3)
+            y = np.around(y, 3)
+
             color_leds_in_area(
                 x, y, self._effect_radius, newvalue, self._led_spacing, self._pixels
             )
@@ -321,6 +364,9 @@ class FloatPolarIndexing(Indexing):
         theta %= 360
         x, y = polar_to_cartesian(r, theta)
         x, y = transform_unit_circle_to_origin(x, y, self._origin[0], self._origin[1])
+        # Round to improve caching ability of led spacing
+        x = np.around(x, 3)
+        y = np.around(y, 3)
         # get location in light strip
         indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
         return None if indx is None else self._pixels[indx]
@@ -335,6 +381,12 @@ class FloatPolarIndexing(Indexing):
         """
         if len(key) == 3:
             x, y, r = key
+
+            # Round to improve caching ability of led spacing
+            x = np.around(x, 3)
+            y = np.around(y, 3)
+            r = np.around(r, 3)
+
             leds = self._led_spacing.get_LEDs_in_radius(x, y, r)
             for l in leds:
                 self._pixels[l._index] = newvalue
@@ -345,6 +397,11 @@ class FloatPolarIndexing(Indexing):
             x, y = transform_unit_circle_to_origin(
                 x, y, self._origin[0], self._origin[1]
             )
+
+            # Round to improve caching ability of led spacing
+            x = np.around(x, 3)
+            y = np.around(y, 3)
+
             color_leds_in_area(
                 x, y, self._effect_radius, newvalue, self._led_spacing, self._pixels
             )

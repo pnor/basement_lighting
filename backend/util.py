@@ -32,7 +32,7 @@ def color_leds_in_area(
         dist = distance_formula(l.get_x(), l.get_y(), x, y)
         amp = max(0, 1 - (dist / effect_radius))
 
-        res = dim_color_by_amount(color, amp)
+        res = dim_color_by_amount_fast(color, amp)
         cur = pixels[l._index]
         final_color = (
             max(res[0], cur[0]),
@@ -67,6 +67,10 @@ def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:
         return colour.Color(rgb=tuple(np.array(color) / 255))
     else:
         return colour.Color(color)
+
+
+def color_format_to_rgb(color: Union[RGB, str, colour.Color]) -> RGB:
+    return color_obj_to_rgb(color_format_to_obj(color))
 
 
 def hsl_to_rgb(hue: float, sat: float, lum: float):

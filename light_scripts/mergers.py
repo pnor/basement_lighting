@@ -33,7 +33,6 @@ def run(**kwargs):
     FPS = 60
     DELTA = 1 / 60
 
-    # TODO remove
     while True:
         point_1 += velocity_1 * DELTA
         point_2 += velocity_2 * DELTA

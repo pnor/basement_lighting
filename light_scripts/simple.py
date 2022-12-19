@@ -10,7 +10,11 @@ from backend.ceiling import Ceiling
 from backend.util import colour_rgb_to_neopixel_rgb, rotate_vector
 
 
+# crash
+
+
 def run(**kwargs):
+    raise NotImplemented()
     ceil = kwargs["ceiling"]
     ceil.clear()
     # pdb.set_trace()

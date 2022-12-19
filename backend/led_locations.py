@@ -159,6 +159,10 @@ class LEDSpace:
         Quadtree cannot be pickled, so this function allows this object to be pickled by unsetting
         the quadtree temoproraily and restoring it when used
         """
+        if self._quadtree is None and self._saved_values is not None:
+            # already saved values, and did not restore
+            return
+
         self._quadtree.set_mask(None)
         self._saved_values = []
         for led in self._quadtree.elements():

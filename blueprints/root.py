@@ -53,8 +53,16 @@ def start_script() -> str:
             {"ok": False, "error": ("path doesn't exist: %s" % file_to_run)}
         )
 
-    _start_script(file_to_run, color, interval)
-    return json.dumps({"ok": True})
+    res = _start_script(file_to_run, color, interval)
+    if res:
+        return json.dumps({"ok": True})
+    else:
+        return json.dumps(
+            {
+                "ok": False,
+                "error": ("script %s crashed when loaded as a module" % file_to_run),
+            }
+        )
 
 
 @bp.route("/stop", methods=["POST"])
@@ -65,8 +73,9 @@ def stop_script() -> str:
 
 def _start_script(
     path: str, color_arg: Optional[str], interval_arg: Optional[int]
-) -> None:
-    """Hands off `state.ceiling` to the new script"""
+) -> bool:
+    """Hands off `state.ceiling` to the new script.
+    Returns True if it succesfully started the process."""
     if state.current_process is not None:
         state.current_process.terminate()
         assert state.recv_pipe is not None
@@ -74,12 +83,19 @@ def _start_script(
         state.ceiling = state.recv_pipe.recv()
         state.recv_pipe = None
 
-    recv, proc = file_to_pipe_and_runnable_script(path, color_arg, interval_arg)
+    recv_proc = file_to_pipe_and_runnable_script(path, color_arg, interval_arg)
+    if not recv_proc:
+        print("Script crashed when loaded as a module")
+        return False
+
+    recv, proc = recv_proc
     state.current_process = proc
     state.recv_pipe = recv
     state.current_process.start()
     # Relinquish control of the ceiling to the running script
-    state.ceiling = None  # ?? TODO do i put it there
+    state.ceiling = None
+
+    return True
 
 
 def _stop_script() -> None:
@@ -171,15 +187,19 @@ def function_wrapper(
 
     def _function_wrapper(color: str, interval: float):
         signal.signal(signal.SIGTERM, _exit_gracefully)
-        f(ceiling=ceiling, color=color, interval=interval)
-        _exit_normally()
+        try:
+            f(ceiling=ceiling, color=color, interval=interval)
+        except:
+            _exit_normally()
+        else:
+            _exit_normally()
 
     return _function_wrapper
 
 
 def file_to_pipe_and_runnable_script(
     file: str, color_arg: Optional[str], interval_arg: Optional[int]
-) -> Tuple[_ConnectionBase, Process]:
+) -> Optional[Tuple[_ConnectionBase, Process]]:
     """
     Converts a path to a file to a process containing the function
     Function in the file should be called "run(**kwargs)"
@@ -188,7 +208,10 @@ def file_to_pipe_and_runnable_script(
     """
     spec = importlib.util.spec_from_file_location("script_func", file)
     mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    try:
+        spec.loader.exec_module(mod)
+    except:  # Script fails to execute
+        return None
 
     assert state.ceiling is not None
     receiver, sender = Pipe()

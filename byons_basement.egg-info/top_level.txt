@@ -1,4 +1,0 @@
-backend
-blueprints
-light_scripts
-parametric_scripts

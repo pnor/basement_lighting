@@ -18,6 +18,7 @@ from flask import (
 )
 
 from backend.ceiling import Ceiling
+from backend.ceiling_animation import red_out
 
 bp = Blueprint("root", __name__, url_prefix="/")
 
@@ -175,6 +176,8 @@ def function_wrapper(
     """
 
     def _exit_gracefully(sig_number, stack_frame):
+        # animate the crash
+        red_out(ceiling, duration=0.2)
         # Send back the ceiling to the main app
         ceiling.prepare_to_send()
         sender_pipe.send(ceiling)
@@ -182,6 +185,9 @@ def function_wrapper(
 
     def _exit_normally():
         """Called when the normal script finishes"""
+        # animate the crash
+        red_out(ceiling, duration=0.2)
+
         ceiling.prepare_to_send()
         sender_pipe.send(ceiling)
 

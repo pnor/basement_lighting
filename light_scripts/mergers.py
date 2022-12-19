@@ -13,7 +13,7 @@ from numba import jit
 
 
 def run(**kwargs):
-    ceil = Ceiling(test_mode=True)
+    ceil = Ceiling()
     ceil.use_float_cartesian(effect_radius=0.3)
     ceil.clear()
 
@@ -33,6 +33,7 @@ def run(**kwargs):
     FPS = 60
     DELTA = 1 / 60
 
+    # TODO remove
     while True:
         point_1 += velocity_1 * DELTA
         point_2 += velocity_2 * DELTA

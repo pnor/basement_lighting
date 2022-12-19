@@ -2,6 +2,7 @@
 
 """ Convenience functions"""
 
+from functools import lru_cache
 import colour
 import copy
 from typing import Union, List, Tuple
@@ -10,7 +11,7 @@ import numba
 from numba import jit
 from numpy._typing import NDArray
 
-from backend.backend_types import RGB
+from backend.backend_types import RGB, is_RGB
 from backend.neopixel_wrapper import PixelWrapper
 
 # We import and type LEDSpace due to circular import dependency error /:
@@ -62,8 +63,7 @@ def color_obj_to_rgb(color_obj: colour.Color) -> RGB:
 
 
 def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:
-    if type(color) is list or type(color) is tuple:
-        assert len(color) >= 3
+    if is_RGB(color):
         return colour.Color(rgb=tuple(np.array(color) / 255))
     else:
         return colour.Color(color)
@@ -90,14 +90,29 @@ def dim_color(color: Union[RGB, str, colour.Color]) -> RGB:
     return set_color_luminance(color, 0.01)
 
 
-def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount) -> RGB:
+@lru_cache(maxsize=100)
+def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount: float) -> RGB:
     """Dims a color by a percentage of its current luminance"""
+    if is_RGB(color):
+        return dim_color_by_amount_fast(color, dim_amount)
+
     c = color_format_to_obj(color)
     l = c.get_luminance()
     c.set_luminance(l * dim_amount)
     rgb = c.rgb
     rgb = (np.array(rgb) * 255).astype(int)
     return tuple(rgb)
+
+
+@jit
+def dim_color_by_amount_fast(color: RGB, dim_amount: float) -> RGB:
+    """Dims a color by a percentage of its current luminance
+    Only works if color is a RGB tuple
+    """
+    color = list(color)
+    for i in range(len(color)):
+        color[i] *= dim_amount
+    return color
 
 
 def interpolate_colors(

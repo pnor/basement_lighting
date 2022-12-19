@@ -12,6 +12,7 @@ from colour import Color
 from perlin_noise import PerlinNoise
 
 from backend.ceiling import Ceiling
+from backend.ceiling_animation import circle_clear
 from backend.util import color_format_to_rgb, color_obj_to_rgb, sigmoid_0_to_1
 
 

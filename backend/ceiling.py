@@ -171,6 +171,7 @@ class Ceiling:
         self,
         origin: Tuple[float, float],
         lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
+        search_range: float = 0.2,
     ):
         assert len(origin) == 2
         """Use polar indexing"""
@@ -178,6 +179,7 @@ class Ceiling:
             self._pixels,
             lights_per_row=lights_per_row,
             origin=origin,
+            search_range=search_range,
             cached_led_spacing=self._cached_led_spacing,
         )
         self._cached_led_spacing = self._indexing._led_spacing
@@ -187,10 +189,11 @@ class Ceiling:
         block: Callable[[Self], None],
         origin: Tuple[float, float],
         lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
+        search_range: float = 0.2,
     ) -> None:
         """Execute `block` with the polar indexing method"""
         old_indexing = self._indexing
-        self.use_polar(origin, lights_per_row)
+        self.use_polar(origin, lights_per_row, search_range=search_range)
         block(self)
         self._indexing = old_indexing
 

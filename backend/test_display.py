@@ -31,6 +31,7 @@ class TestDisplay:
     def show(self):
         if self._terminal is None:
             self._terminal = Terminal()
+            self._first_draw = True  # make space in flask stdout
         if self._first_draw:
             self._first_draw = False
             print(self._terminal.move_down * (len(self._lights_per_row)))

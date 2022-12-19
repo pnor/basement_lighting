@@ -59,7 +59,7 @@ def hex_to_color_obj(hex_str: str) -> colour.Color:
 def color_obj_to_rgb(color_obj: colour.Color) -> RGB:
     rgb = color_obj.rgb
     rgb = [int(x * 255) for x in rgb]
-    return rgb
+    return tuple(rgb)
 
 
 def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:
@@ -162,6 +162,15 @@ def clamp(num, min_value, max_value):
 @jit
 def sigmoid(x: float) -> float:
     return 1 / (1 + np.exp(-x))
+
+
+@jit
+def sigmoid_0_to_1(x: float) -> float:
+    """Returns result between 0..1
+    `x` should be in 0..1"""
+    LARGE_NUM = 8
+    sigmoid_input = (x - 0.5) * LARGE_NUM
+    return sigmoid(sigmoid_input)
 
 
 @jit

@@ -13,6 +13,7 @@ from backend.util import (
     dim_color,
     sigmoid,
     color_range,
+    sigmoid_0_to_1,
 )
 
 
@@ -41,9 +42,7 @@ def run(**kwargs):
 
         prog = cur_time / interval
         # use sigmoid to get better pulsing
-        LARGE_NUM = 8
-        sigmoid_input = (prog - 0.5) * LARGE_NUM
-        prog = sigmoid(sigmoid_input)
+        prog = sigmoid_0_to_1(prog)
 
         i = int(prog * 99)
 

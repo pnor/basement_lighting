@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# NAME: example
 
 from backend.ceiling import Ceiling
 

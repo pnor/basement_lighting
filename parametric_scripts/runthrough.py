@@ -14,7 +14,7 @@ def run(**kwargs):
     color_input = kwargs["color"]
     interval = float(kwargs["interval"])
 
-    ceil = Ceiling()
+    ceil = Ceiling(test_mode=True)
     ceil.use_linear()
     ceil.clear()
 

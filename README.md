@@ -38,7 +38,7 @@ pip install -e .
 Then run whichever script directly:
 
 ``` sh
-python light_scripts/<name of script>
+python light_scripts/<name of script> [optional color] [optional interval/speed]
 ```
 
 If you are not running on a rasberry pi/want to test how it would look, make sure to set ceiling to testing mode (`ceil = Ceiling(test_mode=True)`)
@@ -48,6 +48,12 @@ If you are not running on a rasberry pi/want to test how it would look, make sur
 You can add a light script by creating a file and putting inside either the `parametric_scripts` directory or the `light_scripts`. Scripts that take inputs should go in `parametric_scripts`, and scripts that do not should go in `light_scripts`.
 
 Both directories are searched at runtime and displayed on the website.
+
+Make sure to include a comment near the top of the file to specify the name of the script that will be displayed on the website
+
+``` python
+# NAME: <name here>
+```
 
 An example of a starter script file is the `example.py`.
 

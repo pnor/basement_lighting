@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from typing import Callable, Any, Optional
+from typing_extensions import Self
 from backend.neopixel_wrapper import (
     PixelWrapper,
     init_for_testing,
@@ -67,6 +68,8 @@ class Ceiling:
         self.NUMBER_LIGHTS = NUMBER_LIGHTS
         self._cached_led_spacing: Optional[LEDSpace] = None
 
+    # ===== Animation / Clearing ==========
+
     def clear(self, show=True) -> None:
         """Set every pixel to black (and updates the LEDs)"""
         self.fill([0, 0, 0])
@@ -80,6 +83,13 @@ class Ceiling:
     def show(self) -> None:
         """Update all pixels with updated colors at once"""
         self._pixels.show()
+
+    # ===== Getting / Setting ==========
+    def __getitem__(self, key: Any) -> Optional[RGB]:
+        return self._indexing.get(key)
+
+    def __setitem__(self, key: Any, value: RGB) -> None:
+        self._indexing.set(key, value)
 
     def rows(self) -> Optional[List[int]]:
         """Returns rows information if the indexing is row indexing"""
@@ -97,6 +107,8 @@ class Ceiling:
         """Return the current Indexing object"""
         return self._indexing
 
+    # ===== Async and Sending Between Processes ==========
+
     def prepare_to_send(self) -> None:
         """
         Prepares the ceiling object to be sent between processes with `Pipe`
@@ -105,13 +117,29 @@ class Ceiling:
         self._pixels.prepare_to_send()
         self._indexing.prepare_to_send()
 
+    # ===== Indexing ==========
+
     def use_linear(self):
         "Use linear indexing"
         self._indexing = LinearIndexing(self._pixels)
 
+    def with_linear(self, block: Callable[[Self], None]) -> None:
+        """Execute `block` with the linear indexing method"""
+        old_indexing = self._indexing
+        self.use_linear()
+        block(self)
+        self._indexing = old_indexing
+
     def use_row(self, lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT):
         """Use row based indexing"""
         self._indexing = RowIndexing(self._pixels, lights_per_row)
+
+    def with_row(self, block: Callable[[Self], None]) -> None:
+        """Execute `block` with the row indexing method"""
+        old_indexing = self._indexing
+        self.use_row()
+        block(self)
+        self._indexing = old_indexing
 
     def use_cartesian(
         self,
@@ -126,6 +154,18 @@ class Ceiling:
             cached_led_spacing=self._cached_led_spacing,
         )
         self._cached_led_spacing = self._indexing._led_spacing
+
+    def with_cartesian(
+        self,
+        block: Callable[[Self], None],
+        lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
+        search_range: float = 0.2,
+    ) -> None:
+        """Execute `block` with the cartesian indexing method"""
+        old_indexing = self._indexing
+        self.use_cartesian(lights_per_row, search_range)
+        block(self)
+        self._indexing = old_indexing
 
     def use_polar(
         self,
@@ -142,6 +182,18 @@ class Ceiling:
         )
         self._cached_led_spacing = self._indexing._led_spacing
 
+    def with_polar(
+        self,
+        block: Callable[[Self], None],
+        origin: Tuple[float, float],
+        lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
+    ) -> None:
+        """Execute `block` with the polar indexing method"""
+        old_indexing = self._indexing
+        self.use_polar(origin, lights_per_row)
+        block(self)
+        self._indexing = old_indexing
+
     def use_float_cartesian(
         self,
         lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
@@ -155,6 +207,18 @@ class Ceiling:
             cached_led_spacing=self._cached_led_spacing,
         )
         self._cached_led_spacing = self._indexing._led_spacing
+
+    def with_float_cartesian(
+        self,
+        block: Callable[[Self], None],
+        lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
+        effect_radius: float = 0.2,
+    ) -> None:
+        """Execute `block` with the float cartesian indexing method"""
+        old_indexing = self._indexing
+        self.use_float_cartesian(lights_per_row, effect_radius)
+        block(self)
+        self._indexing = old_indexing
 
     def use_float_polar(
         self,
@@ -172,8 +236,15 @@ class Ceiling:
         )
         self._cached_led_spacing = self._indexing._led_spacing
 
-    def __getitem__(self, key: Any) -> Optional[RGB]:
-        return self._indexing.get(key)
-
-    def __setitem__(self, key: Any, value: RGB) -> None:
-        self._indexing.set(key, value)
+    def with_float_polar(
+        self,
+        block: Callable[[Self], None],
+        origin: Tuple[float, float],
+        lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT,
+        effect_radius: float = 0.2,
+    ) -> None:
+        """Execute `block` with the float polar indexing method"""
+        old_indexing = self._indexing
+        self.use_float_polar(origin, lights_per_row, effect_radius)
+        block(self)
+        self._indexing = old_indexing

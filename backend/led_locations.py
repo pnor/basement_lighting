@@ -96,7 +96,7 @@ class LEDSpace:
 
                 indx += 1
 
-    #    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)
     def get_LEDs_in_area(
         self, x: float, y: float, width: float, height: float
     ) -> List[LED]:
@@ -104,10 +104,6 @@ class LEDSpace:
         `width`: width of box centered on `(x, y)`
         `height`: height of box centered on `(x, y)`
         """
-
-        # pr = cProfile.Profile()
-        # pr.enable()
-        # # ... do something ...
 
         left = x - (width / 2)
         right = x + (width / 2)
@@ -122,16 +118,9 @@ class LEDSpace:
 
         self._quadtree.set_mask(None)
 
-        # pr.disable()
-        # s = io.StringIO()
-        # sortby = SortKey.CUMULATIVE
-        # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-        # ps.print_stats()
-        # print(s.getvalue())
-
         return res
 
-    #    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)
     def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:
         """
         `radius` around (x, y) of points should be returned
@@ -143,7 +132,7 @@ class LEDSpace:
             )
         )
 
-    @lru_cache(maxsize=100)
+    # @lru_cache(maxsize=100)
     def get_closest_LED_index(
         self, x: float, y: float, max_distance: float = 0.30
     ) -> Optional[int]:
@@ -170,6 +159,6 @@ class LEDSpace:
         """
         Clear cached values
         """
-        # LEDSpace.get_LEDs_in_area.cache_clear()
+        LEDSpace.get_LEDs_in_area.cache_clear()
         LEDSpace.get_closest_LED_index.cache_clear()
-        # LEDSpace.get_LEDs_in_radius.cache_clear()
+        LEDSpace.get_LEDs_in_radius.cache_clear()

@@ -10,7 +10,6 @@ import colour
 
 from backend.ceiling import Ceiling
 from backend.util import clamp, colour_rgb_to_neopixel_rgb
-from backend.led_locations import LEDSpace
 
 
 def rand_func(size: int):
@@ -24,7 +23,7 @@ def run(**kwargs):
     # Brightest color this will yield
     color = np.array([100, 100, 100])
 
-    ceil = Ceiling(test_mode=True, print_to_stdout=False)
+    ceil = Ceiling()
     ceil.use_float_cartesian(effect_radius=0.15)
     ceil.clear()
 
@@ -37,11 +36,7 @@ def run(**kwargs):
     FPS = 60
     DELTA = 1 / FPS
 
-    # TODO remove
-    iter = 0
-    while iter < 100:
-        iter += 1
-
+    while True:
         cur += DELTA
         if cur > period:
             cur = 0
@@ -67,13 +62,6 @@ def run(**kwargs):
 
         ceil.show()
         time.sleep(DELTA)
-
-    # print(f"area:")
-    # print(LEDSpace.get_LEDs_in_area.cache_info())
-    #     print(f"radius:")
-    #     print(LEDSpace.get_LEDs_in_radius.cache_info())
-    # print(f"closest")
-    # print(LEDSpace.get_closest_LED_index.cache_info())
 
 
 if __name__ == "__main__":

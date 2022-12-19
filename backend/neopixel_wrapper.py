@@ -70,7 +70,7 @@ class PixelWrapper:
     def show(self):
         if self._test_display and self.print_to_stdout:
             self._test_display.show()
-        else:
+        elif self._pixels:
             self._pixels.show()
 
 

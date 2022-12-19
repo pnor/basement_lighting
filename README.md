@@ -4,6 +4,46 @@ Lighting his basement with rasberry pis
 Design of web UI
 https://www.figma.com/file/CaGVhb8xKwX06VtySUNkGD/byronsbasement-website?node-id=0%3A1&t=5JYDx7SjkIt8KpCZ-3
 
+## Running
+### Website
+Make sure to first enter virtual environment and install dependencies:
+``` sh
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Install node dependencies and compile
+
+``` sh
+npm install
+npm run compile
+```
+
+Then run with
+
+``` sh
+flask run
+```
+
+### Running light scripts
+You can test/run lighting scripts by first installing necessary dependencies
+``` sh
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+```
+
+Then run whichever script directly:
+
+``` sh
+python light_scripts/<name of script>
+```
+
+If you are not running on a rasberry pi/want to test how it would look, make sure to set ceiling to testing mode (`ceil = Ceiling(test_mode=True)`)
+
+
 ## Adding a light script
 You can add a light script by creating a file and putting inside either the `parametric_scripts` directory or the `light_scripts`. Scripts that take inputs should go in `parametric_scripts`, and scripts that do not should go in `light_scripts`.
 

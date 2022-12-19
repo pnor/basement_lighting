@@ -95,9 +95,15 @@ def get_scripts_and_names(dir: str) -> List[Tuple[str, str]]:
     Parses files in `dir`  for runnable scripts. Returns (name, file_path)
     """
     base_name = dir + "/"
-    results = []
+
+    skip_names = ["__init__.py"]
+
     files = os.listdir(base_name)
-    files = [base_name + f for f in files if len(f) > 3 and f[-3:] == ".py"]
+    files = [
+        base_name + f
+        for f in files
+        if len(f) > 3 and f[-3:] == ".py" and f not in skip_names
+    ]
     names = [parse_script_name_from_file(f) for f in files]
     return list(zip(names, files))
 
@@ -108,11 +114,8 @@ def parse_script_name_from_file(path) -> str:
     # NAME: <name of script>
     in a docstring towards the top of the file
     """
-    skip_names = ["__init__.py"]
     SEARCH_STR = "# NAME:"
     with open(path) as file:
-        if file in skip_names:
-            continue
         for line in file.readlines():
             indx = line.find(SEARCH_STR)
             if indx == 0:

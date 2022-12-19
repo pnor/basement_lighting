@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 
 
+# NAME: Fade
 # Fades every LED on and off
-#
-# Usage:
-# python fade.py [color hex string] [entire fade interval in seconds]
-#
-# Fade interval is time for it to go from on to off/vice versa
 
 import sys
 import time

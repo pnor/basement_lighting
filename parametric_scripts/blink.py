@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
+# NAME: Blink
 # Blinks every LED to the same color
-#
-# Usage:
-# python blink.py [color hex string] [blink interval in seconds]
+
 
 import sys
 import time

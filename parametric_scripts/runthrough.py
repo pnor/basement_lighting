@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
+# NAME: Run through
 # Runs a single LED throughout the light strip
-#
-# Usage:
-# python runthrough.py [color hex string] [speed to traverse seconds]
 
 import sys
 import time

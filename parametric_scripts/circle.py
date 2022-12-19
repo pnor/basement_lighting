@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+# NAME: Circle
 # Sets a circle to a solid color
+
 
 import sys
 

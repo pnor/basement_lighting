@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# NAME: Spinnning
 # Do a circular running motion
 
 import sys

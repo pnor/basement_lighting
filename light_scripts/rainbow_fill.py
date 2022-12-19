@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# NAME: Rainbow Fill
 # Fill all LEDs with changing colors based off the rainbow
 
 import time

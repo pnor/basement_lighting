@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# NAME: Blink Rows
 # Blinks rows
 
 import sys

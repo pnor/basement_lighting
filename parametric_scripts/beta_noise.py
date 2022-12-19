@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# NAME: Beta Noise
+#
 # Animated gray noise, using the float cartesian's effect radius
 # (based off gray_noise in light_scripts)
 
@@ -26,7 +28,7 @@ def run(**kwargs):
     # Brightest color this will yield
     color = np.array(hex_to_rgb(color_input))
 
-    ceil = Ceiling(test_mode=True)
+    ceil = Ceiling()
     ceil.use_float_cartesian(effect_radius=0.15)
     ceil.clear()
 

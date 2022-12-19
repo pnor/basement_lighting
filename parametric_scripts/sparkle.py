@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
+# NAME: Sparkle
 # Create a glittering effect with the LEDs
-#
-# Usage:
-# python sparkle.py [color hex string] [entire fade interval in seconds]
 
 
 import sys

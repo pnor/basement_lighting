@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
+# NAME: Alternate
 # Blinks every other LED to the same color
-#
-# Usage:
-# python alternate.py [color hex string] [blink interval in seconds]
 
 import sys
 import time
@@ -22,7 +20,7 @@ def run(**kwargs):
     on_rgb = hex_to_rgb(color_input)
     off_rgb = [0] * len(on_rgb)
 
-    ceil = Ceiling()
+    ceil = Ceiling(test_mode=True)
     ceil.clear()
 
     on = True

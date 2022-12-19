@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# NAME: Circle Out
 # Create ripples outward
 
 import sys
@@ -15,7 +16,7 @@ def run(**kwargs):
     color_input = kwargs["color"]
     interval = float(kwargs["interval"])
 
-    ceil = Ceiling(test_mode=True)
+    ceil = Ceiling()
     ceil.use_polar((0.5, 0.5))
 
     color = hex_to_rgb(color_input)
@@ -35,10 +36,6 @@ def run(**kwargs):
         ceil.show()
 
         time.sleep(DELTA)
-
-    print(LEDSpace.get_LEDs_in_area.cache_info())
-    print()
-    print(LEDSpace.get_LEDs_in_radius.cache_info())
 
 
 if __name__ == "__main__":

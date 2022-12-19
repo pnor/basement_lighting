@@ -49,6 +49,14 @@ class PixelWrapper:
         if self._test_display and self._auto_write:
             self._test_display.show()
 
+    def __len__(self) -> int:
+        if self._pixels:
+            return len(self._pixels)
+        elif self._pretend_pixels:
+            return len(self._pretend_pixels)
+        else:
+            return 0
+
     def fill(self, color: RGB) -> None:
         if self._pixels:
             self._pixels.fill(color)

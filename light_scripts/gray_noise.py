@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-# Animated gray noise, using the float cartesian's effect radius
+# NAME: Grid Gray Noise
+# Animated grid based noise, using the float cartesian's effect radius
 
 
 import time

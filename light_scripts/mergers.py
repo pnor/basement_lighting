@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# NAME: Mergers
 # 2 points of different colors, bouncing around
 
 import time
@@ -9,7 +10,6 @@ import colour
 from backend.ceiling import Ceiling
 from backend.util import colour_rgb_to_neopixel_rgb, rotate_vector
 from numba import jit
-from backend.led_locations import LEDSpace
 
 
 def run(**kwargs):

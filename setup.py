@@ -23,7 +23,7 @@ def read(*names, **kwargs):
 
 
 setup(
-    name="byons basement",
+    name="byronsbasement",
     version="0.1",
     license="",
     description="Mini project to control lights in the basement",

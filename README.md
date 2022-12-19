@@ -1,10 +1,7 @@
-# byrons basement
-Lighting his basement with rasberry pis
+# Byrons Basement
+Using a Rasberry pi and WS2811 addressable light strips to create cool lighting effects
 
-Design of web UI
-https://www.figma.com/file/CaGVhb8xKwX06VtySUNkGD/byronsbasement-website?node-id=0%3A1&t=5JYDx7SjkIt8KpCZ-3
-
-## Running
+## How to Run
 ### Website
 Make sure to first enter virtual environment and install dependencies:
 ``` sh
@@ -116,7 +113,7 @@ You can set circles of LEDs by providing a tuple of 3 elements: (x, y, radius)
 `ceil.use_float_polar(origin=, effect_radius=)`: Same as `use_float_cartesian` but uses polar coordinate system.
 
 
-## Tesintg
+## Testing
 You can test scripts without a rasberry pi right in your terminal
 A quick way of doing this is to do this in the constructor:
 

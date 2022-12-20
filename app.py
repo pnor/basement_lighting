@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from .blueprints import root, control
+from blueprints import root, control
 
 
 def create_app(test_config=None):

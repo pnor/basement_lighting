@@ -22,7 +22,6 @@ from backend.state import global_state as state
 
 bp = Blueprint("root", __name__, url_prefix="/")
 
-
 @bp.route("/")
 def route_main():
     return render_template("index.html", patterns=ls)

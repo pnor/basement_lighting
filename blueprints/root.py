@@ -88,10 +88,7 @@ def parse_script_name_from_file(path) -> str:
 
 # ========================================
 
-paramaetric_name_and_script = get_scripts_and_names("parametric_scripts")
+parametric_name_and_script = get_scripts_and_names("parametric_scripts")
 light_name_and_script = get_scripts_and_names("light_scripts")
 
-# ls = list(map(lambda t: t[0], paramaetric_name_and_script)) + list(
-#     map(lambda t: t[0], light_name_and_script)
-# )
-ls = paramaetric_name_and_script + light_name_and_script
+ls = parametric_name_and_script + light_name_and_script

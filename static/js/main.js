@@ -25,7 +25,7 @@ window.addEventListener("load", function() {
 function start(ev) {
     var xhr = new XMLHttpRequest();
     var path = ev.target.id;
-    var post = { file: path, color: #beebee, interval: 1 };
+    var post = { file: path, color: "#beebee", interval: 1 };
 
     xhr.open("POST", `${URL}/control/start`, true);
 

@@ -10,8 +10,7 @@ window.addEventListener("load", function() {
     var buttons = document.getElementsByClassName("button"); 
 
     for (i = 0; i < buttons.length; i++) {                                      
-        var path = buttons[i].id;
-        buttons[i].addEventListener("click", function(){ start(path) });
+        buttons[i].addEventListener("click", start, false);
     }
 });
 
@@ -23,8 +22,9 @@ window.addEventListener("load", function() {
 });
 
 
-function start(path) {
+function start(ev) {
     var xhr = new XMLHttpRequest();
+    var path = ev.target.id;
     var post = { file: path, interval: 1 };
 
     xhr.open("POST", `${URL}/control/start`, true);

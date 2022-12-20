@@ -2,6 +2,8 @@
 <html>
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}">
+        </script>
     </head>
     <body class="body flexbox flexbox--col">
         <header class="header mb-5">
@@ -14,7 +16,7 @@
         <main class="content mx-auto mt-5">
             <div class="flexbox flexbox--j--center flexbox--wrap buttons-grid">
                 {% for pattern in patterns %}
-                <a script="{{ pattern[1] }}" class="button p-3">{{ pattern[0] }}</a>
+                <a id="{{ pattern[1] }}" class="button p-3">{{ pattern[0] }}</a>
                 {% endfor %}
             </div>
         </main>

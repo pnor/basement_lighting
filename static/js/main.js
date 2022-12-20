@@ -47,18 +47,18 @@ function stop() {
 function get_state() {
     fetch(`${URL}/state`)
         .then(res => res.json())
-        .then(response => response.state)
-        .then(state => {
+        .then(response => {
             var header = document.getElementsByTagName("header")[0]; 
             var title = document.getElementById("nowShowing"); 
 
-            if (state == "RUNNING") {
+            if (response.state == "RUNNING") {
                 header.classList.add("header--active");
                 header.classList.remove("header--error");
-                title.innerHTML = "LED Light Show";
-            } else if (state == "CRASHED") {
+                title.innerHTML = response.pattern;
+            } else if (response.state == "CRASHED") {
                 header.classList.remove("header--active");
                 header.classList.add("header--error");
+                title.innerHTML = response.pattern;
             } else {
                 header.classList.remove("header--active");
                 header.classList.remove("header--error");

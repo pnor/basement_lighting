@@ -19,6 +19,7 @@ from flask import (
 
 from backend.ceiling import Ceiling
 from backend.state import global_state as state
+from backend.files import *;
 
 bp = Blueprint("root", __name__, url_prefix="/")
 
@@ -41,49 +42,20 @@ def get_state() -> str:
         return json.dumps({"state": "NOT_RUNNING"})
 
     exit_code = state.current_process.exitcode
+    pattern = "N/A"
 
     result = ""
     if exit_code is None:
         result = "RUNNING"
+        pattern = state.current_pattern
     elif exit_code == 0:
         result = "GRACEFULLY_TERMINATED"
     else:
         result = "CRASHED"
+        pattern = state.current_pattern
 
-    return json.dumps({"state": result})
+    return json.dumps({"state": result, "pattern": pattern})
 
-
-def get_scripts_and_names(dir: str) -> List[Tuple[str, str]]:
-    """
-    Parses files in `dir`  for runnable scripts. Returns (name, file_path)
-    """
-    base_name = dir + "/"
-
-    skip_names = ["__init__.py"]
-
-    files = os.listdir(base_name)
-    files = [
-        base_name + f
-        for f in files
-        if len(f) > 3 and f[-3:] == ".py" and f not in skip_names
-    ]
-    names = [parse_script_name_from_file(f) for f in files]
-    return list(zip(names, files))
-
-
-def parse_script_name_from_file(path) -> str:
-    """Parses `path` for the name of the script
-    The name should be formatted:
-    # NAME: <name of script>
-    in a docstring towards the top of the file
-    """
-    SEARCH_STR = "# NAME:"
-    with open(path) as file:
-        for line in file.readlines():
-            indx = line.find(SEARCH_STR)
-            if indx == 0:
-                return line[len(SEARCH_STR) :].strip()
-    return path
 
 
 # ========================================

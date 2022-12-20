@@ -21,14 +21,9 @@ from backend.ceiling_animation import circle_clear
 
 from backend.state import global_state as state
 from backend.ceiling import Ceiling
+from backend.files import *
 
 bp = Blueprint("control", __name__, url_prefix="/control")
-
-
-@bp.route("/")
-def route_main():
-    return render_template("index.html", patterns=ls)
-
 
 @bp.route("/start", methods=["POST"])
 def start_script() -> str:
@@ -85,6 +80,7 @@ def _start_script(
     state.current_process = proc
     state.recv_pipe = recv
     state.current_process.start()
+    state.current_pattern = parse_script_name_from_file(path)
     # Relinquish control of the ceiling to the running script
     state.ceiling = None
 
@@ -102,6 +98,7 @@ def _stop_script() -> None:
         state.recv_pipe = None
         # With ceiling, animate clear
         circle_clear(state.ceiling, 0.2, (255, 255, 255))
+        state.current_pattern = None
 
 
 def function_wrapper(

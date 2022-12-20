@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# NAME: Particles
+
 from typing import List
 import sys
 import time
@@ -46,13 +48,13 @@ class Particle:
         return self._cur > self._lifetime
 
 
-def create_random_particle() -> Particle:
+def create_random_particle(speed: float) -> Particle:
     angle = np.random.random() * (2 * np.pi)
-    radius = 1.3
-    x = radius * np.cos(angle)
-    y = radius * np.sin(angle)
+    radius = 0.6
+    x = (radius * np.cos(angle)) + 0.5
+    y = (radius * np.sin(angle)) + 0.5
 
-    MAX_MAGNITUDE = 4
+    MAX_MAGNITUDE = 3 * speed
     v_angle = angle - np.pi - (np.random.random() * (np.pi / 3))
     v_magnitude = np.random.random() * MAX_MAGNITUDE
     v_x = v_magnitude * np.cos(v_angle)
@@ -72,12 +74,12 @@ def run(**kwargs):
     speed = float(kwargs["interval"])
 
     ceil: Ceiling = kwargs["ceiling"]
-    ceil.use_cartesian()
+    ceil.use_cartesian(search_range=0.1)
     ceil.clear()
 
     particles: List[Particle] = []
-    for i in range(10):
-        particles += [create_random_particle()]
+    for i in range(6):
+        particles += [create_random_particle(speed)]
 
     FPS = 60
     DELTA = 1 / 60
@@ -91,12 +93,16 @@ def run(**kwargs):
                 particles = list(filter(lambda x: x != p, particles))
 
         ceil.show()
-        if len(particles) < 20:
+
+        if len(particles) < 3:
             for i in range(np.random.randint(6)):
-                particles += [create_random_particle()]
+                particles += [create_random_particle(speed)]
+
+        if np.random.random() < 0.04:
+            particles += [create_random_particle(speed)]
 
         time.sleep(DELTA)
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(test_mode=True), color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])

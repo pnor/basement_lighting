@@ -9,6 +9,7 @@ from multiprocessing.connection import _ConnectionBase
 class State:
     def __init__(self) -> None:
         self.current_process: Optional[Process] = None
+        self.current_running_script: Optional[str] = None
         self.ceiling: Optional[Ceiling] = Ceiling(test_mode=True)
         self.recv_pipe: Optional[_ConnectionBase] = None
 

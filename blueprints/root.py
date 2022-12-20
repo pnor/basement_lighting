@@ -50,7 +50,7 @@ def get_state() -> str:
     else:
         result = "CRASHED"
 
-    return json.dumps({"state": result})
+    return json.dumps({"state": result, "name": state.current_running_script})
 
 
 def get_scripts_and_names(dir: str) -> List[Tuple[str, str]]:

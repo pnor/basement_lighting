@@ -14,6 +14,7 @@
     top: 0;
     
     background: $color-inactive;
+    transition: background 1s, filter 1s;
     @include shadow($color-inactive);
 
     &--active {
@@ -21,12 +22,15 @@
         @include shadow($color-primary);
     }
 
+    &--ok {
+        background: $color-ok;
+        @include shadow($color-ok);
+    }
+
     &--error {
         background: $color-warn;
         @include shadow($color-warn);
     }
-
-
 }
 
 .header__content {

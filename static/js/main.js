@@ -53,14 +53,22 @@ function get_state() {
 
             if (response.state == "RUNNING") {
                 header.classList.add("header--active");
+                header.classList.remove("header--ok");
+                header.classList.remove("header--error");
+                title.innerHTML = response.pattern;
+            } else if (response.state == "GRACEFULLY_TERMINATED") {
+                header.classList.remove("header--active");
+                header.classList.add("header--ok");
                 header.classList.remove("header--error");
                 title.innerHTML = response.pattern;
             } else if (response.state == "CRASHED") {
                 header.classList.remove("header--active");
+                header.classList.remove("header--ok");
                 header.classList.add("header--error");
                 title.innerHTML = response.pattern;
             } else {
                 header.classList.remove("header--active");
+                header.classList.remove("header--ok");
                 header.classList.remove("header--error");
                 title.innerHTML = "N/A";
             }

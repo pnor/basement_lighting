@@ -42,14 +42,15 @@ def get_state() -> str:
         return json.dumps({"state": "NOT_RUNNING"})
 
     exit_code = state.current_process.exitcode
-    pattern = "N/A"
 
     result = ""
+    pattern = "N/A"
     if exit_code is None:
         result = "RUNNING"
         pattern = state.current_pattern
     elif exit_code == 0:
         result = "GRACEFULLY_TERMINATED"
+        pattern = state.current_pattern
     else:
         result = "CRASHED"
         pattern = state.current_pattern

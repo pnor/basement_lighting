@@ -56,8 +56,6 @@ def get_state() -> str:
 
     return json.dumps({"state": result, "pattern": pattern})
 
-
-
 # ========================================
 
 parametric_name_and_script = get_scripts_and_names("parametric_scripts")

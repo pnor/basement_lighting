@@ -15,12 +15,11 @@ from backend.util import (
     hex_to_rgb,
     rotate_vector,
 )
-from numba import jit
 
 
 def run(**kwargs):
     color_input = kwargs["color"]
-    speed = int(kwargs["interval"])
+    speed = float(kwargs["interval"])
 
     color = color_format_to_rgb(color_input)
 

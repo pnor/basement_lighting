@@ -42,7 +42,6 @@ def run(**kwargs):
             cur_perlin_noise = next_perlin_noise
             next_perlin_noise = PerlinNoise(octaves=np.random.randint(1, 4))
 
-        # prog = clamp(cur / period, 0, 1)
         prog = sigmoid_0_to_1(cur / period)
 
         ceil.clear(False)
@@ -68,4 +67,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling())
+    run(ceiling=Ceiling(), interval=sys.argv[1])

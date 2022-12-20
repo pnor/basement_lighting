@@ -2,6 +2,7 @@ from multiprocessing import Process, Pipe
 from multiprocessing.connection import _ConnectionBase
 from typing import Callable, Optional, List, Tuple
 import os
+import pdb
 import importlib
 import json
 import signal
@@ -16,6 +17,7 @@ from flask import (
     session,
     url_for,
 )
+from backend.ceiling_animation import circle_clear
 
 from backend.state import global_state as state
 from backend.ceiling import Ceiling
@@ -39,7 +41,6 @@ def start_script() -> str:
     color = data_dict.get("color")
     interval = data_dict.get("interval")
 
-    print(file_to_run)
     if not os.path.exists(file_to_run):
         return json.dumps(
             {"ok": False, "error": ("path doesn't exist: %s" % file_to_run)}
@@ -99,6 +100,8 @@ def _stop_script() -> None:
         assert state.ceiling is not None
         state.current_process = None
         state.recv_pipe = None
+        # With ceiling, animate clear
+        circle_clear(state.ceiling, 0.2, (255, 255, 255))
 
 
 def function_wrapper(
@@ -122,6 +125,7 @@ def function_wrapper(
     def _function_wrapper(color: str, interval: float):
         signal.signal(signal.SIGTERM, _exit_gracefully)
         try:
+            circle_clear(ceiling, 0.2, (255, 255, 255))
             f(ceiling=ceiling, color=color, interval=interval)
         except Exception:
             _prepare_to_exit()

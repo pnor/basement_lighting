@@ -17,7 +17,8 @@ from backend.util import color_format_to_rgb, color_obj_to_rgb, sigmoid_0_to_1
 
 
 def run(**kwargs):
-    interval = float(kwargs["interval"])
+    interval = kwargs.get("interval")
+    interval = float(interval) if interval else 1
 
     # Number of points used to sample the perlin noise obj
     SAMPLE_SIZE = 20

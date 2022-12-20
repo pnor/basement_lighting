@@ -114,6 +114,7 @@ class Ceiling:
         Prepares the ceiling object to be sent between processes with `Pipe`
         Must call this before sending this with `pipe.send(ceiling)`!
         """
+        self._cached_led_spacing = None
         self._pixels.prepare_to_send()
         self._indexing.prepare_to_send()
 

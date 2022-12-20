@@ -18,7 +18,6 @@ from flask import (
 )
 
 from backend.ceiling import Ceiling
-from backend.ceiling_animation import red_out
 from backend.state import global_state as state
 
 bp = Blueprint("root", __name__, url_prefix="/")

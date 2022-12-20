@@ -87,68 +87,6 @@ def parse_script_name_from_file(path) -> str:
     return path
 
 
-def function_wrapper(
-    f: Callable, ceiling: Ceiling, sender_pipe: _ConnectionBase
-) -> Callable[[str, float], None]:
-    """Wraps the function in another function that doesn't use keyword arguements.
-    Also catches interrupts from `process.terminate()` to distinguish from actually crashing
-    """
-
-    def _exit_gracefully(sig_number, stack_frame):
-        # animate the crash
-        red_out(ceiling, duration=0.2)
-        # Send back the ceiling to the main app
-        ceiling.prepare_to_send()
-        sender_pipe.send(ceiling)
-        exit(0)
-
-    def _exit_normally():
-        """Called when the normal script finishes"""
-        # animate the crash
-        red_out(ceiling, duration=0.2)
-
-        ceiling.prepare_to_send()
-        sender_pipe.send(ceiling)
-
-    def _function_wrapper(color: str, interval: float):
-        signal.signal(signal.SIGTERM, _exit_gracefully)
-        try:
-            f(ceiling=ceiling, color=color, interval=interval)
-        except:
-            _exit_normally()
-        else:
-            _exit_normally()
-
-    return _function_wrapper
-
-
-def file_to_pipe_and_runnable_script(
-    file: str, color_arg: Optional[str], interval_arg: Optional[int]
-) -> Optional[Tuple[_ConnectionBase, Process]]:
-    """
-    Converts a path to a file to a process containing the function
-    Function in the file should be called "run(**kwargs)"
-
-    Also wraps the function in code that will pass the ceiling between the script process and this process
-    """
-    spec = importlib.util.spec_from_file_location("script_func", file)
-    mod = importlib.util.module_from_spec(spec)
-    try:
-        spec.loader.exec_module(mod)
-    except:  # Script fails to execute
-        return None
-
-    assert state.ceiling is not None
-    receiver, sender = Pipe()
-    f = function_wrapper(mod.run, state.ceiling, sender)
-    process = Process(
-        target=f,
-        args=(color_arg, interval_arg),
-    )
-
-    return receiver, process
-
-
 # ========================================
 
 paramaetric_name_and_script = get_scripts_and_names("parametric_scripts")

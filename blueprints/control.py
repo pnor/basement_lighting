@@ -18,8 +18,10 @@ from flask import (
 )
 
 from backend.state import global_state as state
+from backend.ceiling import Ceiling
 
 bp = Blueprint("control", __name__, url_prefix="/control")
+
 
 @bp.route("/")
 def route_main():
@@ -37,6 +39,7 @@ def start_script() -> str:
     color = data_dict.get("color")
     interval = data_dict.get("interval")
 
+    print(file_to_run)
     if not os.path.exists(file_to_run):
         return json.dumps(
             {"ok": False, "error": ("path doesn't exist: %s" % file_to_run)}
@@ -86,6 +89,7 @@ def _start_script(
 
     return True
 
+
 def _stop_script() -> None:
     """Stops currently running script, waiting for it to return the `Ceiling` object"""
     if state.current_process:
@@ -95,6 +99,38 @@ def _stop_script() -> None:
         assert state.ceiling is not None
         state.current_process = None
         state.recv_pipe = None
+
+
+def function_wrapper(
+    f: Callable, ceiling: Ceiling, sender_pipe: _ConnectionBase
+) -> Callable[[str, float], None]:
+    """Wraps the function in another function that doesn't use keyword arguements.
+    Also catches interrupts from `process.terminate()` to distinguish from actually crashing
+    """
+
+    def _exit_gracefully(sig_number, stack_frame):
+        # Send back the ceiling to the main app
+        ceiling.prepare_to_send()
+        sender_pipe.send(ceiling)
+        exit(0)
+
+    def _prepare_to_exit():
+        """Called when the normal script finishes"""
+        ceiling.prepare_to_send()
+        sender_pipe.send(ceiling)
+
+    def _function_wrapper(color: str, interval: float):
+        signal.signal(signal.SIGTERM, _exit_gracefully)
+        try:
+            f(ceiling=ceiling, color=color, interval=interval)
+        except Exception:
+            _prepare_to_exit()
+            exit(1)
+        else:
+            _prepare_to_exit()
+
+    return _function_wrapper
+
 
 def file_to_pipe_and_runnable_script(
     file: str, color_arg: Optional[str], interval_arg: Optional[int]

@@ -4,11 +4,14 @@
 Estimate the location of LEDs in 2D space based on how they are arranged
 """
 
+import numpy as np
 from functools import lru_cache
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from smartquadtree import Quadtree
+from numba import jit
 
 from backend.util import distance_formula
+from backend.mru_cache import mru_cache
 
 
 class LED:
@@ -93,7 +96,8 @@ class LEDSpace:
 
                 indx += 1
 
-    @lru_cache(maxsize=1000)
+    # @lru_cache(maxsize=1000)
+    @mru_cache(maxsize=1000)
     def get_LEDs_in_area(
         self, x: float, y: float, width: float, height: float
     ) -> List[LED]:
@@ -120,19 +124,27 @@ class LEDSpace:
 
         return res
 
-    @lru_cache(maxsize=1000)
+    # @lru_cache(maxsize=1000)
+    @mru_cache(maxsize=1000)
     def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:
         """
         `radius` around (x, y) of points should be returned
         """
-        res = self.get_LEDs_in_area(x, y, radius * 2, radius * 2)
-        return list(
-            filter(
-                lambda l: distance_formula(x, y, l.get_x(), l.get_y()) <= radius, res
-            )
-        )
+        if self._quadtree is None:
+            self.restore_quadtree()
 
-    @lru_cache(maxsize=1000)
+        self._quadtree.set_mask(_mask_for_radius(x, y, radius, 10))
+
+        res: List[LED] = []
+        for led in self._quadtree.elements():
+            res += [led]
+
+        self._quadtree.set_mask(None)
+
+        return res
+
+    # @lru_cache(maxsize=1000)
+    @mru_cache(maxsize=1000)
     def get_closest_LED_index(
         self, x: float, y: float, max_distance: float = 0.30
     ) -> Optional[int]:
@@ -185,3 +197,21 @@ class LEDSpace:
         LEDSpace.get_LEDs_in_area.cache_clear()
         LEDSpace.get_closest_LED_index.cache_clear()
         LEDSpace.get_LEDs_in_radius.cache_clear()
+
+
+@jit
+def _mask_for_radius(
+    x: float, y: float, radius: float, number_points: int
+) -> List[Tuple[float, float]]:
+    """Helper to create the set of points needed to make a mask for the quadtree
+    enacpsulating a circular area"""
+    points: List[Tuple[float, float]] = [(0.0, 0.0)] * number_points
+    i = 0
+    for theta in np.arange(0, 2 * np.pi, (2 * np.pi) / number_points):
+        _x = np.cos(theta) * radius
+        _y = np.sin(theta) * radius
+        _x += x
+        _y += y
+        points[i] = (_x, _y)
+        i += 1
+    return points

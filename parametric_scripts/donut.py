@@ -4,7 +4,7 @@
 
 # Based off of
 # https://www.a1k0n.net/2011/07/20/donut-math.html
-# (computationally expensive to run, numba requried)
+# (computationally expensive to run, numba required)
 
 import sys
 import time
@@ -88,6 +88,7 @@ def run(**kwargs):
     interval_a = interval * 7 * 5
     cur_b = 0
     interval_b = interval * 9
+
     while True:
         cur_a = (cur_a + DELTA) % interval_a
         cur_b = (cur_b + DELTA) % interval_b

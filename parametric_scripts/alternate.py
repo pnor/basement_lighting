@@ -21,6 +21,7 @@ def run(**kwargs):
     off_rgb = [0] * len(on_rgb)
 
     ceil = kwargs["ceiling"]
+    ceil.use_linear()
     ceil.clear()
 
     on = True
@@ -35,4 +36,3 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(color=sys.argv[1], interval=sys.argv[2])
-    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])

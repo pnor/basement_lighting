@@ -25,6 +25,7 @@ from backend.files import *
 
 bp = Blueprint("control", __name__, url_prefix="/control")
 
+
 @bp.route("/start", methods=["POST"])
 def start_script() -> str:
     """
@@ -69,6 +70,7 @@ def _start_script(
         assert state.recv_pipe is not None
         assert state.ceiling is None
         state.ceiling = state.recv_pipe.recv()
+        state.ceiling.use_linear()
         state.recv_pipe = None
 
     recv_proc = file_to_pipe_and_runnable_script(path, color_arg, interval_arg)

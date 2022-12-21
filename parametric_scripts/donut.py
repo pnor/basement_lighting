@@ -89,7 +89,10 @@ def run(**kwargs):
     cur_b = 0
     interval_b = interval * 9
 
-    while True:
+    iter = 0
+    while iter < 3000:
+        iter += 1
+
         cur_a = (cur_a + DELTA) % interval_a
         cur_b = (cur_b + DELTA) % interval_b
         prog_a = cur_a / interval
@@ -112,7 +115,7 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(test_mode=True),
+        ceiling=Ceiling(test_mode=True, print_to_stdout=False),
         color=sys.argv[1],
         interval=sys.argv[2],
     )

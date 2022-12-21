@@ -210,3 +210,9 @@ def rotate_vector(vector: NDArray[np.float32], theta: float):
         [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
     )
     return np.dot(vector, rot_mat)
+
+
+@jit
+def fast_round(number: float, decimals: int) -> float:
+    """Rounds `number` to `decimals` decimal points"""
+    return np.around(number, decimals)

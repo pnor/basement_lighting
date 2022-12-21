@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 
-from typing import Callable, Any, Optional
+from typing import Callable, Any, Optional, List, Tuple
 from typing_extensions import Self
+from backend.cartesian_indexing import CartesianIndexing
+from backend.float_cartesian import FloatCartesianIndexing
+from backend.float_polar import FloatPolarIndexing
+from backend.linear_indexing import LinearIndexing
 from backend.neopixel_wrapper import (
-    PixelWrapper,
     init_for_testing,
     init_with_real_board,
 )
+from backend.polar_indexing import PolarIndexing
+from backend.row_indexing import RowIndexing
+
 
 from .backend_types import RGB
 

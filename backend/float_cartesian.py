@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Any, Tuple, List, Union, Optional
-import numpy as np
+from typing import Tuple, List, Union, Optional
 from backend.indexing import Indexing
 
 from backend.neopixel_wrapper import PixelWrapper

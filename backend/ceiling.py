@@ -5,6 +5,7 @@ from typing_extensions import Self
 from backend.cartesian_indexing import CartesianIndexing
 from backend.float_cartesian import FloatCartesianIndexing
 from backend.float_polar import FloatPolarIndexing
+from backend.led_locations import LEDSpace
 from backend.linear_indexing import LinearIndexing
 from backend.neopixel_wrapper import (
     init_for_testing,
@@ -41,31 +42,40 @@ class Ceiling:
         `number_lights`: number lights in the light strip
         `print_to_stdout`: whether to print to stdout. Default true
         """
+        # Initialize for testing mode
+        # For running not on a Pi
         if kwargs.get("test_mode"):
-            num_lights = (
-                kwargs.get("number_lights")
-                if kwargs.get("number_lights")
-                else NUMBER_LIGHTS
-            )
-            print_to_stdout = (
-                kwargs.get("print_to_stdout")
-                if kwargs.get("print_to_stdout") is not None
-                else True
-            )
+            opt_number_lights = kwargs.get("number_lights")
+            if opt_number_lights and type(opt_number_lights) is int:
+                number_lights = opt_number_lights
+            else:
+                number_lights = NUMBER_LIGHTS
+
+            opt_print_to_stdout = kwargs.get("print_to_stdout")
+            if opt_print_to_stdout and type(opt_print_to_stdout) is bool:
+                print_to_stdout = opt_print_to_stdout
+            else:
+                print_to_stdout = True
+
             self._pixels = init_for_testing(
-                number_leds=num_lights, print_to_stdout=print_to_stdout
+                number_leds=number_lights, print_to_stdout=print_to_stdout
             )
             self.testing_mode_rows()
-        else:
+        else:  # For running on the actual pi
             io_pin = kwargs.get("io_pin")
-            number_lights: int = (
-                kwargs.get("number_lights")
-                if kwargs.get("number_lights")
-                else NUMBER_LIGHTS
-            )
-            auto_write: bool = (
-                kwargs.get("auto_write") if kwargs.get("auto_write") else False
-            )
+
+            opt_number_lights = kwargs.get("number_lights")
+            if opt_number_lights and type(opt_number_lights) is int:
+                number_lights = opt_number_lights
+            else:
+                number_lights = NUMBER_LIGHTS
+
+            opt_auto_write = kwargs.get("auto_write")
+            if opt_auto_write and type(opt_auto_write) is bool:
+                auto_write = opt_auto_write
+            else:
+                auto_write = False
+
             self._pixels = init_with_real_board(
                 io_pin, number_lights, auto_write=auto_write
             )
@@ -104,9 +114,7 @@ class Ceiling:
         else:
             return None
 
-    def testing_mode_rows(
-        self, lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT, print_to_stdout=True
-    ):
+    def testing_mode_rows(self, lights_per_row: List[int] = CEILING_ROW_ARRANGEMENT):
         self._pixels.set_lights_per_row(lights_per_row)
 
     def indexing(self) -> Indexing:

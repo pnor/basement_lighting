@@ -9,7 +9,6 @@ import colour
 
 from backend.ceiling import Ceiling
 from backend.util import colour_rgb_to_neopixel_rgb, rotate_vector
-from numba import jit
 
 
 def run(**kwargs):
@@ -31,7 +30,7 @@ def run(**kwargs):
     velocity_2 = rotate_vector(velocity_2, np.random.random() * 360)
 
     FPS = 60
-    DELTA = 1 / 60
+    DELTA = 1 / FPS
 
     while True:
         point_1 += velocity_1 * DELTA

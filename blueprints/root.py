@@ -1,25 +1,12 @@
-from multiprocessing import Process, Pipe
-from multiprocessing.connection import _ConnectionBase
-from typing import Callable, Optional, List, Tuple
-import os
-import importlib
+from multiprocessing import Pipe
 import json
-import signal
-import threading
 from flask import (
     Blueprint,
-    flash,
-    g,
-    redirect,
     render_template,
-    request,
-    session,
-    url_for,
 )
 
-from backend.ceiling import Ceiling
 from backend.state import global_state as state
-from backend.files import *;
+from backend.files import *
 
 bp = Blueprint("root", __name__, url_prefix="/")
 
@@ -56,6 +43,7 @@ def get_state() -> str:
         pattern = state.current_pattern
 
     return json.dumps({"state": result, "pattern": pattern})
+
 
 # ========================================
 

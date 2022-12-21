@@ -20,7 +20,7 @@ def run(**kwargs):
     on_rgb = hex_to_rgb(color_input)
     off_rgb = [0] * len(on_rgb)
 
-    ceil = kwargs["ceiling"]
+    ceil: Ceiling = kwargs["ceiling"]
     ceil.use_linear()
     ceil.clear()
 

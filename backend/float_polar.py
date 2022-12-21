@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Any, Tuple, List, Union, Optional
-import numpy as np
+from typing import Tuple, List, Union, Optional
 from backend.indexing import Indexing
 
 from backend.neopixel_wrapper import PixelWrapper
@@ -53,10 +52,12 @@ class FloatPolarIndexing(Indexing):
         x = fast_round(x, 3)
         y = fast_round(y, 3)
         # get location in light strip
-        indx = self._led_spacing.get_closest_LED_index(x, y, self._search_range)
+        indx = self._led_spacing.get_closest_LED_index(x, y, self._effect_radius)
         return None if indx is None else self._pixels[indx]
 
-    def set(self, key: Tuple[float, float], newvalue: RGB) -> None:
+    def set(
+        self, key: Union[Tuple[float, float, float], Tuple[float, float]], newvalue: RGB
+    ) -> None:
         """
         key: either a tuple of 2 or 3 elements.
         If tuple of 2, represents (r, theta). Will set values with varying intensities of `newvalue` based

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from typing import Any, Optional
-import numpy as np
 
 from backend.backend_types import RGB
 

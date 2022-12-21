@@ -28,10 +28,10 @@ class RowIndexing(Indexing):
         if key is a tuple, will set one LED. If key is an int corresponding to the row, will set
         every LED in the row
         """
-        if type(key) == tuple:
+        if type(key) is tuple and len(key) == 2:
             row, col = key
             self._pixels[self.row_col_to_indx(row, col)] = newvalue
-        elif type(key) == int:
+        elif type(key) is int:
             row = key
             for i in range(self.rows[row]):
                 self._pixels[self.row_col_to_indx(row, i)] = newvalue

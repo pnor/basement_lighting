@@ -1,21 +1,13 @@
 from multiprocessing import Process, Pipe
 from multiprocessing.connection import _ConnectionBase
-from typing import Callable, Optional, List, Tuple
+from typing import Callable, Optional, Tuple
 import os
-import pdb
-import importlib
+import importlib.util as importlib_util
 import json
 import signal
-import threading
 from flask import (
     Blueprint,
-    flash,
-    g,
-    redirect,
-    render_template,
     request,
-    session,
-    url_for,
 )
 from backend.ceiling_animation import circle_clear
 
@@ -32,6 +24,14 @@ def start_script() -> str:
     Runs the file provided in the request with the args color and interval
     """
     data_dict = request.json
+    if data_dict is None:
+        return json.dumps(
+            {"ok": False, "error": "request body requires path to script to start"}
+        )
+    elif type(data_dict) is not dict:
+        return json.dumps(
+            {"ok": False, "error": "request body must contain json dictionary"}
+        )
 
     file_to_run = data_dict["file"]
     color = data_dict.get("color")
@@ -144,10 +144,18 @@ def file_to_pipe_and_runnable_script(
 
     Also wraps the function in code that will pass the ceiling between the script process and this process
     """
-    spec = importlib.util.spec_from_file_location("script_func", file)
-    mod = importlib.util.module_from_spec(spec)
+    spec = importlib_util.spec_from_file_location("script_func", file)
+    if spec is None:
+        return None
+
+    mod = importlib_util.module_from_spec(spec)
+
+    spec_loader = spec.loader
+    if spec_loader is None:
+        return None
+
     try:
-        spec.loader.exec_module(mod)
+        spec_loader.exec_module(mod)
     except:  # Script fails to execute
         return None
 

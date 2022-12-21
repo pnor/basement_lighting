@@ -4,6 +4,7 @@
 
 # Based off of
 # https://www.a1k0n.net/2011/07/20/donut-math.html
+# (computationally expensive to run, numba requried)
 
 import sys
 import time
@@ -34,8 +35,8 @@ def render_frame(A: float, B: float) -> NDArray[np.float64]:
     cosB = np.cos(B)
     sinB = np.sin(B)
 
-    output = np.zeros((screen_width, screen_height + 1))
-    zbuffer = np.zeros((screen_width, screen_height + 1))
+    output = np.zeros((screen_width, screen_height))
+    zbuffer = np.zeros((screen_width, screen_height))
 
     for theta in np.arange(0, 2 * np.pi, theta_spacing):
         costheta = np.cos(theta)

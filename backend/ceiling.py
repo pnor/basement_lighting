@@ -52,7 +52,7 @@ class Ceiling:
                 number_lights = NUMBER_LIGHTS
 
             opt_print_to_stdout = kwargs.get("print_to_stdout")
-            if opt_print_to_stdout and type(opt_print_to_stdout) is bool:
+            if type(opt_print_to_stdout) is bool:
                 print_to_stdout = opt_print_to_stdout
             else:
                 print_to_stdout = True

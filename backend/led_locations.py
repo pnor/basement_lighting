@@ -5,15 +5,19 @@ Estimate the location of LEDs in 2D space based on how they are arranged
 """
 
 import numpy as np
+from numba.experimental import jitclass
 from functools import lru_cache
 from typing import List, Optional, Tuple
 from smartquadtree import Quadtree
-from numba import jit
+from numba import jit, int32, float32
 
 from backend.util import distance_formula
 from backend.mru_cache import mru_cache
 
+spec = [("_x", float32), ("_y", float32), ("_index", int32)]
 
+
+@jitclass(spec)
 class LED:
     def __init__(self, x: float, y: float, index: int):
         self._x = x
@@ -25,6 +29,9 @@ class LED:
 
     def get_y(self) -> float:
         return self._y
+
+    def as_tuple(self) -> Tuple[float, float, int]:
+        return (self._x, self._y, self._index)
 
     def __str__(self) -> str:
         return "LED(x: %s, y: %s, index: %s)" % (self._x, self._y, self._index)

@@ -5,9 +5,9 @@
 from functools import lru_cache
 import colour
 import copy
-from typing import Union, List, Tuple
+from typing import Iterable, Union, List, Tuple
 import numpy as np
-import numba
+
 from numba import jit
 from numpy._typing import NDArray
 
@@ -27,19 +27,38 @@ def color_leds_in_area(
     led_spacing,
     pixels: PixelWrapper,
 ):
+    """Colors LEDs within `effect_radius` with `color`. Has an airbrush effect where it will merge
+    `color` with the color already there"""
     leds = led_spacing.get_LEDs_in_radius(x, y, effect_radius)
-    for l in leds:
-        dist = distance_formula(l.get_x(), l.get_y(), x, y)
-        amp = max(0, 1 - (dist / effect_radius))
 
-        res = dim_color_by_amount_fast(color, amp)
-        cur = pixels[l._index]
-        final_color = (
-            max(res[0], cur[0]),
-            max(res[1], cur[1]),
-            max(res[2], cur[2]),
+    for l in leds:
+        # NOTE: we ignore the type warning/error on pixels as checking types here is pretty slow
+        # since this is a very hot section of code
+        pixels[l._index] = _area_lerp_color(
+            l._x, l._y, x, y, effect_radius, pixels[l._index], color
         )
-        pixels[l._index] = final_color
+
+
+@jit(nopython=True, fastmath=True)
+def _area_lerp_color(
+    led_x: float,
+    led_y: float,
+    x: float,
+    y: float,
+    effect_radius: float,
+    cur_color: RGB,
+    set_color: RGB,
+) -> RGB:
+    dist = distance_formula(led_x, led_y, x, y)
+    amp = max(0, 1 - (dist / effect_radius))
+
+    res = dim_color_by_amount_fast(set_color, amp)
+    final_color = (
+        max(res[0], cur_color[0]),
+        max(res[1], cur_color[1]),
+        max(res[2], cur_color[2]),
+    )
+    return final_color
 
 
 # ===== Color Math =========================
@@ -108,7 +127,7 @@ def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount: float)
     return tuple(rgb)
 
 
-@jit
+@jit(fastmath=True)
 def dim_color_by_amount_fast(color: RGB, dim_amount: float) -> RGB:
     """Dims a color by a percentage of its current luminance
     Only works if color is a RGB tuple
@@ -153,18 +172,18 @@ def colour_rgb_to_neopixel_rgb(rgb: Tuple[float, float, float]) -> RGB:
 # ===== Math =========================
 
 
-@jit
+@jit(fastmath=True)
 def clamp(num, min_value, max_value):
     num = max(min(num, max_value), min_value)
     return num
 
 
-@jit
+@jit(fastmath=True)
 def sigmoid(x: float) -> float:
     return 1 / (1 + np.exp(-x))
 
 
-@jit
+@jit(fastmath=True)
 def sigmoid_0_to_1(x: float) -> float:
     """Returns result between 0..1
     `x` should be in 0..1"""
@@ -173,12 +192,12 @@ def sigmoid_0_to_1(x: float) -> float:
     return sigmoid(sigmoid_input)
 
 
-@jit
+@jit(fastmath=True)
 def distance_formula(x1: float, y1: float, x2: float, y2: float):
     return np.sqrt(np.power(x2 - x1, 2) + np.power(y2 - y1, 2))
 
 
-@jit
+@jit(fastmath=True)
 def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
     theta = np.radians(theta)
     x = r * np.cos(theta)
@@ -186,7 +205,7 @@ def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
     return x, y
 
 
-@jit
+@jit(fastmath=True)
 def transform_unit_circle_to_origin(
     x: float, y: float, orig_x: float, orig_y: float
 ) -> Tuple[float, float]:
@@ -201,7 +220,8 @@ def transform_unit_circle_to_origin(
     return x, y
 
 
-def rotate_vector(vector: NDArray[np.float32], theta: float):
+@jit(fastmath=True)
+def rotate_vector(vector: NDArray[np.float64], theta: float) -> NDArray[np.float64]:
     """
     theta in degrees
     """
@@ -209,10 +229,16 @@ def rotate_vector(vector: NDArray[np.float32], theta: float):
     rot_mat = np.array(
         [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
     )
-    return np.dot(vector, rot_mat)
+    # compute dot product
+    vector_0 = float(vector[0])
+    vector_1 = float(vector[1])
+    x_comp = (vector_0 * rot_mat[0, 0]) + (vector_1 * rot_mat[1, 0])
+    y_comp = (vector_0 * rot_mat[1, 0]) + (vector_1 * rot_mat[1, 1])
+    return np.array([x_comp, y_comp])
+    # return np.dot(vector, rot_mat)
 
 
-@jit
+@jit(fastmath=True)
 def fast_round(number: float, decimals: int) -> float:
     """Rounds `number` to `decimals` decimal points"""
     return np.around(number, decimals)

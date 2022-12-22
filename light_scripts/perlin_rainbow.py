@@ -12,8 +12,7 @@ from colour import Color
 from perlin_noise import PerlinNoise
 
 from backend.ceiling import Ceiling
-from backend.ceiling_animation import circle_clear
-from backend.util import color_format_to_rgb, color_obj_to_rgb, sigmoid_0_to_1
+from backend.util import color_obj_to_rgb, sigmoid_0_to_1
 
 
 def run(**kwargs):
@@ -36,7 +35,10 @@ def run(**kwargs):
     FPS = 60
     DELTA = 1 / FPS
 
-    while True:
+    # while True:
+    iter = 0
+    while iter < 1000:
+        iter += 1
         cur += DELTA
         if cur > period:
             cur = 0

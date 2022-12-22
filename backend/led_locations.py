@@ -103,8 +103,8 @@ class LEDSpace:
 
                 indx += 1
 
-    # @lru_cache(maxsize=1000)
-    @mru_cache(maxsize=1000)
+    @lru_cache(maxsize=1000)
+    # @mru_cache(maxsize=1000)
     def get_LEDs_in_area(
         self, x: float, y: float, width: float, height: float
     ) -> List[LED]:
@@ -131,8 +131,8 @@ class LEDSpace:
 
         return res
 
-    # @lru_cache(maxsize=1000)
-    @mru_cache(maxsize=1000)
+    @lru_cache(maxsize=1000)
+    # @mru_cache(maxsize=1000)
     def get_LEDs_in_radius(self, x: float, y: float, radius: float) -> List[LED]:
         """
         `radius` around (x, y) of points should be returned
@@ -150,8 +150,8 @@ class LEDSpace:
 
         return res
 
-    # @lru_cache(maxsize=1000)
-    @mru_cache(maxsize=1000)
+    @lru_cache(maxsize=1000)
+    # @mru_cache(maxsize=1000)
     def get_closest_LED_index(
         self, x: float, y: float, max_distance: float = 0.30
     ) -> Optional[int]:

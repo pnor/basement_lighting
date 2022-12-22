@@ -49,7 +49,6 @@ class CartesianIndexing(Indexing):
         If tuple, (x, y) are in (0..1)
         If slice, is 2 tuples, (x1, y1):(x2, y2), and will set box spanning x1..x2 and y1..y2 to
         same color"""
-        # TODO jit
         if type(key) is slice:
             x1, y1 = key.start
             x2, y2 = key.stop

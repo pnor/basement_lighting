@@ -35,10 +35,7 @@ def run(**kwargs):
     FPS = 60
     DELTA = 1 / FPS
 
-    # while True:
-    iter = 0
-    while iter < 1000:
-        iter += 1
+    while True:
         cur += DELTA
         if cur > period:
             cur = 0

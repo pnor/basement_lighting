@@ -39,7 +39,7 @@ def color_leds_in_area(
         )
 
 
-@jit(nopython=True, fastmath=True)
+@jit(nopython=True, fastmath=True, cache=True)
 def _area_lerp_color(
     led_x: float,
     led_y: float,
@@ -127,7 +127,7 @@ def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount: float)
     return tuple(rgb)
 
 
-@jit(fastmath=True)
+@jit(fastmath=True, cache=True)
 def dim_color_by_amount_fast(color: RGB, dim_amount: float) -> RGB:
     """Dims a color by a percentage of its current luminance
     Only works if color is a RGB tuple
@@ -172,18 +172,18 @@ def colour_rgb_to_neopixel_rgb(rgb: Tuple[float, float, float]) -> RGB:
 # ===== Math =========================
 
 
-@jit(fastmath=True)
+@jit(fastmath=True, cache=True)
 def clamp(num, min_value, max_value):
     num = max(min(num, max_value), min_value)
     return num
 
 
-@jit(fastmath=True)
+@jit(fastmath=True, cache=True)
 def sigmoid(x: float) -> float:
     return 1 / (1 + np.exp(-x))
 
 
-@jit(fastmath=True)
+@jit(fastmath=True, cache=True)
 def sigmoid_0_to_1(x: float) -> float:
     """Returns result between 0..1
     `x` should be in 0..1"""
@@ -192,12 +192,12 @@ def sigmoid_0_to_1(x: float) -> float:
     return sigmoid(sigmoid_input)
 
 
-@jit(fastmath=True)
+@jit(fastmath=True, cache=True)
 def distance_formula(x1: float, y1: float, x2: float, y2: float):
     return np.sqrt(np.power(x2 - x1, 2) + np.power(y2 - y1, 2))
 
 
-@jit(fastmath=True)
+@jit(fastmath=True, cache=True)
 def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
     theta = np.radians(theta)
     x = r * np.cos(theta)
@@ -205,7 +205,7 @@ def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
     return x, y
 
 
-@jit(fastmath=True)
+@jit(fastmath=True, cache=True)
 def transform_unit_circle_to_origin(
     x: float, y: float, orig_x: float, orig_y: float
 ) -> Tuple[float, float]:
@@ -220,7 +220,7 @@ def transform_unit_circle_to_origin(
     return x, y
 
 
-@jit(fastmath=True)
+@jit(fastmath=True, cache=True)
 def rotate_vector(vector: NDArray[np.float64], theta: float) -> NDArray[np.float64]:
     """
     theta in degrees
@@ -238,7 +238,7 @@ def rotate_vector(vector: NDArray[np.float64], theta: float) -> NDArray[np.float
     # return np.dot(vector, rot_mat)
 
 
-@jit(fastmath=True)
+@jit(fastmath=True, cache=True)
 def fast_round(number: float, decimals: int) -> float:
     """Rounds `number` to `decimals` decimal points"""
     return np.around(number, decimals)

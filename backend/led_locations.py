@@ -14,10 +14,7 @@ from numba import jit, int32, float32
 from backend.util import distance_formula
 from backend.mru_cache import mru_cache
 
-spec = [("_x", float32), ("_y", float32), ("_index", int32)]
 
-
-@jitclass(spec)
 class LED:
     def __init__(self, x: float, y: float, index: int):
         self._x = x

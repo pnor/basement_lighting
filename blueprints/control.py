@@ -126,7 +126,8 @@ def function_wrapper(
         try:
             circle_clear(ceiling, 0.2, (255, 255, 255))
             f(ceiling=ceiling, color=color, interval=interval)
-        except Exception:
+        except Exception as e:
+            print(e)
             _prepare_to_exit()
             exit(1)
         else:

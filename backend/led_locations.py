@@ -5,11 +5,10 @@ Estimate the location of LEDs in 2D space based on how they are arranged
 """
 
 import numpy as np
-from numba.experimental import jitclass
 from functools import lru_cache
 from typing import List, Optional, Tuple
 from smartquadtree import Quadtree
-from numba import jit, int32, float32
+from numba import jit
 
 from backend.util import distance_formula
 from backend.mru_cache import mru_cache
@@ -54,51 +53,41 @@ class LEDSpace:
         """
         Map LEDs based on the row information in `lights_per_row` to positions in 2D space.
         Asssumes LEDs are layed out like so:
-          ---> n
-           \
-            \
-        0  ----
+
+                ----->
+        3 ------
+         <-----
+               ----- 2
+                ---->
+        1 ------
+         <-----
+               ----- 0
 
         `lights_per_row`: first index represents the bottomost row, closest to the data connection
         of the pi
 
-        For horizontal lines, the first LED in the row corresponds to the leftmost point and the
-        last LED corresponds to the *2nd to last* rightmost point.
-
-        For right to left diagonals, the first LED (rightmost one) corresponds to the rightmost
-        LED that is in the same vertical line as the LEDs of the previous row. The last LED
-        (leftmost one) corresponds to the leftmost LED right below the start of the next horizontal row.
-
-        This is done to compensate for the fact that the first and last LED technically are in 2 rows
+        Each row moves diagonally upwards towards the next row. We map LEDs using the assumption
+        that they are equally spaced.
         """
         self._quadtree = Quadtree(0.5, 0.5, 1, 1)
-        indx = 0
+        index = 0
 
         if len(lights_per_row) == 1:
             row_height = 1
         else:
-            row_height = 1 / (len(lights_per_row) // 2)
+            row_height = 1 / len(lights_per_row)
 
         for i in range(len(lights_per_row)):
-            lights = range(lights_per_row[i])
-
-            number_lights = lights_per_row[i]
-
-            for j in lights:
-                x: float
-                y: float
-                if i % 2 == 0:  # horizontal -
-                    x = j / number_lights
-                    y = (i / 2) * row_height
-                else:  # diagonal \
-                    x = 1 - (j / number_lights)
-                    # x = j / number_lights
-                    y = ((i // 2) * row_height) + ((j / number_lights) * (row_height))
-
-                led = LED(x, y, indx)
+            for j in range(lights_per_row[i]):
+                if i % 2 == 0:  # backward diagonal
+                    x = 1 - ((j + 1) / lights_per_row[i])
+                    y = (i * row_height) + ((j / lights_per_row[i]) * row_height)
+                else:  # forward diagonal
+                    x = j / lights_per_row[i]
+                    y = (i * row_height) + ((j / lights_per_row[i]) * row_height)
+                led = LED(x, y, index)
                 self._quadtree.insert(led)
-
-                indx += 1
+                index += 1
 
     @lru_cache(maxsize=1000)
     # @mru_cache(maxsize=1000)
@@ -203,7 +192,7 @@ class LEDSpace:
         LEDSpace.get_LEDs_in_radius.cache_clear()
 
 
-@jit
+@jit(nopython=True, fastmath=True)
 def _mask_for_radius(
     x: float, y: float, radius: float, number_points: int
 ) -> List[Tuple[float, float]]:

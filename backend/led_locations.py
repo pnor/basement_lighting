@@ -75,7 +75,7 @@ class LEDSpace:
         if len(lights_per_row) == 1:
             row_height = 1
         else:
-            row_height = 1 / (len(lights_per_row) // 2)
+            row_height = 1 / len(lights_per_row)
 
         for i in range(len(lights_per_row)):
             for j in range(lights_per_row[i]):
@@ -85,8 +85,6 @@ class LEDSpace:
                 else:  # forward diagonal
                     x = j / lights_per_row[i]
                     y = (i * row_height) + ((j / lights_per_row[i]) * row_height)
-                xs += [x]
-                ys += [y]
                 led = LED(x, y, index)
                 self._quadtree.insert(led)
                 index += 1

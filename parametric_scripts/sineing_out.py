@@ -17,7 +17,7 @@ def run(**kwargs):
     interval = float(kwargs["interval"])
 
     # Number of bands
-    SAMPLE_SIZE = 5
+    SAMPLE_SIZE = 4
     # Brightest color this will yield
     color = np.array(color_input)
 

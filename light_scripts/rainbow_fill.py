@@ -20,12 +20,15 @@ def run(**kwargs):
     prog = np.random.random()
     col = colour.Color(hsl=(prog, 1, 0.5))
 
-    FPS = 60
-    DELTA = 1 / 60
-    while True:
+    cur = 0
+    interval = 3
 
-        prog = (prog + (DELTA / 4)) % 1
-        col.set_hue(prog)
+    FPS = 30
+    DELTA = 1 / FPS
+    while True:
+        cur = (cur + DELTA) % interval
+
+        col.set_hue(cur / interval)
 
         ceil.fill(colour_rgb_to_neopixel_rgb(col.rgb))
         ceil.show()

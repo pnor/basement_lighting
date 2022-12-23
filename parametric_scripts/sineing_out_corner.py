@@ -17,7 +17,7 @@ def run(**kwargs):
     interval = float(kwargs["interval"])
 
     # Number of bands
-    SAMPLE_SIZE = 5
+    SAMPLE_SIZE = 4
     # Brightest color this will yield
     color = np.array(color_input)
 
@@ -25,7 +25,7 @@ def run(**kwargs):
     ceil.use_float_polar(origin=(0.0, 0.0), effect_radius=0.1)
     ceil.clear()
 
-    FPS = 60
+    FPS = 20
     DELTA = 1 / FPS
     cur_time = 0
 

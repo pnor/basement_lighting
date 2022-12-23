@@ -14,16 +14,16 @@ from backend.util import color_format_to_rgb, color_obj_to_rgb, sigmoid_0_to_1
 
 
 def run(**kwargs):
-    interval = float(kwargs["interval"])
+    interval = float(kwargs["interval"]) * 5
 
     # Number of bands
-    SAMPLE_SIZE = 3
+    SAMPLE_SIZE = 4
 
     ceil = kwargs["ceiling"]
-    ceil.use_float_polar(origin=(0.5, 0.5), effect_radius=0.1)
+    ceil.use_float_polar(origin=(0.5, 0.5), effect_radius=0.2)
     ceil.clear()
 
-    FPS = 60
+    FPS = 20
     DELTA = 1 / FPS
     cur_time = 0
 
@@ -42,6 +42,7 @@ def run(**kwargs):
                 amt = (amt / 2) + 0.5
                 color_obj.hue = amt
                 ceil[radiuses[i], theta] = color_obj_to_rgb(color_obj)
+
         ceil.show()
         time.sleep(DELTA)
 

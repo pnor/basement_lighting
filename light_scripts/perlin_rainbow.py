@@ -32,7 +32,7 @@ def run(**kwargs):
     period = interval
     cur = 0
 
-    FPS = 60
+    FPS = 10
     DELTA = 1 / FPS
 
     while True:
@@ -40,7 +40,7 @@ def run(**kwargs):
         if cur > period:
             cur = 0
             cur_perlin_noise = next_perlin_noise
-            next_perlin_noise = PerlinNoise(octaves=np.random.randint(1, 4))
+            next_perlin_noise = PerlinNoise(octaves=np.random.randint(1, 2))
 
         prog = sigmoid_0_to_1(cur / period)
 

@@ -2,6 +2,7 @@
 
 from typing import Callable, Union, Optional
 from abc import ABC, abstractmethod
+import time
 
 from backend.ceiling import Ceiling
 
@@ -13,7 +14,7 @@ class RenderState(ABC):
     _interval: Optional[float] = None
 
     @abstractmethod
-    def __init__(self, interval: float):
+    def __init__(self, interval: Optional[float]):
         """
         `interval`: keep track of how long until `interval` is reached.
         When `interval` is reacher, timer resets and `interval_reached` is called
@@ -21,13 +22,13 @@ class RenderState(ABC):
         self._interval = interval
 
     @abstractmethod
-    def render(self, delta: float, ceiling: Ceiling) -> Union[bool, None]:
+    def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         pass
 
-    def interval_reached(self, ceiling: Ceiling) -> None:
+    def interval_reached(self, ceil: Ceiling) -> None:
         pass
 
-    def run(self, FPS: float, ceiling: Ceiling):
+    def run(self, FPS: float, ceil: Ceiling):
         """Handles boiler plate of running a render loop at `FPS` frames per second.
 
         `block` is a function (deltatime, ceiling) -> boolean that should be run
@@ -43,9 +44,10 @@ class RenderState(ABC):
                 self._cur += delta
                 if self._cur > self._interval:
                     self._cur = 0
-                    self.interval_reached(ceiling)
+                    self.interval_reached(ceil)
 
-            run = self.render(delta, ceiling)
+            run = self.render(delta, ceil)
+            time.sleep(delta)
 
     def progress(self) -> float:
         """Returns percetnage progress towards `_interval`"""

@@ -63,6 +63,7 @@ class Render(RenderState):
                 ] = tuple(interpolated_col)
 
         ceil.show()
+        return super().render(delta, ceil)
 
     def interval_reached(self, ceiling: Ceiling) -> None:
         self.cur_perlin_noise = self.next_perlin_noise

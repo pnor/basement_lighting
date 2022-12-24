@@ -17,13 +17,13 @@ def run(**kwargs):
     interval = float(kwargs["interval"]) * 5
 
     # Number of bands
-    SAMPLE_SIZE = 4
+    SAMPLE_SIZE = 15
 
     ceil = kwargs["ceiling"]
     ceil.use_float_polar(origin=(0.5, 0.5), effect_radius=0.2)
     ceil.clear()
 
-    FPS = 20
+    FPS = 5
     DELTA = 1 / FPS
     cur_time = 0
 

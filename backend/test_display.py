@@ -28,7 +28,86 @@ class TestDisplay:
         # However, when we need it, we initialize it
         self._terminal: Optional[Terminal] = None
 
-    def show(self):
+    def show_as_linear(self) -> None:
+        """
+        Prints to terminal a represnetation of the light strip.
+        Shows the rows as straight aligned rows.
+        """
+        index = 0
+
+        full_output = ""
+        for i in range(len(self._lights_per_row)):
+            line = ""
+
+            for j in range(self._lights_per_row[i]):
+                color = self._pixels[index]
+
+                if i % 2 == 0:  # horizontal -
+                    line += truecolor.color_text("x", color, (0, 0, 0))
+                else:  # diagonal \
+                    line = truecolor.color_text("-", color, (0, 0, 0)) + line
+
+                index += 1
+
+            full_output = line + "\n" + full_output
+
+        print((self._terminal.move_up * (len(self._lights_per_row) + 1)), end="")
+        print(full_output)
+
+    def show_as_diagonals(self) -> None:
+        """
+        Prints to terminal a represnetation of the light strip.
+        Shows the rows as diagonals arrange like so:
+                ----->
+        3 ------
+         <-----
+               ----- 2
+                ---->
+        1 ------
+         <-----
+               ----- 0
+        """
+        index = 0
+
+        output_lines = []
+        for i in range(len(self._lights_per_row)):
+            line_bot = ""
+            line_top = ""
+
+            for j in range(self._lights_per_row[i]):
+                color = self._pixels[index]
+                if i % 2 == 0:  # backward diagonal
+                    if j > self._lights_per_row[i] // 2:
+                        line_bot = (
+                            truecolor.color_text(" ", (0, 0, 0), (0, 0, 0)) + line_bot
+                        )
+                        line_top = (
+                            truecolor.color_text("x", color, (0, 0, 0)) + line_top
+                        )
+                    else:
+                        line_bot = (
+                            truecolor.color_text("x", color, (0, 0, 0)) + line_bot
+                        )
+                        line_top = (
+                            truecolor.color_text(" ", (0, 0, 0), (0, 0, 0)) + line_top
+                        )
+                else:  # forward diagonal
+                    if j > self._lights_per_row[i] // 2:
+                        line_bot += truecolor.color_text(" ", (0, 0, 0), (0, 0, 0))
+                        line_top += truecolor.color_text("x", color, (0, 0, 0))
+                    else:
+                        line_bot += truecolor.color_text("x", color, (0, 0, 0))
+                        line_top += truecolor.color_text(" ", (0, 0, 0), (0, 0, 0))
+                index += 1
+
+            output_lines += [line_bot, line_top]
+
+        output_lines.reverse()
+        full_output = "\n".join(output_lines)
+        print((self._terminal.move_up * (len(self._lights_per_row) * 2 + 1)), end="")
+        print(full_output)
+
+    def show(self) -> None:
         if self._terminal is None:
             self._terminal = Terminal()
             self._first_draw = True  # make space in flask stdout
@@ -36,24 +115,5 @@ class TestDisplay:
             self._first_draw = False
             print(self._terminal.move_down * (len(self._lights_per_row)))
 
-        MAX_COLS = max(self._lights_per_row)
-        indx = 0
-
-        full_output = ""
-        for i in range(len(self._lights_per_row)):
-            line = ""
-
-            for j in range(self._lights_per_row[i]):
-                color = self._pixels[indx]
-
-                if i % 2 == 0:  # horizontal -
-                    line += truecolor.color_text("x", color, (0, 0, 0))
-                else:  # diagonal \
-                    line = truecolor.color_text("-", color, (0, 0, 0)) + line
-
-                indx += 1
-
-            full_output = line + "\n" + full_output
-
-        print((self._terminal.move_up * (len(self._lights_per_row) + 1)), end="")
-        print(full_output)
+        # self.show_as_linear()
+        self.show_as_diagonals()

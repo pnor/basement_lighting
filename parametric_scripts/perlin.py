@@ -23,6 +23,8 @@ def run(**kwargs):
     SAMPLE_SIZE = 20
     # Brightest color this will yield
     color = np.array(color_input)
+    # Minimal brightness of any LED
+    MIN_BRIGHTNESS = 0.4
 
     ceil = kwargs["ceiling"]
     ceil.use_float_cartesian(effect_radius=0.1)
@@ -51,8 +53,19 @@ def run(**kwargs):
             for j in range(SAMPLE_SIZE):
                 i_indx = i / SAMPLE_SIZE
                 j_indx = j / SAMPLE_SIZE
-                before_col = (color * cur_perlin_noise([i_indx, j_indx])).astype(int)
-                next_col = (color * next_perlin_noise([i_indx, j_indx])).astype(int)
+
+                # Bump up the minimal brightness this can yield
+                cur_perlin_sample = cur_perlin_noise([i_indx, j_indx])
+                cur_perlin_sample = MIN_BRIGHTNESS + (
+                    cur_perlin_sample * (1 - MIN_BRIGHTNESS)
+                )
+                next_perlin_sample = next_perlin_noise([i_indx, j_indx])
+                next_perlin_sample = MIN_BRIGHTNESS + (
+                    next_perlin_sample * (1 - MIN_BRIGHTNESS)
+                )
+
+                before_col = (color * cur_perlin_sample).astype(int)
+                next_col = (color * next_perlin_sample).astype(int)
                 interpolated_col = (
                     ((1 - prog) * before_col) + (prog * next_col)
                 ).astype(int)

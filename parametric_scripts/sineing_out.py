@@ -17,7 +17,7 @@ def run(**kwargs):
     interval = float(kwargs["interval"])
 
     # Number of bands
-    SAMPLE_SIZE = 5
+    SAMPLE_SIZE = 8
     # Brightest color this will yield
     color = np.array(color_input)
 
@@ -25,7 +25,7 @@ def run(**kwargs):
     ceil.use_float_polar(origin=(0.5, 0.5), effect_radius=0.1)
     ceil.clear()
 
-    FPS = 60
+    FPS = 20
     DELTA = 1 / FPS
     cur_time = 0
 
@@ -40,7 +40,6 @@ def run(**kwargs):
             for i in range(len(radiuses)):
                 amt = np.sin((i / len(radiuses) + (prog)) * (2 * np.pi))
                 amt = (amt / 2) + 0.5
-                # print(amt)
                 ceil[radiuses[i], theta] = (color * amt).astype(int)
         ceil.show()
         time.sleep(DELTA)

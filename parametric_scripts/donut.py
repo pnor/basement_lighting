@@ -106,6 +106,8 @@ def run(**kwargs):
                 col = (color * mat[i, j]).astype(int)
                 x_indx = i / screen_width
                 y_indx = j / screen_height
+                x_indx = x_indx * 1.3 - 0.15
+                y_indx = y_indx * 1.3 - 0.15
                 ceil[x_indx, y_indx] = col
 
         ceil.show()

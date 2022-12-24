@@ -11,9 +11,15 @@ def get_scripts_and_names(dir: str) -> List[Tuple[str, str]]:
     skip_names = ["__init__.py"]
 
     files = os.listdir(dir)
-    files = [f for f in files if len(f) > 3 and f[-3:] == ".py" and f not in skip_names]
+    files = [
+        SCRIPTS_PATH + f
+        for f in files
+        if len(f) > 3 and f[-3:] == ".py" and f not in skip_names
+    ]
     names = [parse_script_name_from_file(f) for f in files]
-    return list(zip(names, files))
+    zipped = list(zip(names, files))
+    zipped.sort(key=lambda t: t[0])
+    return zipped
 
 
 def parse_script_name_from_file(path) -> str:

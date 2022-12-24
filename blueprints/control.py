@@ -10,7 +10,6 @@ from flask import (
     request,
 )
 from backend.ceiling_animation import circle_clear
-from backend.constants import SCRIPTS_PATH
 
 from backend.state import global_state as state
 from backend.ceiling import Ceiling
@@ -34,7 +33,7 @@ def start_script() -> str:
             {"ok": False, "error": "request body must contain json dictionary"}
         )
 
-    file_to_run = SCRIPTS_PATH + data_dict["file"]
+    file_to_run = data_dict["file"]
     print(f"statt script running: {file_to_run}")
     color = data_dict.get("color")
     interval = data_dict.get("interval")

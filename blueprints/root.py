@@ -47,7 +47,6 @@ def get_state() -> str:
 
 # ========================================
 
-parametric_name_and_script = get_scripts_and_names("parametric_scripts")
-light_name_and_script = get_scripts_and_names("light_scripts")
+script_names = get_scripts_and_names("scripts/light_scripts")
 
-ls = parametric_name_and_script + light_name_and_script
+ls = script_names

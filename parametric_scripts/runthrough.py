@@ -19,7 +19,7 @@ def run(**kwargs):
     ceil.clear()
 
     # Getting range of colors for all LEDs to cycle through
-    TAIL_LENGTH = 4
+    TAIL_LENGTH = 7
     colors = color_range(color_input, dim_color(color_input), TAIL_LENGTH)
 
     FPS = 60

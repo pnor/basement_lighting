@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-# NAME: Circle
-# Sets a circle to a solid color
-
+# NAME: Radial
 
 import sys
 
@@ -14,10 +12,10 @@ def run(**kwargs):
     color = kwargs["color"]
 
     ceil: Ceiling = kwargs["ceiling"]
-    ceil.use_polar((0.5, 0.5))
-    ceil[0.5, 0.5, 0.35] = hex_to_rgb(color)
+    ceil.use_float_cartesian(effect_radius=0.6)
+    ceil[0.5, 0.5] = hex_to_rgb(color)
     ceil.show()
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(), color=sys.argv[1])
+    run(ceiling=Ceiling(test_mode=True), color=sys.argv[1])

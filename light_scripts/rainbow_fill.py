@@ -23,7 +23,7 @@ def run(**kwargs):
     cur = 0
     interval = 3
 
-    FPS = 30
+    FPS = 20
     DELTA = 1 / FPS
     while True:
         cur = (cur + DELTA) % interval

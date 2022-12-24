@@ -82,7 +82,7 @@ def run(**kwargs):
         particles += [create_random_particle(speed)]
 
     FPS = 60
-    DELTA = 1 / 60
+    DELTA = 1 / FPS
     while True:
         ceil.clear(False)
 

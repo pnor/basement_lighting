@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-#!/usr/bin/env python3
-
 # NAME: Perlin Noise
 # Animated Perlin Noise (of any 1 color)
 

@@ -34,7 +34,6 @@ def start_script() -> str:
         )
 
     file_to_run = data_dict["file"]
-    print(f"statt script running: {file_to_run}")
     color = data_dict.get("color")
     interval = data_dict.get("interval")
 

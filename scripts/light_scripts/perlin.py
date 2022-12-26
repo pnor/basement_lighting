@@ -5,15 +5,14 @@
 
 
 import sys
-import time
 import numpy as np
 from perlin_noise import PerlinNoise
-from typing import Optional, Union
+from typing import Union
 from backend.backend_types import RGB
 
 from backend.ceiling import Ceiling
 from backend.util import color_format_to_rgb, sigmoid_0_to_1
-from scripts.library.render import RenderLoop, RenderState
+from scripts.library.render import RenderState
 
 
 class Render(RenderState):
@@ -73,21 +72,8 @@ def run(**kwargs):
     color_input = color_format_to_rgb(kwargs["color"])
     interval = float(kwargs["interval"])
 
-    # Number of points used to sample the perlin noise obj
-    SAMPLE_SIZE = 20
-    # Brightest color this will yield
-    color = np.array(color_input)
-    # Minimal brightness of any LED
-    MIN_BRIGHTNESS = 0.4
-
     ceil: Ceiling = kwargs["ceiling"]
     ceil.use_float_cartesian(effect_radius=0.1)
-
-    cur_perlin_noise = PerlinNoise()
-    next_perlin_noise = PerlinNoise()
-
-    period = interval
-    cur = 0
 
     render_loop = Render(color_input, interval)
     render_loop.run(30, ceil)

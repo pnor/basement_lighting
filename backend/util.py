@@ -4,8 +4,7 @@
 
 from functools import lru_cache
 import colour
-import copy
-from typing import Iterable, Union, List, Tuple
+from typing import Union, List, Tuple
 import numpy as np
 
 from numba import jit
@@ -134,7 +133,7 @@ def dim_color_by_amount_fast(color: RGB, dim_amount: float) -> RGB:
     """
     color = list(color)
     for i in range(len(color)):
-        color[i] *= dim_amount
+        color[i] = int(color[i] * dim_amount)
     return color
 
 

@@ -11,7 +11,7 @@ RenderLoop = Callable[[float, Ceiling], Union[bool, None]]
 
 class RenderState(ABC):
     _cur: float = 0
-    _interval: Optional[float] = None
+    interval: Optional[float] = None
 
     @abstractmethod
     def __init__(self, interval: Optional[float]):
@@ -19,7 +19,7 @@ class RenderState(ABC):
         `interval`: keep track of how long until `interval` is reached.
         When `interval` is reacher, timer resets and `interval_reached` is called
         """
-        self._interval = interval
+        self.interval = interval
 
     @abstractmethod
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
@@ -40,9 +40,9 @@ class RenderState(ABC):
         run = True
         delta = 1 / FPS
         while run is True or run is None:
-            if self._interval is not None:
+            if self.interval is not None:
                 self._cur += delta
-                if self._cur > self._interval:
+                if self._cur > self.interval:
                     self._cur = 0
                     self.interval_reached(ceil)
 
@@ -51,7 +51,7 @@ class RenderState(ABC):
 
     def progress(self) -> float:
         """Returns percetnage progress towards `_interval`"""
-        if self._interval is None:
+        if self.interval is None:
             return 0
         else:
-            return self._cur / self._interval
+            return self._cur / self.interval

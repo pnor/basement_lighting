@@ -2,71 +2,94 @@
 
 # NAME: Particles
 
-from typing import List
+from typing import List, Optional, Union
 import sys
-import time
 import numpy as np
-from numpy._typing import NDArray
 from backend.backend_types import RGB
 from backend.ceiling import Ceiling
 from backend.util import (
-    clamp,
     color_format_to_rgb,
     dim_color_by_amount_fast,
-    sigmoid_0_to_1,
 )
+from scripts.library.point import Point
+from scripts.library.render import RenderState
 
 
-class Particle:
-    def __init__(
-        self,
-        position: NDArray[np.float64],
-        velocity: NDArray[np.float64],
-        acceleration: NDArray[np.float64],
-        lifetime: float,
-    ) -> None:
-        self._position = position
-        self._velocity = velocity
-        self._acceleration = acceleration
-        self._lifetime = lifetime
-        self._cur = 0
-
-    def step(self, delta: float):
-        self._cur += delta
-        self._position += self._velocity * delta
-        self._velocity += self._acceleration * delta
-
-    def life_left(self) -> float:
-        return clamp(self._cur / self._lifetime, 0, 1)
-
-    def draw(self, ceiling: Ceiling, base_color: RGB) -> None:
-        prog = sigmoid_0_to_1(1 - self.life_left())
-        col = dim_color_by_amount_fast(base_color, prog)
-        ceiling[self._position[0], self._position[1]] = col
-
-    def is_dead(self) -> bool:
-        return self._cur > self._lifetime
+class LifetimePoint:
+    def __init__(self, lifetime: float, point: Point) -> None:
+        self.point = point
+        self.lifetime = lifetime
 
 
-def create_random_particle(speed: float) -> Particle:
+def create_random_particle(speed: float) -> LifetimePoint:
     angle = np.random.random() * (2 * np.pi)
     radius = 0.6
     x = (radius * np.cos(angle)) + 0.5
     y = (radius * np.sin(angle)) + 0.5
+    position = np.array([x, y])
 
     MAX_MAGNITUDE = 3 * speed
     v_angle = angle - np.pi - (np.random.random() * (np.pi / 3))
     v_magnitude = np.random.random() * MAX_MAGNITUDE
     v_x = v_magnitude * np.cos(v_angle)
     v_y = v_magnitude * np.sin(v_angle)
+    velocity = np.array([v_x, v_y])
 
     accel = np.array(
         [np.random.random() * MAX_MAGNITUDE, np.random.random() * MAX_MAGNITUDE]
     )
 
-    LIFETIME = 1
+    return LifetimePoint(0, Point(position, velocity, accel))
 
-    return Particle(np.array([x, y]), np.array([v_x, v_y]), accel, LIFETIME)
+
+def interarrival_function(x: float) -> float:
+    return np.random.exponential(1 / (5 * x))
+
+
+class Render(RenderState):
+    def __init__(self, color: RGB, interval: Optional[float]):
+        # color
+        self.color = color
+
+        # speed
+        interval = interval if interval else 1
+        self.speed = interval / 2
+
+        # starting particles
+        self.particles: List[LifetimePoint] = []
+        for _ in range(6):
+            self.particles += [create_random_particle(self.speed)]
+
+        # spawning of particles
+        self.cur = 0
+        self.interval = interarrival_function(self.speed)
+        self.LIFETIME = 1 * (1 / interval)
+        super().__init__(self.interval)
+
+    def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
+        ceil.clear(False)
+        for i in range(len(self.particles)):
+            self.particles[i].lifetime += delta
+            self.particles[i].point.step(delta)
+            col = dim_color_by_amount_fast(
+                self.color, 1 - (self.particles[i].lifetime / self.LIFETIME)
+            )
+            self.particles[i].point.draw(col, ceil)
+
+        self.particles = list(
+            filter(lambda t: t.lifetime < self.LIFETIME, self.particles)
+        )
+        ceil.show()
+
+        if np.random.random() < 0.04:
+            self.particles += [create_random_particle(self.speed)]
+
+        return super().render(delta, ceil)
+
+    def interval_reached(self, ceil: Ceiling) -> None:
+        self.interval = interarrival_function(self.speed)
+        self.particles += [create_random_particle(self.speed)]
+        return super().interval_reached(ceil)
 
 
 def run(**kwargs):
@@ -77,32 +100,13 @@ def run(**kwargs):
     ceil.use_cartesian(search_range=0.1)
     ceil.clear()
 
-    particles: List[Particle] = []
-    for i in range(6):
-        particles += [create_random_particle(speed)]
-
-    FPS = 60
-    DELTA = 1 / FPS
-    while True:
-        ceil.clear(False)
-
-        for p in particles:
-            p.step(DELTA)
-            p.draw(ceil, color_input)
-            if p.is_dead():
-                particles = list(filter(lambda x: x != p, particles))
-
-        ceil.show()
-
-        if len(particles) < 3:
-            for i in range(np.random.randint(6)):
-                particles += [create_random_particle(speed)]
-
-        if np.random.random() < 0.04:
-            particles += [create_random_particle(speed)]
-
-        time.sleep(DELTA)
+    render_loop = Render(color_input, speed)
+    render_loop.run(30, ceil)
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])
+    run(
+        ceiling=Ceiling(),
+        color=sys.argv[1],
+        interval=sys.argv[2],
+    )

@@ -7,7 +7,6 @@
 # (computationally expensive to run, numba required)
 
 import sys
-import time
 from typing import Optional, Union
 import numpy as np
 from numpy._typing import NDArray
@@ -80,19 +79,19 @@ def render_frame(A: float, B: float) -> NDArray[np.float64]:
 class Render(RenderState):
     def __init__(self, color: RGB, interval: Optional[float]) -> None:
         interval = interval if interval else 1
-        self._cur_a = 0
-        self._interval_a = interval * 7
-        self._cur_b = 0
-        self._interval_b = interval * 9
-        self._color = np.array(color)
+        self.cur_a = 0
+        self.interval_a = interval * 7
+        self.cur_b = 0
+        self.interval_b = interval * 9
+        self.color = np.array(color)
         super().__init__(interval)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        self._cur_a = (self._cur_a + delta) % self._interval_a
-        self._cur_b = (self._cur_b + delta) % self._interval_b
+        self.cur_a = (self.cur_a + delta) % self.interval_a
+        self.cur_b = (self.cur_b + delta) % self.interval_b
 
-        prog_a = self._cur_a / self._interval_a
-        prog_b = self._cur_b / self._interval_b
+        prog_a = self.cur_a / self.interval_a
+        prog_b = self.cur_b / self.interval_b
 
         a = prog_a * (2 * np.pi)
         b = prog_b * (2 * np.pi)
@@ -101,7 +100,7 @@ class Render(RenderState):
         ceil.clear(False)
         for i in range(screen_width):
             for j in range(screen_height):
-                col = (self._color * mat[i, j]).astype(int)
+                col = (self.color * mat[i, j]).astype(int)
                 x_indx = i / screen_width
                 y_indx = j / screen_height
                 x_indx = x_indx * 1.3 - 0.15

@@ -6,44 +6,45 @@
 
 import sys
 import time
+from typing import Optional, Union
 import numpy as np
+from backend.backend_types import RGB
 
 from backend.ceiling import Ceiling
 from backend.util import color_format_to_rgb, sigmoid_0_to_1
+from scripts.library.render import RenderState
+
+
+class Render(RenderState):
+    def __init__(self, color: RGB, interval: Optional[float]):
+        # Number of bands
+        self.SAMPLE_SIZE = 16
+        # Brightest color this will yield
+        self.color = np.array(color)
+        self.radiuses = ((np.arange(self.SAMPLE_SIZE) + 1) / self.SAMPLE_SIZE) * 2.5
+        super().__init__(interval)
+
+    def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
+        ceil.clear(False)
+        for theta in range(0, 360, 10):
+            for i in range(len(self.radiuses)):
+                amt = np.sin((i / len(self.radiuses) + (self.progress())) * (2 * np.pi))
+                amt = (amt / 2) + 0.5
+                ceil[self.radiuses[i], theta] = (self.color * amt).astype(int)
+
+        ceil.show()
+        return super().render(delta, ceil)
 
 
 def run(**kwargs):
     color_input = color_format_to_rgb(kwargs["color"])
     interval = float(kwargs["interval"])
 
-    # Number of bands
-    SAMPLE_SIZE = 12
-    # Brightest color this will yield
-    color = np.array(color_input)
+    ceil = kwargs["ceiling"]
+    ceil.use_float_polar(origin=(0, 0), effect_radius=0.15)
 
-    ceil: Ceiling = kwargs["ceiling"]
-    ceil.use_float_polar(origin=(0.0, 0.0), effect_radius=0.1)
-    ceil.clear()
-
-    FPS = 10
-    DELTA = 1 / FPS
-    cur_time = 0
-
-    radiuses = (np.arange(SAMPLE_SIZE) + 1) / SAMPLE_SIZE * 3
-    while True:
-        cur_time = (cur_time + DELTA) % interval
-        prog = cur_time / interval
-
-        ceil.clear(False)
-
-        for theta in range(0, 360, 10):
-            for i in range(len(radiuses)):
-                amt = np.sin((i / len(radiuses) + (prog)) * (2 * np.pi))
-                amt = (amt / 2) + 0.5
-                # print(amt)
-                ceil[radiuses[i], theta] = (color * amt).astype(int)
-        ceil.show()
-        time.sleep(DELTA)
+    render_loop = Render(color_input, interval)
+    render_loop.run(10, ceil)
 
 
 if __name__ == "__main__":

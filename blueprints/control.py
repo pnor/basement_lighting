@@ -34,7 +34,8 @@ def start_script() -> str:
         )
 
     file_to_run = data_dict["file"]
-    color = data_dict.get("color")
+    # color = data_dict.get("color")
+    color = state.get_color_and_cycle()
     interval = data_dict.get("interval")
 
     if not os.path.exists(file_to_run):

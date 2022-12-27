@@ -26,7 +26,7 @@ class Render(RenderState):
         # Brightest color this will yield
         self.color = np.array(color)
         # Minimal brightness of any LED
-        self.MIN_BRIGHTNESS = 0.4
+        self.MIN_BRIGHTNESS = 0.15
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         prog = sigmoid_0_to_1(self.progress())
@@ -80,4 +80,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=Ceiling(test_mode=True), color=sys.argv[1], interval=sys.argv[2])

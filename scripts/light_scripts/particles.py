@@ -8,6 +8,7 @@ import numpy as np
 from backend.backend_types import RGB
 from backend.ceiling import Ceiling
 from backend.util import (
+    clamp,
     color_format_to_rgb,
     dim_color_by_amount_fast,
 )
@@ -72,7 +73,7 @@ class Render(RenderState):
             self.particles[i].lifetime += delta
             self.particles[i].point.step(delta)
             col = dim_color_by_amount_fast(
-                self.color, 1 - (self.particles[i].lifetime / self.LIFETIME)
+                self.color, 1 - clamp(self.particles[i].lifetime / self.LIFETIME, 0, 1)
             )
             self.particles[i].point.draw(col, ceil)
 

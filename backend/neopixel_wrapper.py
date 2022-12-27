@@ -51,6 +51,9 @@ class PixelWrapper:
             # self._pixels.__setitem__(key, value)
             self._pixels[key] = value
         else:
+            for x in value:
+                assert x >= 0
+                assert x < 256
             self._pretend_pixels[key] = value
 
         if self._test_display and self._auto_write:

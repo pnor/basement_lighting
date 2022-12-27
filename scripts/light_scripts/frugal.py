@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 
-# NAME: Radial
+# NAME: Frugal
 
 import sys
+import numpy as np
 
 from backend.ceiling import Ceiling
 from backend.util import hex_to_rgb
 
 
 def run(**kwargs):
-    color = kwargs["color"]
+    color = hex_to_rgb(kwargs["color"])
 
     ceil: Ceiling = kwargs["ceiling"]
-    ceil.use_float_cartesian(effect_radius=0.4)
-    ceil[0.5, 0.5] = hex_to_rgb(color)
+    ceil.use_linear()
+    ceil[int(np.random.random() * ceil.NUMBER_LIGHTS)] = color
     ceil.show()
 
 

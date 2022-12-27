@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 import time
 
 from backend.ceiling import Ceiling
+from backend.util import clamp
 
 RenderLoop = Callable[[float, Ceiling], Union[bool, None]]
 
@@ -50,8 +51,8 @@ class RenderState(ABC):
             time.sleep(delta)
 
     def progress(self) -> float:
-        """Returns percetnage progress towards `_interval`"""
+        """Returns percetnage progress towards `_interval` (always 0..1)"""
         if self.interval is None:
             return 0
         else:
-            return self._cur / self.interval
+            return clamp(self._cur / self.interval, 0, 1)

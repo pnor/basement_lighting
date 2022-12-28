@@ -1,10 +1,13 @@
 from multiprocessing import Process, Pipe
 from multiprocessing.connection import _ConnectionBase
 from typing import Callable, Optional, Tuple
-import os
 import importlib.util as importlib_util
 import json
+import numpy as np
+import os
+import random
 import signal
+import time
 from flask import (
     Blueprint,
     request,
@@ -124,6 +127,9 @@ def function_wrapper(
     def _function_wrapper(color: str, interval: float):
         signal.signal(signal.SIGTERM, _exit_gracefully)
         try:
+            now = int(time.time())
+            np.random.seed(now)
+            random.seed(now)
             circle_clear(ceiling, 0.2, (255, 255, 255))
             f(ceiling=ceiling, color=color, interval=interval)
         except Exception as e:

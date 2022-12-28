@@ -23,6 +23,7 @@ class Render(RenderState):
         self._color = color
         self._point = np.array([0.5, 0.5])
         self._velocity = np.array([1.0, 0]) * interval
+        self._velocity = rotate_vector(self._velocity, np.random.random() * 360)
         super().__init__(None)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:

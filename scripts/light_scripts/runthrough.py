@@ -17,7 +17,7 @@ class Render(RenderState):
     def __init__(self, color: RGB, interval: Optional[float]):
         self.TAIL_LENGTH = 7
         self.colors = color_range(color, dim_color(color), self.TAIL_LENGTH)
-        super().__init__(interval)
+        super().__init__(interval * 3)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         index = int(self.progress() * ceil.NUMBER_LIGHTS)

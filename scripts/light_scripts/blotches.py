@@ -72,6 +72,6 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(test_mode=True),
+        ceiling=Ceiling(),
         interval=sys.argv[1],
     )

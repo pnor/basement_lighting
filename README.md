@@ -72,7 +72,7 @@ ceil = Ceiling(io_pin=board.D10, number_lights=200, auto_write=False)
 ceil.clear()
 ```
 
-By default, it lets you index using the linear indexing system NeoPixels provides by default
+By default, it lets you index using the linear indexing system NeoPixels provides:
 
 ``` python
 ceil[0] = (255, 0, 0)
@@ -112,6 +112,37 @@ You can set circles of LEDs by providing a tuple of 3 elements: (x, y, radius)
 
 `ceil.use_float_polar(origin=, effect_radius=)`: Same as `use_float_cartesian` but uses polar coordinate system.
 
+## Animations and displays that change over time
+Many light scripts will feature an animation. Doing this is best done using a render loop, tracking the time between frames. The scripts library includes a convenience object that handles calling your code every frame.
+
+To use, create a custom object that extends `RenderState`:
+
+``` python
+class Render(RenderState):
+    def __init__(self, interval: Optional[float]):
+        # initialize state used across render frames here
+        super().__init__(interval)
+
+    def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
+        # Update the display every frame
+        return super().render(delta, ceil)
+
+    def interval_reached(self, ceil: Ceiling) -> None:
+        # This function is run every `interval` seconds
+        return super().interval_reached(ceil)
+```
+then start the render loop in the `run` function with:
+
+``` python
+render_loop = Render(interval=1)
+render_loop.run(FPS=30, ceil=ceil)
+```
+
+`interval` is optional (can be None) and if it is provided, will call `interval_reached` every `interval` seconds. You can also use `self.progress()` to get the percentage you are from the next `interval` being reached.
+
+`render` must be overriden and is called every frame.
+
+See `example_render.py` for an example.
 
 ## Testing
 

@@ -14,13 +14,13 @@ class Point:
         velocity: NDArray[np.float64],
         acceleration: NDArray[np.float64],
     ) -> None:
-        self._position = position
-        self._velocity = velocity
-        self._acceleration = acceleration
+        self.position = position
+        self.velocity = velocity
+        self.acceleration = acceleration
 
     def step(self, delta: float):
-        self._position += self._velocity * delta
-        self._velocity += self._acceleration * delta
+        self.position += self.velocity * delta
+        self.velocity += self.acceleration * delta
 
     def draw(self, color: RGB, ceiling: Ceiling) -> None:
-        ceiling[self._position[0], self._position[1]] = color
+        ceiling[self.position[0], self.position[1]] = color

@@ -41,6 +41,8 @@ def run(**kwargs):
         num_hours = int(uptime_seconds / SECONDS_IN_HOUR)
         if num_hours > ceil.NUMBER_LIGHTS:
             ceil.fill(HOURS_COLOR)
+        elif num_hours == 0:
+            ceil.fill((60, 60, 60))
         else:
             ceil[:num_hours] = HOURS_COLOR
     else:

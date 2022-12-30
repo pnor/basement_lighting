@@ -32,7 +32,7 @@ def get_run_fn_from_other_scripts() -> Optional[Callable]:
     path = SCRIPTS_PATH
 
     # Choose a random file
-    files_to_exclude = ["__init__.py"]
+    files_to_exclude = ["__init__.py", "__pycache__"]
     files = os.listdir("./" + path)
     files = list(filter(lambda f: f not in files_to_exclude, files))
     assert len(files) > 0

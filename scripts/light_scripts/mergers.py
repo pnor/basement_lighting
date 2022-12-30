@@ -74,4 +74,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(test_mode=True))
+    run(ceiling=Ceiling())

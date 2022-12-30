@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
 
-# NAME: Alternate
-# Blinks every other LED to the same color
+# NAME: Rainbow Step
 
 import sys
 from typing import Optional, Union
 from backend.backend_types import RGB
+import colour
 
 from backend.ceiling import Ceiling
-from backend.util import color_format_to_rgb
+from backend.util import color_obj_to_rgb
 from scripts.library.render import RenderState
 
 
 class Render(RenderState):
-    def __init__(self, color: RGB, interval: Optional[float]):
-        self.color = color
+    def __init__(self, interval: Optional[float]):
         interval = interval if interval else 1
-        self.first_lit = True
+        self.step = 2
+        self.hue = 0
+        self.color = colour.Color(hsl=(self.hue, 1, 0.5))
         super().__init__(interval)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
@@ -25,24 +26,32 @@ class Render(RenderState):
     def interval_reached(self, ceil: Ceiling) -> None:
         ceil.clear(False)
 
-        ceil[::2] = self.color if self.first_lit else (0, 0, 0)
-        ceil[1::2] = (0, 0, 0) if self.first_lit else self.color
+        step = self.step + 2
+        col = color_obj_to_rgb(self.color)
+
+        if self.step % 2 == 0:
+            ceil[::step] = col
+            ceil[1::step] = (0, 0, 0)
+        else:
+            ceil[::step] = (0, 0, 0)
+            ceil[1::step] = col
 
         ceil.show()
-        self.first_lit = not self.first_lit
+        self.step = (self.step + 1) % 8
+        self.hue = (self.hue + 0.05) % 1
+        self.color.hue = self.hue
 
 
 def run(**kwargs):
-    color_input = color_format_to_rgb(kwargs["color"])
     interval = float(kwargs["interval"])
 
     ceil: Ceiling = kwargs["ceiling"]
     ceil.use_linear()
     ceil.clear()
 
-    render_loop = Render(color_input, interval / 3)
+    render_loop = Render(interval / 3)
     render_loop.run(1, ceil)
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(test_mode=True), color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=Ceiling(), interval=sys.argv[1])

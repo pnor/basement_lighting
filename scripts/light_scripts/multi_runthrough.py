@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-# NAME: Run through
-# Runs a single LED throughout the light strip
+# NAME: Run through 2
 
+import numpy as np
 import sys
 import time
 from typing import Optional, Union
@@ -14,17 +14,25 @@ from scripts.library.render import RenderState
 
 
 class Render(RenderState):
-    def __init__(self, color: RGB, interval: Optional[float]):
-        self.TAIL_LENGTH = 7
+    def __init__(self, color: RGB, num_lights: int, interval: Optional[float]):
+        assert interval is not None
+        self.NUMBER_POINTS = 10
+        self.TAIL_LENGTH = 10
+
         self.colors = color_range(color, dim_color(color), self.TAIL_LENGTH)
-        super().__init__(interval * 3)
+        self.points = (np.random.random(self.NUMBER_POINTS) * num_lights).astype(
+            np.int32
+        )
+        super().__init__(interval * 5)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        index = int(self.progress() * ceil.NUMBER_LIGHTS)
-
         ceil.clear(False)
-        for i in range(0, self.TAIL_LENGTH):
-            ceil[index - i] = self.colors[i]
+
+        for p in self.points:
+            index = (int(self.progress() * ceil.NUMBER_LIGHTS) + p) % ceil.NUMBER_LIGHTS
+
+            for i in range(0, self.TAIL_LENGTH):
+                ceil[index - i] = self.colors[i]
 
         ceil.show()
 
@@ -39,7 +47,7 @@ def run(**kwargs):
     ceil.use_linear()
     ceil.clear()
 
-    render_loop = Render(color_input, interval)
+    render_loop = Render(color_input, ceil.NUMBER_LIGHTS, interval)
     render_loop.run(30, ceil)
 
 

@@ -16,7 +16,7 @@ from scripts.library.render import RenderState
 class Render(RenderState):
     def __init__(self, interval: Optional[float]):
         self.color = colour.Color(hsl=(0, 1, 0.5))
-        super().__init__(interval if interval else 1)
+        super().__init__(interval * 5 if interval else 1)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         self.color.set_hue(self.progress())

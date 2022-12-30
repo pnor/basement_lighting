@@ -48,10 +48,8 @@ class Render(RenderState):
             ceil[x, y] = color_obj_to_rgb(self.color)
             ceil.show()
         else:
-            if np.random.random() < 0.1:
-                circle_clear(ceil, 0.2, color_obj_to_rgb(self.color))
-            else:
-                fade_out(ceil, 0.2, color_obj_to_rgb(self.color))
+            circle_clear(ceil, 0.2, color_obj_to_rgb(self.color))
+
             random_hue = np.random.random()
             self.color = colour.Color(hsl=(random_hue, 1, 0.5))
 
@@ -74,6 +72,6 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(test_mode=True),
+        ceiling=Ceiling(),
         interval=sys.argv[1],
     )

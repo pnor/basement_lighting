@@ -37,7 +37,7 @@ class Render(RenderState):
         y = np.random.random()
 
         col = color_obj_to_rgb(self.color)
-        circle_out(ceil, 10 * self.interval, col, (x, y), 1.2)
+        circle_out(ceil, 10 * self.interval, col, (x, y), 1.3)
 
         return super().interval_reached(ceil)
 

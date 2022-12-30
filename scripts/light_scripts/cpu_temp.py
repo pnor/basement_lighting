@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# CPU Temperature
+# NAME: CPU Temperature
 
 import os
 import sys

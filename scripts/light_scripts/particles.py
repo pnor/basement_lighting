@@ -82,14 +82,15 @@ class Render(RenderState):
         )
         ceil.show()
 
-        if np.random.random() < 0.04:
-            self.particles += [create_random_particle(self.speed)]
-
         return super().render(delta, ceil)
 
     def interval_reached(self, ceil: Ceiling) -> None:
         self.interval = interarrival_function(self.speed)
         self.particles += [create_random_particle(self.speed)]
+
+        if np.random.random() < 0.5:
+            self.particles += [create_random_particle(self.speed)]
+
         return super().interval_reached(ceil)
 
 

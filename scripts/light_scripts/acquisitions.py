@@ -56,7 +56,7 @@ class Render(RenderState):
         # spawning of particles
         self.cur = 0
         self.LIFETIME = 2 * interval
-        super().__init__(interval)
+        super().__init__(0.25)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear(False)
@@ -82,9 +82,12 @@ class Render(RenderState):
         )
         ceil.show()
 
-        if np.random.random() < 0.2:
-            self.particles += [create_random_point()]
         return super().render(delta, ceil)
+
+    def interval_reached(self, ceil: Ceiling) -> None:
+        if np.random.random() < 0.6:
+            self.particles += [create_random_point()]
+        return super().interval_reached(ceil)
 
 
 def run(**kwargs):

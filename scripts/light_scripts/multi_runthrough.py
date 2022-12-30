@@ -15,6 +15,7 @@ from scripts.library.render import RenderState
 
 class Render(RenderState):
     def __init__(self, color: RGB, num_lights: int, interval: Optional[float]):
+        assert interval is not None
         self.NUMBER_POINTS = 10
         self.TAIL_LENGTH = 10
 

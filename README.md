@@ -1,4 +1,4 @@
-# Byrons Basement
+# Basement Lighting
 Using a Rasberry pi and WS2811 addressable light strips to create cool lighting effects
 
 ## How to Run

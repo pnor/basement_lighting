@@ -12,7 +12,7 @@ from flask import (
     Blueprint,
     request,
 )
-from backend.ceiling_animation import circle_clear
+from backend.ceiling_animation import circle_clear, row_clear
 
 from backend.state import global_state as state
 from backend.ceiling import Ceiling

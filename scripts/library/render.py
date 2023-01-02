@@ -29,7 +29,7 @@ class RenderState(ABC):
     def interval_reached(self, ceil: Ceiling) -> None:
         pass
 
-    def run(self, FPS: float, ceil: Ceiling):
+    def run(self, fps: float, ceil: Ceiling):
         """Handles boiler plate of running a render loop at `FPS` frames per second.
 
         `block` is a function (deltatime, ceiling) -> boolean that should be run
@@ -39,16 +39,26 @@ class RenderState(ABC):
         will continue running in a loop
         """
         run = True
-        delta = 1 / FPS
-        while run is True or run is None:
-            if self.interval is not None:
-                self._cur += delta
-                if self._cur > self.interval:
-                    self._cur = 0
-                    self.interval_reached(ceil)
+        ns_per_frame = 1000000000 / fps
+        last_frame_time = time.time_ns()
+        delta = 0
 
-            run = self.render(delta, ceil)
-            time.sleep(delta)
+        while run is True or run is None:
+            start_time = time.time_ns()
+            delta += (start_time - last_frame_time) / ns_per_frame
+            last_frame_time = start_time
+
+            if delta >= 1:
+                run = self.render(1 / fps, ceil)
+
+                if self.interval is not None:
+                    self._cur += 1 / fps
+                    if self._cur > self.interval:
+                        self._cur = 0
+                        self.interval_reached(ceil)
+
+                delta -= 1
+
 
     def progress(self) -> float:
         """Returns percetnage progress towards `_interval` (always 0..1)"""

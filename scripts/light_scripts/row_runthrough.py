@@ -8,7 +8,7 @@ from typing import Optional, Union
 from backend.backend_types import RGB
 
 from backend.ceiling import Ceiling
-from backend.util import color_format_to_rgb, color_range, dim_color
+from backend.util import clamp, color_format_to_rgb, color_range, dim_color
 from scripts.library.render import RenderState
 
 
@@ -16,12 +16,12 @@ class Render(RenderState):
     def __init__(self, color: RGB, interval: Optional[float]):
         self.TAIL_LENGTH = 5
         self.colors = color_range(color, dim_color(color), self.TAIL_LENGTH)
-        super().__init__(interval)
+        super().__init__(interval / 2.5)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         rows = ceil.rows()
         assert rows is not None
-        index = int(self.progress() * len(rows))
+        index = int(clamp(self.progress(), 0, 0.999) * len(rows))
 
         ceil.clear(False)
         for i in range(0, self.TAIL_LENGTH):
@@ -41,7 +41,7 @@ def run(**kwargs):
     ceil.clear()
 
     render_loop = Render(color_input, interval)
-    render_loop.run(30, ceil)
+    render_loop.run(60, ceil)
 
 
 if __name__ == "__main__":

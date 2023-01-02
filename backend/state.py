@@ -25,7 +25,9 @@ class State:
             colour.Color("purple"),
             colour.Color("cyan"),
             colour.Color("chartreuse"),
+            colour.Color("pink"),
             colour.Color("white"),
+            colour.Color("darkgrey"),
         ]
         self.color_index = 0
 

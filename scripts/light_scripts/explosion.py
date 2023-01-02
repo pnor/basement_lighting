@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
-# NAME: Linear Plosions
+# NAME: Explosion
 
 import numpy as np
 import sys
+import copy
 import colour
 from typing import List, Optional, Union
+
+from numpy._typing import NDArray
 
 from backend.ceiling import Ceiling
 from backend.util import (
@@ -28,21 +31,25 @@ class Shockwave:
 
 class Charger:
     def __init__(
-        self, loc: int, color_obj: colour.Color, num_lights: int, speed: float
+        self,
+        pos: NDArray[np.float32],
+        color_obj: colour.Color,
+        speed: float,
     ) -> None:
-        self.loc = loc % num_lights
-        self.CHARGE_TIME = 2 * (1 / speed)
-        self.NUM_LIGHTS = num_lights
+        self.pos = pos
+        self.RADIUS = 0.2
+
+        self.CHARGE_TIME = 5 * (1 / speed)
         self.cur_time = 0
         self.speed = speed
 
         self.color_obj = color_obj
         self.cur_color = color_obj_to_rgb(color_obj)
         # Chargin up to explode
-        self.color_range = color_range(color_obj, colour.Color("white"), 50)
+        self.color_range = color_range(color_obj, colour.Color("white"), 200)
         # Fade into existence
         self.color_range = (
-            color_range(dim_color(color_obj), color_obj, 10) + self.color_range
+            color_range(dim_color(color_obj), color_obj, 25) + self.color_range
         )
 
     def step(self, delta: float, entity_list: List[Union[Charger, Shockwave]]):
@@ -52,17 +59,24 @@ class Charger:
         color_from_range = self.color_range[int(prog * len(self.color_range))]
         self.cur_color = color_from_range
 
-        shockwave_speed = self.speed * 30
         if self.cur_time > self.CHARGE_TIME:
-            entity_list.append(
-                Shockwave(self.loc, shockwave_speed, self.color_obj, self.NUM_LIGHTS)
-            )
-            entity_list.append(
-                Shockwave(self.loc, -shockwave_speed, self.color_obj, self.NUM_LIGHTS)
-            )
+            for i in range(0, 360, 5):
+                shockwave_speed = (self.speed * 1.0) + (
+                    np.random.random() * (self.speed * 6)
+                )
+                shockwave_accel = -(np.random.random() * (self.speed * 1))
+
+                if np.random.random() < 0.7:
+                    s = Shockwave(
+                        np.array([0.0, i]),
+                        shockwave_speed,
+                        shockwave_accel,
+                        self.color_obj,
+                    )
+                    entity_list.append(s)
 
     def draw(self, ceil: Ceiling):
-        ceil[int(self.loc)] = self.cur_color
+        ceil[self.pos[0], self.pos[1], self.RADIUS] = self.cur_color
 
     def is_dead(self) -> bool:
         return self.cur_time > self.CHARGE_TIME
@@ -70,44 +84,45 @@ class Charger:
 
 class Shockwave:
     def __init__(
-        self, loc: int, velocity: float, color_obj: colour.Color, num_lights: int
+        self,
+        r_theta: NDArray[np.float32],
+        r_velocity: float,
+        r_accel: float,
+        base_color_obj: colour.Color,
     ) -> None:
-        self.loc = float(loc)
-        self.velocity = velocity
-        self.LIFETIME = 1
-        self.NUM_LIGHTS = num_lights
+        self.r_theta = r_theta
+        self.r_velocity = r_velocity
+        self.r_accel = r_accel
+
         self.cur_time = 0
-        self.color_range = color_range(color_obj, dim_color(color_obj), 50)
-        self.cur_color = color_obj_to_rgb(color_obj)
+        self.LIFETIME = 2
+
+        color_obj = copy.deepcopy(base_color_obj)
+        color_obj.hue = clamp(color_obj.hue + (np.random.random() * 0.1 - 0.05), 0, 1)
+        color_obj.luminance = clamp(
+            color_obj.hue + (np.random.random() * 0.5 - 0.25), 0, 1
+        )
+        self.color_range = color_range(color_obj, dim_color(color_obj), 20)
 
     def step(self, delta: float, entity_list: List[Union[Charger, Shockwave]]):
         self.cur_time += delta
-
-        self.loc += self.velocity * delta
-        self.loc %= self.NUM_LIGHTS
-
         prog: float = clamp(self.cur_time / self.LIFETIME, 0, 0.999)
+
+        self.r_theta[0] += self.r_velocity * delta
+        self.r_velocity += self.r_accel * delta
+
         color_from_range = self.color_range[int(prog * len(self.color_range))]
         self.cur_color = color_from_range
 
     def draw(self, ceil: Ceiling):
-        # composit the color if it already has a color
-        cur_color = ceil[int(self.loc) % self.NUM_LIGHTS]
-        assert cur_color is not None
-        cur_color = np.array(cur_color, dtype=np.int8)
-        set_color = np.array(self.cur_color)
-        new_color = cur_color + set_color
-        new_color[0] = clamp(new_color[0], 0, 255)
-        new_color[1] = clamp(new_color[1], 0, 255)
-        new_color[2] = clamp(new_color[2], 0, 255)
-        ceil[int(self.loc) % self.NUM_LIGHTS] = new_color
+        ceil[self.r_theta[0], self.r_theta[1]] = self.cur_color
 
     def is_dead(self) -> bool:
         return self.cur_time > self.LIFETIME
 
 
 def random_explosion(num_lights: int, color_obj: colour.Color, speed: float) -> Charger:
-    return Charger(np.random.randint(num_lights - 1), color_obj, num_lights, speed)
+    return Charger(np.array([0.5, 0.5]), color_obj, speed)
 
 
 class Render(RenderState):
@@ -122,7 +137,7 @@ class Render(RenderState):
         self.entity_list: List[Union[Charger, Shockwave]] = [
             random_explosion(num_lights, color_obj, self.speed)
         ]
-        super().__init__(0.3)
+        super().__init__(interval * 10)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear(False)
@@ -140,10 +155,9 @@ class Render(RenderState):
         return super().render(delta, ceil)
 
     def interval_reached(self, ceil: Ceiling) -> None:
-        if np.random.random() < 0.8:
-            self.entity_list += [
-                random_explosion(ceil.NUMBER_LIGHTS, self.color_obj, self.speed)
-            ]
+        self.entity_list += [
+            random_explosion(ceil.NUMBER_LIGHTS, self.color_obj, self.speed)
+        ]
         return super().interval_reached(ceil)
 
 
@@ -151,8 +165,8 @@ def run(**kwargs):
     color_input = color_format_to_obj(kwargs["color"])
     interval = float(kwargs["interval"])
 
-    ceil = kwargs["ceiling"]
-    ceil.use_linear()
+    ceil: Ceiling = kwargs["ceiling"]
+    ceil.use_polar((0.5, 0.5))
     ceil.clear()
 
     render_loop = Render(color_input, ceil.NUMBER_LIGHTS, interval)

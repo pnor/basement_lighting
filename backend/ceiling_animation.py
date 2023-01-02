@@ -63,3 +63,33 @@ def fade_out(ceiling: Ceiling, duration: float, color: RGB) -> None:
         ceiling.fill((color * (clamp(prog, 0, 1))).astype(int))
         ceiling.show()
         time.sleep(DELTA)
+
+
+def row_clear(ceiling: Ceiling, duration: float, color: RGB) -> None:
+    """Clears display row by row"""
+
+    _color = color
+
+    def _row_clear(ceiling: Ceiling) -> None:
+        FPS = 60
+        DELTA = 1 / FPS
+        cur_time = 0
+
+        color = np.array(_color)
+
+        while cur_time < duration:
+            cur_time += DELTA
+
+            prog = clamp(cur_time / duration, 0, 0.99)
+            index = int(prog * len(ceiling.rows()))
+            last_index = index - 1 if index > 0 else None
+
+            ceiling[index] = color
+            if last_index:
+                ceiling[last_index] = (0, 0, 0)
+
+            ceiling.show()
+            time.sleep(DELTA)
+
+    ceiling.with_row(_row_clear)
+    ceiling.clear()

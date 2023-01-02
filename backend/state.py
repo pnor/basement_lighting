@@ -22,8 +22,10 @@ class State:
             colour.Color("blue"),
             colour.Color("indigo"),
             colour.Color("violet"),
+            colour.Color("purple"),
+            colour.Color("cyan"),
+            colour.Color("chartreuse"),
             colour.Color("white"),
-            colour.Color("#999999"),
         ]
         self.color_index = 0
 

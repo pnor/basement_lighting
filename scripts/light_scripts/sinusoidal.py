@@ -17,7 +17,7 @@ from scripts.library.render import RenderState
 class Render(RenderState):
     def __init__(self, color: RGB, interval: Optional[float]):
         self.color = color
-        super().__init__(interval)
+        super().__init__(interval * 1.5)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear(False)

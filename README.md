@@ -2,35 +2,45 @@
 Using a Rasberry pi and WS2811 addressable light strips to create cool lighting effects
 
 ## How to Run
-### Website
-Make sure to first enter virtual environment and install dependencies:
+### Installation
+Setup the python virtual environment:
 ``` sh
-virtualenv -p python3 venv
+python -m venv ./venv
 source venv/bin/activate
-pip install -r requirements.txt
 ```
+You can quickly install everything you need to run by running `./install.sh`
 
-Install node dependencies and compile
 
+Or you can do it manually by running these commands:
 ``` sh
+# Install python packages
+pip install Cython
+pip install -r requirements.txt
+# Install node packages
 npm install
 npm run compile
 ```
 
-Then run with
+You may also want to set the environment variable for colorterm to true to
+enable demos in the terminal:
+
+```sh
+export COLORTERM=true
+```
+You can have this done automatically if you have `direnv`
+
+### Website
+Make sure to first enter virtual environment and install dependencies.
+
+Run with:
 
 ``` sh
 flask run
 ```
 
 ### Running light scripts
-You can test/run lighting scripts by first installing necessary dependencies
-``` sh
-virtualenv -p python3 venv
-source venv/bin/activate
-pip install -r requirements.txt
-pip install -e .
-```
+You can test/run lighting scripts by first installing necessary dependencies by
+setting up the python environment or running `./install.sh`
 
 Then run whichever script directly:
 

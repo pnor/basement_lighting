@@ -37,6 +37,7 @@ pyparsing==3.0.9
 pyserial==3.5
 pytest==7.2.0
 python-dateutil==2.8.2
+python-dotenv==0.21.1
 pyusb==1.2.1
 rpi-ws281x==4.3.4
 RPi.GPIO==0.7.1

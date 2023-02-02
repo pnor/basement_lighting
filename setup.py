@@ -23,7 +23,7 @@ def read(*names, **kwargs):
 
 
 setup(
-    name="byronsbasement",
+    name="basement_lighting",
     version="0.1",
     license="",
     description="Mini project to control lights in the basement",
@@ -48,7 +48,7 @@ setup(
     python_requires=">=3.9",
     install_requires=[],
     extras_require={},
-    sass_manifests={"byronsbasement": ("static/sass", "static/css")},
+    sass_manifests={"basement_lighting": ("static/sass", "static/css")},
     setup_requires=["libsass >= 0.6.0"],
     entry_points={
         "console_scripts": [

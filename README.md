@@ -8,7 +8,7 @@ Setup the python virtual environment:
 python -m venv ./venv
 source venv/bin/activate
 ```
-You can quickly install everything you need to run by running `./install.sh`
+You can quickly install everything you need to run by running `./install.sh`.
 
 
 Or you can do it manually by running these commands:

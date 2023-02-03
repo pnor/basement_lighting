@@ -31,6 +31,7 @@ class ColorLifetimePoint:
         self.point = point
         self.radius = radius
         self.lifetime = lifetime
+        self.max_lifetime = lifetime
 
     def draw(self, x: float, y: float, color: NDArray[np.int32], ceiling: Ceiling):
         def _draw(ceil: Ceiling):
@@ -41,16 +42,13 @@ class ColorLifetimePoint:
 
 def create_random_point() -> ColorLifetimePoint:
     pos = np.random.random(2)
-    point = Point(pos, np.zeros(2), np.zeros(2))
-
     col = np.array(color_format_to_rgb('#2e05fc'))
 
-    return ColorLifetimePoint(col, 0, Point(pos, np.zeros(2), np.zeros(2)), 0.2)
+    return ColorLifetimePoint(col, 5, Point(pos, np.zeros(2), np.zeros(2)), 0.2)
+
 
 def create_random_shine() -> ColorLifetimePoint:
     pos = np.random.random(2)
-    point = Point(pos, np.zeros(2), np.zeros(2))
-
     col = np.array(color_format_to_rgb('#eadfaf'))
 
     return ColorLifetimePoint(col, 1, Point(pos, np.zeros(2), np.zeros(2)), 0.02)
@@ -68,19 +66,19 @@ class Render(RenderState):
 
         # spawning of particles
         self.cur = 0
-        self.LIFETIME = 2 * interval
+        self.LIFETIME = interval
         super().__init__(0.25)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear(False)
 
         for p in self.particles:
-            p.lifetime += delta
+            p.lifetime -= delta
 
             x = p.point.position[0]
             y = p.point.position[1]
 
-            prog = clamp(p.lifetime / self.LIFETIME, 0, 1)
+            prog = clamp(p.lifetime / p.max_lifetime, 0, 1)
             if prog > 0.5:
                 prog = (1 - prog) * 2
             else:
@@ -91,14 +89,15 @@ class Render(RenderState):
             p.draw(x, y, col, ceil)
 
         self.particles = list(
-            filter(lambda p: p.lifetime < self.LIFETIME, self.particles)
+            filter(lambda p: p.lifetime > 0, self.particles)
         )
+
         ceil.show()
 
         return super().render(delta, ceil)
 
     def interval_reached(self, ceil: Ceiling) -> None:
-        if np.random.random() < 0.6:
+        if np.random.random() < 0.5:
             self.particles += [create_random_point(), create_random_point()]
         if np.random.random() < 0.8:
             self.particles += [create_random_shine(), create_random_shine(), create_random_shine()]

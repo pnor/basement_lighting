@@ -22,14 +22,14 @@ class Render(RenderState):
         self.col_2 = colour.Color(hsl=(self.offset_2, 1, 0.5))
 
         self.point_1 = np.array([0.5, 0.5])
-        self.velocity_1 = np.array([1.0, 0]) * interval
+        self.velocity_1 = np.array([1.0, 0]) * (1 / interval)
         self.velocity_1 = rotate_vector(self.velocity_1, np.random.random() * 360)
 
         self.point_2 = np.array([0.5, 0.5])
-        self.velocity_2 = np.array([1.0, 0]) * interval
+        self.velocity_2 = np.array([1.0, 0]) * (1 / interval)
         self.velocity_2 = rotate_vector(self.velocity_2, np.random.random() * 360)
 
-        super().__init__(interval)
+        super().__init__(interval * 2)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         self.point_1 += self.velocity_1 * delta
@@ -69,7 +69,7 @@ def run(**kwargs):
     ceil.use_float_cartesian(effect_radius=0.3)
     ceil.clear()
 
-    render_loop = Render(interval)
+    render_loop = Render(interval * 2)
     render_loop.run(30, ceil)
 
 

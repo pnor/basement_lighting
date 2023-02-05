@@ -29,7 +29,6 @@ def blotch_locations(num_blotches: int) -> List[Tuple[float, float]]:
 
 class Render(RenderState):
     def __init__(self, interval: Optional[float]):
-        super().__init__(interval)
         self.BLOTCHES = 64  # sqrt of this number should be an integer
         assert abs(np.sqrt(self.BLOTCHES) - int(np.sqrt(self.BLOTCHES))) < 0.01
 
@@ -67,7 +66,7 @@ def run(**kwargs):
     ceil.clear()
 
     render_loop = Render(interval / 3)
-    render_loop.run(1, ceil)
+    render_loop.run(30, ceil)
 
 
 if __name__ == "__main__":

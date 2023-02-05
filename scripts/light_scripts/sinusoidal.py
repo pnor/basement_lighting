@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 # NAME: Sinusoidal
-# Since curves
 
 import sys
 import time
@@ -16,15 +15,17 @@ from scripts.library.render import RenderState
 
 class Render(RenderState):
     def __init__(self, color: RGB, interval: Optional[float]):
+        assert interval is not None
         self.color = color
-        super().__init__(interval * 1.5)
+        self.NUM_POINTS = 15
+        super().__init__(interval * 3)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear(False)
 
-        for x in range(0, 10):
-            x_index = x / 10
-            y_index = np.sin((2 * np.pi) * (self.progress() + (x / 9)))
+        for x in range(0, self.NUM_POINTS):
+            x_index = x / self.NUM_POINTS
+            y_index = np.sin((2 * np.pi) * (self.progress() + (x / self.NUM_POINTS)))
             y_index = (y_index / 2) + 0.5
             ceil[x_index, y_index] = self.color
 
@@ -40,7 +41,7 @@ def run(**kwargs):
     ceil.use_cartesian()
 
     render_loop = Render(color_input, interval)
-    render_loop.run(30, ceil)
+    render_loop.run(60, ceil)
 
 
 if __name__ == "__main__":

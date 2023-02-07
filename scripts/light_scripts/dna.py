@@ -27,7 +27,7 @@ class Render(RenderState):
         self.color1 = color_format_to_rgb(color1)
 
         color2 = copy.deepcopy(color)
-        color2.hue = (color2.hue + 0.1) % 1
+        color2.hue = (color2.hue + 0.2) % 1
         self.color2 = color_format_to_rgb(color2)
 
         self.NUM_POINTS = 50

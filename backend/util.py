@@ -56,7 +56,7 @@ def _area_lerp_color(
         max(res[0], cur_color[0]),
         max(res[1], cur_color[1]),
         max(res[2], cur_color[2]),
-    )
+        )
     return final_color
 
 
@@ -148,6 +148,15 @@ def interpolate_colors(
     prog_indx = int(clamp(progress, 0, 1) * 99)
     res_color = list(color_a.range_to(color_b, 100))[prog_indx]
     return colour_rgb_to_neopixel_rgb(res_color.rgb)
+
+
+@jit(fastmath=True, cache=True)
+def mix_colors_fast(
+    col_a: RGB,
+    col_b: RGB,
+) -> RGB:
+    """Mixes `col_a` and `col_b` using maximums on each component"""
+    return np.maximum(col_a, col_b)
 
 
 def color_range(

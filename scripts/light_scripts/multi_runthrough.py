@@ -23,7 +23,7 @@ class Render(RenderState):
         self.points = (np.random.random(self.NUMBER_POINTS) * num_lights).astype(
             np.int32
         )
-        super().__init__(interval * 5)
+        super().__init__(interval * 7)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear(False)

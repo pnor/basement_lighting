@@ -45,7 +45,15 @@ def random_kernel(size) -> NDArray:
         filter[np.random.randint(size), np.random.randint(size)] = 1
         return filter
 
-    funcs = [_beta, _binom, _unsharp, _shift]
+    def _DoG():
+        axs = np.linspace(-(size - 1) / 2, (size - 1) / 2, size)
+        gauss_a = np.exp(-0.5 * np.square(axs) / np.square(5))
+        gauss_b = np.exp(-0.5 * np.square(axs) / np.square(25))
+        gauss_a = np.outer(gauss_a, gauss_a)
+        gauss_b = np.outer(gauss_b, gauss_b)
+        return gauss_b - gauss_a
+
+    funcs = [_beta, _binom, _unsharp, _shift, _DoG]
     f = np.random.choice(funcs)
     return f()
 

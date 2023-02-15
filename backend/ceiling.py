@@ -1,88 +1,57 @@
 #!/usr/bin/env python3
 
-from typing import Callable, Any, Optional, List, Tuple
-from typing_extensions import Self
-from backend.cartesian_indexing import CartesianIndexing
-from backend.float_cartesian import FloatCartesianIndexing
-from backend.float_polar import FloatPolarIndexing
-from backend.led_locations import LEDSpace
-from backend.linear_indexing import LinearIndexing
-from backend.neopixel_wrapper import (
-    init_for_testing,
-    init_with_real_board,
-)
-from backend.polar_indexing import PolarIndexing
-from backend.row_indexing import RowIndexing
-
-
-from .backend_types import RGB
-
-from .indexing import *
-
-"""
-A layer between the neopixel API and our light scripts to abstract away all that coordinate math
-"""
-
-# Basement related constants
-NUMBER_LIGHTS = 200
-CEILING_ROW_ARRANGEMENT = [29, 29, 32, 29, 32, 28, 20]
+# from typing import Callable, Any, Optional, List, Tuple
+# from typing_extensions import Self
+# from backend.cartesian_indexing import CartesianIndexing
+# from backend.float_cartesian import FloatCartesianIndexing
+# from backend.float_polar import FloatPolarIndexing
+# from backend.led_locations import LEDSpace
+# from backend.linear_indexing import LinearIndexing
+# from backend.neopixel_wrapper import (
+#     init_for_testing,
+#     init_with_real_board,
+# )
+# from backend.polar_indexing import PolarIndexing
+# from backend.row_indexing import RowIndexing
+#
+#
+# from .backend_types import RGB
+#
+# from .indexing import *
+import light_arrangements_python
 
 
 class Ceiling:
     def __init__(self, **kwargs):
         """
-        If using actual light strip:
-        `io_pin`: which GPIO pin neopixels should be initialized for
-        `number_lights`: number lights controlled
-        `auto_write`: whether every write to the neopixels LED array should update the lights. *False*
-        by default(!!!)
-
-        If using testing: (only provide 2 args)
-        `test_mode`: to true
-        `number_lights`: number lights in the light strip
-        `print_to_stdout`: whether to print to stdout. Default true
+        Construct a wrapper around the light arrangement object
         """
-        # Initialize for testing mode
-        # For running not on a Pi
-        if kwargs.get("test_mode"):
-            opt_number_lights = kwargs.get("number_lights")
-            if opt_number_lights and type(opt_number_lights) is int:
-                number_lights = opt_number_lights
-            else:
-                number_lights = NUMBER_LIGHTS
+        light_arrangement_type = kwargs["type"]
 
-            opt_print_to_stdout = kwargs.get("print_to_stdout")
-            if type(opt_print_to_stdout) is bool:
-                print_to_stdout = opt_print_to_stdout
-            else:
-                print_to_stdout = True
+        dimensions = kwargs["dimensions"]
+        arrangement_file = kwargs["arrangement_file"]
 
-            self._pixels = init_for_testing(
-                number_leds=number_lights, print_to_stdout=print_to_stdout
+        if light_arrangement_type == "test":
+            sphere_size = kwargs["sphere_size"]
+            camera_position = kwargs["camera_position"]
+            dimension_mask = kwargs["dimension_mask"]
+
+            self.light_arrangement = light_arrangements_python.init_test(
+                dimensions,
+                arrangement_file,
+                sphere_size,
+                camera_position,
+                dimension_mask,
             )
-            self.testing_mode_rows()
-        else:  # For running on the actual pi
-            io_pin = kwargs.get("io_pin")
+        elif light_arrangement_type == "ws281x":
+            number_lights = kwargs["number_lights"]
+            io_pin = kwargs["io_pin"]
 
-            opt_number_lights = kwargs.get("number_lights")
-            if opt_number_lights and type(opt_number_lights) is int:
-                number_lights = opt_number_lights
-            else:
-                number_lights = NUMBER_LIGHTS
-
-            opt_auto_write = kwargs.get("auto_write")
-            if opt_auto_write and type(opt_auto_write) is bool:
-                auto_write = opt_auto_write
-            else:
-                auto_write = False
-
-            self._pixels = init_with_real_board(
-                io_pin, number_lights, auto_write=auto_write
+            self.light_arrangement = light_arrangements_python.init_ws281x(
+                dimensions, arrangement_file, number_lights, io_pin
             )
-
-        self._indexing = LinearIndexing(self._pixels)
-        self.NUMBER_LIGHTS = NUMBER_LIGHTS
-        self._cached_led_spacing: Optional[LEDSpace] = None
+        else:
+            raise ValueError("invalid value: " + light_arrangement_type)
 
     # ===== Animation / Clearing ==========
 

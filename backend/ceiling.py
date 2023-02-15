@@ -6,6 +6,21 @@ from typing_extensions import Self
 import light_arrangements_python
 
 from backend.backend_types import RGB
+from backend.indexing import (
+    cartesian_getitem,
+    cartesian_setitem,
+    float_cartesian_setitem,
+    flaot_cartesian_getitem,
+    float_polar_getitem,
+    float_polar_setitem,
+    linear_getitem,
+    linear_setitem,
+    polar_getitem,
+    polar_setitem,
+    row_getitem,
+    row_setitem,
+)
+from backend.indexing_type import IndexingType
 
 
 class Ceiling:
@@ -13,6 +28,16 @@ class Ceiling:
         """
         Construct a wrapper around the light arrangement object
         """
+        # -- Indexing
+        self.indexing_type = IndexingType.LINEAR
+        self._get_func = linear_getitem
+        self._set_func = linear_setitem
+        self._search_radius = 0
+        self._set_radius = 0
+        self._center = [0.5, 0.5]
+
+        # Reading configs and instantiating the light arrangement
+        self._rows = kwargs["rows"]
         light_arrangement_type = kwargs["type"]
 
         dimensions = kwargs["dimensions"]
@@ -88,6 +113,10 @@ class Ceiling:
         """Update all pixels with updated colors at once"""
         self.light_arrangement.show()
 
+    # ===== Metadata ==========
+    def number_lights(self) -> int:
+        return self.light_arrangement.number_lights()
+
     # ===== Getting / Setting ==========
     def __getitem__(self, key: Any) -> Optional[RGB]:
         pass
@@ -97,94 +126,157 @@ class Ceiling:
 
     def rows(self) -> Optional[List[int]]:
         """Returns rows information if the indexing is row indexing"""
-        pass
+        return self._rows
 
     # ===== Indexing ==========
 
     def use_linear(self):
         "Use linear indexing"
-        pass
+        self.indexing_type = IndexingType.LINEAR
+        self._get_func = linear_getitem
+        self._set_func = linear_setitem
 
     def with_linear(self, block: Callable[[Self], None]) -> None:
         """Execute `block` with the linear indexing method"""
-        pass
 
-    def use_row(self, lights_per_row: List[int]):
+        def _block():
+            self.use_linear()
+            block(self)
+
+        self._run_block_save_indexing(lambda: _block())
+
+    def use_row(self):
         """Use row based indexing"""
-        pass
+        self.indexing_type = IndexingType.ROWS
+        self._get_func = row_getitem
+        self._set_func = row_setitem
 
     def with_row(self, block: Callable[[Self], None]) -> None:
         """Execute `block` with the row indexing method"""
-        pass
+
+        def _block():
+            self.use_row()
+            block(self)
+
+        self._run_block_save_indexing(lambda: _block())
 
     def use_cartesian(
         self,
-        lights_per_row: List[int],
         search_range: float = 0.2,
     ):
         """Use cartesian indexing"""
-        pass
+        self._search_radius = search_range
+        self._set_radius = search_range
+        self.indexing_type = IndexingType.CARTESIAN
+        self._get_func = cartesian_getitem
+        self._set_func = cartesian_setitem
 
     def with_cartesian(
         self,
         block: Callable[[Self], None],
-        lights_per_row: List[int],
         search_range: float = 0.2,
     ) -> None:
         """Execute `block` with the cartesian indexing method"""
-        pass
+
+        def _block():
+            self.use_cartesian(search_range=search_range)
+            block(self)
+
+        self._run_block_save_indexing(lambda: _block())
 
     def use_polar(
         self,
-        origin: Tuple[float, float],
-        lights_per_row: List[int],
+        origin: List[float],
         search_range: float = 0.2,
     ):
         """Use polar indexing"""
-        pass
+        self._search_radius = search_range
+        self._set_radius = search_range
+        self._center = origin
+        self.indexing_type = IndexingType.POLAR
+        self._get_func = polar_getitem
+        self._set_func = polar_setitem
 
     def with_polar(
         self,
         block: Callable[[Self], None],
-        origin: Tuple[float, float],
-        lights_per_row: List[int],
+        origin: List[float],
         search_range: float = 0.2,
     ) -> None:
         """Execute `block` with the polar indexing method"""
-        pass
+
+        def _block():
+            self.use_polar(origin, search_range=search_range)
+            block(self)
+
+        self._run_block_save_indexing(lambda: _block())
 
     def use_float_cartesian(
         self,
-        lights_per_row: List[int],
         effect_radius: float = 0.2,
     ):
         """Use floating point cartesian indexing"""
-        pass
+        self._set_radius = effect_radius
+        self.indexing_type = IndexingType.FLOAT_POLAR
+        self._get_func = flaot_cartesian_getitem
+        self._set_func = float_cartesian_setitem
 
     def with_float_cartesian(
         self,
         block: Callable[[Self], None],
-        lights_per_row: List[int],
         effect_radius: float = 0.2,
     ) -> None:
         """Execute `block` with the float cartesian indexing method"""
-        pass
+
+        def _block():
+            self.use_float_cartesian(effect_radius=effect_radius)
+            block(self)
+
+        self._run_block_save_indexing(lambda: _block())
 
     def use_float_polar(
         self,
-        origin: Tuple[float, float],
-        lights_per_row: List[int],
+        origin: List[float],
         effect_radius: float = 0.2,
     ):
         """Use floating point polar indexing"""
-        pass
+        self._search_radius = effect_radius
+        self._set_radius = effect_radius
+        self._center = origin
+        self.indexing_type = IndexingType.FLOAT_POLAR
+        self._get_func = float_polar_getitem
+        self._set_func = float_polar_setitem
 
     def with_float_polar(
         self,
         block: Callable[[Self], None],
-        origin: Tuple[float, float],
-        lights_per_row: List[int],
+        origin: List[float],
         effect_radius: float = 0.2,
     ) -> None:
         """Execute `block` with the float polar indexing method"""
-        pass
+
+        def _block():
+            self.use_float_polar(origin, effect_radius=effect_radius)
+            block(self)
+
+        self._run_block_save_indexing(lambda: _block())
+
+    def _run_block_save_indexing(
+        self,
+        block: Callable[[], None],
+    ):
+        indexing_type = self.indexing_type
+        get_func = self._get_func
+        set_func = self._set_func
+        search_radius = self._search_radius
+        set_radius = self._set_radius
+        center = self._center
+
+        block()
+
+        self.indexing_type = indexing_type
+        self._get_func = get_func
+        self._set_func = set_func
+        self._search_radius = search_radius
+        self._set_radius = set_radius
+        self._center = center

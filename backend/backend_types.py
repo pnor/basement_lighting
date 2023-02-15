@@ -4,4 +4,4 @@ from numpy._typing import NDArray
 import numpy as np
 
 
-RGB = NDArray[np.uint8]
+RGB = NDArray[np.int32]

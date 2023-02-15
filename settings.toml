@@ -3,6 +3,7 @@ dimensions=2
 arrangement_file="settings/positions2d.csv"
 io_pin=10
 number_lights=100
+rows=[20, 20, 20, 20, 20]
 
 [test]
 test_mode=true

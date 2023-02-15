@@ -16,6 +16,7 @@ class Settings:
         self.arrangement_file: str = dict["settings"]["arrangement_file"]
         self.io_pin: int = dict["settings"]["io_pin"]
         self.dimensions: int = dict["settings"]["dimensions"]
+        self.rows: Optional[List[int]] = dict["settings"].get("rows")
 
         self.sphere_size: Optional[float] = dict["test"].get("sphere_size")
         self.camera_position: Optional[List[float]] = dict["test"].get(

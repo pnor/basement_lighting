@@ -10,8 +10,10 @@ from backend.settings import Settings
 
 def create_ceiling(s: Settings) -> Ceiling:
     if s.test_mode:
+        assert s.camera_position is not None
         return Ceiling(
             type="test",
+            rows=s.rows,
             number_lights=s.number_lights,
             dimensions=s.dimensions,
             arrangement_file=s.arrangement_file,
@@ -22,6 +24,7 @@ def create_ceiling(s: Settings) -> Ceiling:
     else:
         return Ceiling(
             type="ws281x",
+            rows=s.rows,
             number_lights=s.number_lights,
             dimensions=s.dimensions,
             arrangement_file=s.arrangement_file,

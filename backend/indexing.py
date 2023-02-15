@@ -3,8 +3,13 @@
 from typing import Callable, List, Optional, Tuple, Union
 
 from backend.backend_types import RGB
-from backend.ceiling import Ceiling
+
+# from backend.ceiling import Ceiling
 from backend.coordinate_conversions import polar
+
+
+class Ceiling:
+    pass
 
 
 def linear_getitem(key: int, ceiling: Ceiling) -> RGB:
@@ -68,14 +73,15 @@ def row_col_to_indx(row: int, col: int, ceiling: Ceiling) -> int:
 
 
 def cartesian_getitem(
-    key: List[float], search_radius: float, ceiling: Ceiling
+    key: Tuple[float, float], search_radius: float, ceiling: Ceiling
 ) -> Optional[RGB]:
     """key: (x, y), x and y in (0..1)"""
-    return ceiling.get_closest(key, search_radius)
+    x, y = key
+    return ceiling.get_closest([x, y], search_radius)
 
 
 def cartesian_setitem(
-    key: Union[Tuple[List[float], float], slice],
+    key: Union[Tuple[float, float], slice],
     color: RGB,
     ceiling: Ceiling,
 ) -> None:
@@ -88,10 +94,10 @@ def cartesian_setitem(
         x2, y2 = key.stop
         ceiling.set_all_in_box([x1, y1], [x2, y2], color)
     else:
-        loc, search_radius = key
+        x, y = key
         ceiling.set_closest(
-            loc,
-            search_radius,
+            [x, y],
+            ceiling._search_radius,
             color,
         )
 

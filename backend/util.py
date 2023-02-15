@@ -10,7 +10,7 @@ import numpy as np
 from numba import jit
 from numpy._typing import NDArray
 
-from backend.backend_types import RGB, is_RGB
+from backend.backend_types import RGB
 
 # We import and type LEDSpace due to circular import dependency error /:
 # import backend.led_locations as backend_led_space
@@ -33,12 +33,13 @@ def hex_to_color_obj(hex_str: str) -> colour.Color:
 def color_obj_to_rgb(color_obj: colour.Color) -> RGB:
     rgb = color_obj.rgb
     rgb = [int(x * 255) for x in rgb]
-    return tuple(rgb)
+    return np.array(rgb)
 
 
 def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:
-    if is_RGB(color):
-        return colour.Color(rgb=tuple(np.array(color) / 255))
+    if isinstance(color, np.ndarray):
+        col = color / 255
+        return colour.Color(rgb=tuple(col))
     else:
         return colour.Color(color)
 
@@ -59,7 +60,7 @@ def set_color_luminance(color: Union[RGB, str, colour.Color], luminance: float) 
     c.set_luminance(luminance)
     rgb = c.rgb
     rgb = (np.array(rgb) * 255).astype(int)
-    return tuple(rgb)
+    return np.array(rgb)
 
 
 def dim_color(color: Union[RGB, str, colour.Color]) -> RGB:
@@ -71,7 +72,7 @@ def dim_color(color: Union[RGB, str, colour.Color]) -> RGB:
 @lru_cache(maxsize=100)
 def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount: float) -> RGB:
     """Dims a color by a percentage of its current luminance"""
-    if is_RGB(color):
+    if isinstance(color, np.ndarray):
         return dim_color_by_amount_fast(color, dim_amount)
 
     c = color_format_to_obj(color)
@@ -79,7 +80,7 @@ def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount: float)
     c.set_luminance(l * dim_amount)
     rgb = c.rgb
     rgb = (np.array(rgb) * 255).astype(int)
-    return tuple(rgb)
+    return np.array(rgb)
 
 
 @jit(fastmath=True, cache=True)
@@ -87,7 +88,6 @@ def dim_color_by_amount_fast(color: RGB, dim_amount: float) -> RGB:
     """Dims a color by a percentage of its current luminance
     Only works if color is a RGB tuple
     """
-    color = list(color)
     for i in range(len(color)):
         color[i] = int(color[i] * dim_amount)
     return color
@@ -130,7 +130,7 @@ def color_range(
 def colour_rgb_to_neopixel_rgb(rgb: Tuple[float, float, float]) -> RGB:
     """Convert the colour library's `rgb` which has componenets from 0..1 to neopixel's rgb which
     is 0..255"""
-    return tuple((np.array(rgb) * 255).astype(int))
+    return np.array((np.array(rgb) * 255).astype(int))
 
 
 # ===== Math =========================

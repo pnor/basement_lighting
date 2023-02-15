@@ -8,8 +8,9 @@ import sys
 import time
 from typing import Optional, Union
 import numpy as np
-from backend.backend_types import RGB
 
+from backend.state import State
+from backend.backend_types import RGB
 from backend.ceiling import Ceiling
 from backend.util import color_range, dim_color
 from scripts.library.render import RenderState
@@ -56,13 +57,13 @@ def run(**kwargs):
     ceil.use_linear()
     ceil.clear()
 
-    render_loop = Render(color_input, ceil.NUMBER_LIGHTS, interval)
+    render_loop = Render(color_input, ceil.number_lights(), interval)
     render_loop.run(30, ceil)
 
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(),
+        ceiling=State().create_ceiling(),
         color=sys.argv[1],
         interval=sys.argv[2],
     )

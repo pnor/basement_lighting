@@ -43,11 +43,11 @@ def circle_out(
             cur_time += DELTA
             prog = cur_time / duration
             ceil[origin_x, origin_y, (max_radius * prog)] = color
-            ceil[origin_x, origin_y, (max_radius * prog) - 0.05] = (0, 0, 0)
+            ceil[origin_x, origin_y, (max_radius * prog) - 0.05] = np.array([0, 0, 0])
             ceil.show()
             time.sleep(DELTA)
 
-    ceiling.with_polar(lambda c: _circle_outwards(c), (0, 0), search_range=0.1)
+    ceiling.with_polar(lambda c: _circle_outwards(c), [0, 0], search_range=0.1)
 
 
 def fade_out(ceiling: Ceiling, duration: float, color: RGB) -> None:
@@ -77,16 +77,19 @@ def row_clear(ceiling: Ceiling, duration: float, color: RGB) -> None:
 
         color = np.array(_color)
 
+        rows = ceiling.rows()
+        assert rows is not None
+
         while cur_time < duration:
             cur_time += DELTA
 
             prog = clamp(cur_time / duration, 0, 0.99)
-            index = int(prog * len(ceiling.rows()))
+            index = int(prog * len(rows))
             last_index = index - 1 if index > 0 else None
 
             ceiling[index] = color
             if last_index:
-                ceiling[last_index] = (0, 0, 0)
+                ceiling[last_index] = np.array((0, 0, 0))
 
             ceiling.show()
             time.sleep(DELTA)

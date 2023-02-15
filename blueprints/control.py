@@ -66,28 +66,23 @@ def stop_script() -> str:
 def _start_script(
     path: str, color_arg: Optional[str], interval_arg: Optional[int]
 ) -> bool:
-    """Hands off `state.ceiling` to the new script.
+    """Creates a new process to run the ceiling script.
     Returns True if it succesfully started the process."""
+    # Stop running script
     if state.current_process is not None:
         state.current_process.terminate()
-        assert state.recv_pipe is not None
-        assert state.ceiling is None
-        state.ceiling = state.recv_pipe.recv()
-        state.ceiling.use_linear()
-        state.recv_pipe = None
+        state.current_process.join()
 
-    recv_proc = file_to_pipe_and_runnable_script(path, color_arg, interval_arg)
-    if not recv_proc:
+    # Load new script
+    script = runnable_script(path, color_arg, interval_arg)
+    if script is None:
         print("Script crashed when loaded as a module")
         return False
 
-    recv, proc = recv_proc
-    state.current_process = proc
-    state.recv_pipe = recv
+    # Start new script
+    state.current_process = script
     state.current_process.start()
     state.current_pattern = parse_script_name_from_file(path)
-    # Relinquish control of the ceiling to the running script
-    state.ceiling = None
 
     return True
 
@@ -95,34 +90,20 @@ def _start_script(
 def _stop_script() -> None:
     """Stops currently running script, waiting for it to return the `Ceiling` object"""
     if state.current_process:
-        assert state.recv_pipe is not None
         state.current_process.terminate()
-        state.ceiling = state.recv_pipe.recv()
-        assert state.ceiling is not None
+        state.current_process.join()
         state.current_process = None
-        state.recv_pipe = None
-        # With ceiling, animate clear
-        circle_clear(state.ceiling, 0.2, (255, 255, 255))
         state.current_pattern = None
 
 
-def function_wrapper(
-    f: Callable, ceiling: Ceiling, sender_pipe: _ConnectionBase
-) -> Callable[[str, float], None]:
+def function_wrapper(f: Callable) -> Callable[[str, float], None]:
     """Wraps the function in another function that doesn't use keyword arguements.
     Also catches interrupts from `process.terminate()` to distinguish from actually crashing
     """
 
     def _exit_gracefully(sig_number, stack_frame):
         # Send back the ceiling to the main app
-        ceiling.prepare_to_send()
-        sender_pipe.send(ceiling)
         exit(0)
-
-    def _prepare_to_exit():
-        """Called when the normal script finishes"""
-        ceiling.prepare_to_send()
-        sender_pipe.send(ceiling)
 
     def _function_wrapper(color: str, interval: float):
         signal.signal(signal.SIGTERM, _exit_gracefully)
@@ -130,21 +111,21 @@ def function_wrapper(
             now = int(time.time())
             np.random.seed(now)
             random.seed(now)
-            circle_clear(ceiling, 0.2, (255, 255, 255))
+            ceiling = state.create_ceiling()
+            circle_clear(ceiling, 0.2, np.array((255, 255, 255)))
             f(ceiling=ceiling, color=color, interval=interval)
         except Exception as e:
             print(e)
-            _prepare_to_exit()
             exit(1)
         else:
-            _prepare_to_exit()
+            pass
 
     return _function_wrapper
 
 
-def file_to_pipe_and_runnable_script(
+def runnable_script(
     file: str, color_arg: Optional[str], interval_arg: Optional[int]
-) -> Optional[Tuple[_ConnectionBase, Process]]:
+) -> Optional[Process]:
     """
     Converts a path to a file to a process containing the function
     Function in the file should be called "run(**kwargs)"
@@ -166,12 +147,11 @@ def file_to_pipe_and_runnable_script(
     except:  # Script fails to execute
         return None
 
-    assert state.ceiling is not None
     receiver, sender = Pipe()
-    f = function_wrapper(mod.run, state.ceiling, sender)
+    f = function_wrapper(mod.run)
     process = Process(
         target=f,
         args=(color_arg, interval_arg),
     )
 
-    return receiver, process
+    return process

@@ -52,7 +52,7 @@ class Render(RenderState):
         super().__init__(interval)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         for p in self.points:
             p.point.step(delta)

@@ -119,10 +119,10 @@ class Ceiling:
 
     # ===== Getting / Setting ==========
     def __getitem__(self, key: Any) -> Optional[RGB]:
-        pass
+        return self._get_func(key, self)
 
     def __setitem__(self, key: Any, value: RGB) -> None:
-        pass
+        self._set_func(key, value, self)
 
     def rows(self) -> Optional[List[int]]:
         """Returns rows information if the indexing is row indexing"""

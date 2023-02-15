@@ -47,6 +47,35 @@ class Ceiling:
     def set_by_index(self, index: int, color: RGB):
         self.light_arrangement.set_by_index(index, color)
 
+    def get_closest(
+        self, location: List[float], search_distance: float
+    ) -> Optional[RGB]:
+        res = self.light_arrangement.get_closest(location, search_distance)
+        return np.array([0, 0, 0]) if res is None else np.array(res)
+
+    def set_closest(self, location: List[float], search_distance: float, color: RGB):
+        self.light_arrangement.set_closest(location, search_distance, color)
+
+    def set_decreasing_intensity(
+        self, location: List[float], fill_distance: float, color: RGB
+    ):
+        self.light_arrangement.set_decreasing_intensity(location, fill_distance, color)
+
+    def set_decreasing_intensity_merge(
+        self, location: List[float], fill_distance: float, color: RGB
+    ):
+        self.light_arrangement.set_decreasing_intensity_merge(
+            location, fill_distance, color
+        )
+
+    def set_all_in_box(
+        self, low_location: List[float], high_location: List[float], color: RGB
+    ):
+        self.light_arrangement.set_all_in_box(low_location, high_location, color)
+
+    def set_all_in_radius(self, location: List[float], radius: float, color: RGB):
+        self.light_arrangement.set_all_in_radius(location, radius, color)
+
     def clear(self) -> None:
         """Set every pixel to black (and updates the LEDs)"""
         self.light_arrangement.fill((0, 0, 0))

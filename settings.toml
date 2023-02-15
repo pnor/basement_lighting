@@ -5,7 +5,7 @@ io_pin=10
 number_lights=100
 
 [test]
-test_mode=True
+test_mode=true
 sphere_size=0.02
 camera_position=[0.5, 0.5, 2.0]
 dimension_mask=[0, 1, 2]

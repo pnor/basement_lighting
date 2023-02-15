@@ -8,6 +8,27 @@ from multiprocessing.connection import _ConnectionBase
 from backend.settings import Settings
 
 
+def create_ceiling(s: Settings) -> Ceiling:
+    if s.test_mode:
+        return Ceiling(
+            type="test",
+            number_lights=s.number_lights,
+            dimensions=s.dimensions,
+            arrangement_file=s.arrangement_file,
+            sphere_size=s.sphere_size,
+            camera_position=tuple(s.camera_position),
+            dimension_mask=s.dimension_mask,
+        )
+    else:
+        return Ceiling(
+            type="ws281x",
+            number_lights=s.number_lights,
+            dimensions=s.dimensions,
+            arrangement_file=s.arrangement_file,
+            io_pin=s.io_pin,
+        )
+
+
 class State:
     def __init__(self) -> None:
         self.settings = Settings("settings.toml")
@@ -20,25 +41,3 @@ class State:
 
 
 global_state = State()
-
-
-def create_ceiling(s: Settings) -> Ceiling:
-    if s.test_mode:
-        return Ceiling(
-            light_arrangement_type="test",
-            number_lights=s.number_lights,
-            dimensions=s.dimensions,
-            arrangement_file=s.arrangement_file,
-            sphere_size=s.sphere_size,
-            camera_position=s.camera_position,
-            dimension_mask=s.dimension_mask,
-        )
-    else:
-        return Ceiling(
-            light_arrangement_type="ws281x",
-            number_lights=s.number_lights,
-            dimensions=s.dimensions,
-            arrangement_file=s.arrangement_file,
-            number_lights=s.number_lights,
-            io_pin=s.io_pin,
-        )

@@ -24,4 +24,4 @@ class Settings:
         self.dimension_mask: Optional[List[int]] = dict["test"].get("dimension_mask")
 
         test_mode = dict["test"].get("test_mode")
-        self.test_mode: bool = False if self.test_mode is None else bool(test_mode)
+        self.test_mode: bool = False if test_mode is None else bool(test_mode)

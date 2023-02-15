@@ -11,53 +11,9 @@ from numba import jit
 from numpy._typing import NDArray
 
 from backend.backend_types import RGB, is_RGB
-from backend.neopixel_wrapper import PixelWrapper
 
 # We import and type LEDSpace due to circular import dependency error /:
 # import backend.led_locations as backend_led_space
-
-
-# ===== Code working with LEDs =========================
-def color_leds_in_area(
-    x: float,
-    y: float,
-    effect_radius: float,
-    color: RGB,
-    led_spacing,
-    pixels: PixelWrapper,
-):
-    """Colors LEDs within `effect_radius` with `color`. Has an airbrush effect where it will merge
-    `color` with the color already there"""
-    leds = led_spacing.get_LEDs_in_radius(x, y, effect_radius)
-
-    for l in leds:
-        # NOTE: we ignore the type warning/error on pixels as checking types here is pretty slow
-        # since this is a very hot section of code
-        pixels[l._index] = _area_lerp_color(
-            l._x, l._y, x, y, effect_radius, pixels[l._index], color
-        )
-
-
-@jit(nopython=True, fastmath=True, cache=True)
-def _area_lerp_color(
-    led_x: float,
-    led_y: float,
-    x: float,
-    y: float,
-    effect_radius: float,
-    cur_color: RGB,
-    set_color: RGB,
-) -> RGB:
-    dist = distance_formula(led_x, led_y, x, y)
-    amp = max(0, 1 - (dist / effect_radius))
-
-    res = dim_color_by_amount_fast(set_color, amp)
-    final_color = (
-        max(res[0], cur_color[0]),
-        max(res[1], cur_color[1]),
-        max(res[2], cur_color[2]),
-        )
-    return final_color
 
 
 # ===== Color Math =========================

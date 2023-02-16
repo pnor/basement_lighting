@@ -12,6 +12,8 @@ class Settings:
     def __init__(self, file_path: str):
         dict = toml.load(file_path)
 
+        self.url: str = dict["settings"]["url"]
+
         self.number_lights: int = dict["settings"]["number_lights"]
         self.arrangement_file: str = dict["settings"]["arrangement_file"]
         self.io_pin: int = dict["settings"]["io_pin"]

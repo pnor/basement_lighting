@@ -1,4 +1,3 @@
-const URL = "http://127.0.0.1:5000"; 
 const STATE_PERIOD = 1000;
 
 // Periodically get state
@@ -27,6 +26,7 @@ function start(ev) {
     var path = ev.target.id;
     var post = { file: path, color: "#beebee", interval: 1 };
 
+    console.log("posting to `${URL}/control/start`")
     xhr.open("POST", `${URL}/control/start`, true);
 
     // Send start request

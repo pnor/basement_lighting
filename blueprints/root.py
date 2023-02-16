@@ -13,7 +13,7 @@ bp = Blueprint("root", __name__, url_prefix="/")
 
 @bp.route("/")
 def route_main():
-    return render_template("index.html", patterns=ls)
+    return render_template("index.html", patterns=ls, url=state.settings.url)
 
 
 @bp.route("/state")

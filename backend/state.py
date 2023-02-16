@@ -4,6 +4,7 @@ from backend.ceiling import Ceiling
 from typing import Callable, Optional, List, Tuple
 from multiprocessing import Process, Pipe
 from multiprocessing.connection import _ConnectionBase
+from threading import Lock
 
 from backend.settings import Settings
 
@@ -14,6 +15,7 @@ class State:
 
         self.current_process: Optional[Process] = None
         self.current_pattern: Optional[str] = None
+        self.lock = Lock()
 
     def create_ceiling(self) -> Ceiling:
         if self.settings.test_mode:

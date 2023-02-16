@@ -45,7 +45,9 @@ def start_script() -> str:
             {"ok": False, "error": ("path doesn't exist: %s" % file_to_run)}
         )
 
-    res = _start_script(file_to_run, color, interval)
+    with state.lock:
+        res = _start_script(file_to_run, color, interval)
+
     if res:
         return json.dumps({"ok": True})
     else:
@@ -59,7 +61,8 @@ def start_script() -> str:
 
 @bp.route("/stop", methods=["POST"])
 def stop_script() -> str:
-    _stop_script()
+    with state.lock:
+        _stop_script()
     return json.dumps({"ok": True})
 
 

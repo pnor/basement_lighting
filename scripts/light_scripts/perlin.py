@@ -9,12 +9,11 @@ import numpy as np
 from perlin_noise import PerlinNoise
 from typing import Union
 from backend.backend_types import RGB
+from backend.state import State
 
 from backend.ceiling import Ceiling
 from backend.util import color_format_to_rgb, sigmoid_0_to_1
 from scripts.library.render import RenderState
-
-# TODO fix
 
 
 class Render(RenderState):
@@ -55,9 +54,11 @@ class Render(RenderState):
                 interpolated_col = (
                     ((1 - prog) * before_col) + (prog * next_col)
                 ).astype(int)
+                interpolated_col = np.clip(interpolated_col, 0, 255)
 
                 # to better center the effect
                 bump = (1 / self.SAMPLE_SIZE) / 2
+
                 ceil[
                     bump + (i / self.SAMPLE_SIZE), bump + (j / self.SAMPLE_SIZE)
                 ] = np.array(interpolated_col)
@@ -83,4 +84,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(test_mode=True), color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=State().create_ceiling(), color=sys.argv[1], interval=sys.argv[2])

@@ -140,7 +140,7 @@ class Render(RenderState):
         super().__init__(interval * 10)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         for e in self.entity_list:
             e.step(delta, self.entity_list)
@@ -156,7 +156,7 @@ class Render(RenderState):
 
     def interval_reached(self, ceil: Ceiling) -> None:
         self.entity_list += [
-            random_explosion(ceil.NUMBER_LIGHTS, self.color_obj, self.speed)
+            random_explosion(ceil.number_lights(), self.color_obj, self.speed)
         ]
         return super().interval_reached(ceil)
 
@@ -169,7 +169,7 @@ def run(**kwargs):
     ceil.use_polar((0.5, 0.5))
     ceil.clear()
 
-    render_loop = Render(color_input, ceil.NUMBER_LIGHTS, interval)
+    render_loop = Render(color_input, ceil.number_lights(), interval)
     render_loop.run(30, ceil)
 
 

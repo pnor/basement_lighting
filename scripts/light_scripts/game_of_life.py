@@ -92,7 +92,7 @@ class Render(RenderState):
     def interval_reached(self, ceil: Ceiling) -> None:
         self.game.run_board(N_ITERS=1)
 
-        ceil.clear(False)
+        ceil.clear()
 
         for i in range(BOARD_HEIGHT):
             for j in range(BOARD_WIDTH):

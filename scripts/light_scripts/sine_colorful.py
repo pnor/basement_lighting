@@ -44,7 +44,7 @@ class Render(RenderState):
         super().__init__(interval * 4)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         self.color_progress = (self.color_progress + (delta / 15)) % 1
 

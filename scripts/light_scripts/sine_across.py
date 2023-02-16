@@ -27,7 +27,7 @@ class Render(RenderState):
         super().__init__(interval)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         for y in range(10):
             for i in range(len(self.horizs)):

@@ -30,11 +30,11 @@ class Render(RenderState):
         color2.hue = (color2.hue + 0.2) % 1
         self.color2 = color_format_to_rgb(color2)
 
-        self.NUM_POINTS = 50
+        self.NUM_POINTS = 150
         super().__init__(interval * 3)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         for x in range(0, self.NUM_POINTS):
             x_index = x / self.NUM_POINTS

@@ -54,7 +54,7 @@ def run(**kwargs):
     ceil.use_linear()
     ceil.clear()
 
-    render_loop = Render(color_input, ceil.NUMBER_LIGHTS, interval)
+    render_loop = Render(color_input, ceil.number_lights(), interval)
     render_loop.run(30, ceil)
 
 

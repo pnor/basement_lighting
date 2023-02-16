@@ -17,11 +17,11 @@ def run(**kwargs):
     ceil.use_linear()
 
     time.sleep(1)
-    ceil[int(np.random.random() * ceil.NUMBER_LIGHTS)] = color
+    ceil[int(np.random.random() * ceil.number_lights())] = color
     ceil.show()
 
     time.sleep(10)
-    ceil[int(np.random.random() * ceil.NUMBER_LIGHTS)] = color
+    ceil[int(np.random.random() * ceil.number_lights())] = color
     ceil.show()
 
 

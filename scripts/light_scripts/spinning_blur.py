@@ -21,7 +21,7 @@ class Render(RenderState):
         super().__init__(interval * 10)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
         theta = self.progress() * 360
 
         for i in range(0, self.TAIL_LENGTH):

@@ -14,6 +14,8 @@ from backend.ceiling import Ceiling
 from backend.util import color_format_to_rgb, sigmoid_0_to_1
 from scripts.library.render import RenderState
 
+# TODO fix
+
 
 class Render(RenderState):
     def __init__(self, color: RGB, interval: float) -> None:
@@ -30,7 +32,8 @@ class Render(RenderState):
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         prog = sigmoid_0_to_1(self.progress())
-        ceil.clear(False)
+        ceil.clear()
+        # TODO
 
         for i in range(self.SAMPLE_SIZE):
             for j in range(self.SAMPLE_SIZE):
@@ -57,7 +60,7 @@ class Render(RenderState):
                 bump = (1 / self.SAMPLE_SIZE) / 2
                 ceil[
                     bump + (i / self.SAMPLE_SIZE), bump + (j / self.SAMPLE_SIZE)
-                ] = tuple(interpolated_col)
+                ] = np.array(interpolated_col)
 
         ceil.show()
         return super().render(delta, ceil)

@@ -39,7 +39,7 @@ class Render(RenderState):
             prog *= 2
         prog = sigmoid_0_to_1(prog)
 
-        ceil.clear(False)
+        ceil.clear()
         ceil.with_float_cartesian(
             lambda c: self.place_radius(c), effect_radius=(prog * self.MAX_RADIUS)
         )

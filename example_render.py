@@ -15,8 +15,8 @@ class Render(RenderState):
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         # Update the display every frame
-        ceil.clear(False)
-        color = [255, 255, 255]
+        ceil.clear()
+        color = np.array([255, 255, 255])
         # progress returns % towards the next interval
         color[self.index_to_set] = int(self.progress() * color[self.index_to_set])
         ceil[0] = color
@@ -35,7 +35,7 @@ def run(**kwargs):
 
     # start the render loop
     render_loop = Render(1)
-    render_loop.run(FPS=30, ceil=ceil)
+    render_loop.run(fps=30, ceil=ceil)
 
 
 if __name__ == "__main__":

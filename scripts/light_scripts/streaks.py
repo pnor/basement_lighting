@@ -44,7 +44,6 @@ class Render(RenderState):
         if self._point[1] < 0 or self._point[1] > 1:
             self._velocity[1] = -self._velocity[1]
 
-        # ceil.clear(False)
         ceil[self._point[0], self._point[1]] = color_obj_to_rgb(self.color_obj)
         ceil.show()
 

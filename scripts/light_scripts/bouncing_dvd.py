@@ -23,7 +23,7 @@ class Render(RenderState):
         self._color = color
         self._point = np.array([0.5, 0.5])
         self._velocity = np.array([1.0, 0]) * interval
-        self._velocity = rotate_vector(self._velocity, np.random.random() * 360)
+        self._velocity = rotate_vector(self._velocity, np.random.random() * (2 * np.pi))
         super().__init__(None)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
@@ -35,7 +35,7 @@ class Render(RenderState):
         if self._point[1] < 0 or self._point[1] > 1:
             self._velocity[1] = -self._velocity[1]
 
-        ceil.clear(False)
+        ceil.clear()
         ceil[self._point[0], self._point[1]] = self._color
         ceil.show()
 

@@ -97,7 +97,7 @@ class Render(RenderState):
         b = prog_b * (2 * np.pi)
         mat = render_frame(a, b)
 
-        ceil.clear(False)
+        ceil.clear()
         for i in range(screen_width):
             for j in range(screen_height):
                 col = (self.color * mat[i, j]).astype(int)

@@ -23,11 +23,13 @@ class Render(RenderState):
 
         self.point_1 = np.array([0.5, 0.5])
         self.velocity_1 = np.array([1.0, 0]) * (1 / interval)
-        self.velocity_1 = rotate_vector(self.velocity_1, np.random.random() * 360)
+        self.velocity_1 = rotate_vector(
+            self.velocity_1, np.random.random() * (np.pi * 2)
+        )
 
         self.point_2 = np.array([0.5, 0.5])
         self.velocity_2 = np.array([1.0, 0]) * (1 / interval)
-        self.velocity_2 = rotate_vector(self.velocity_2, np.random.random() * 360)
+        self.velocity_2 = rotate_vector(self.velocity_2, np.random.random() * np.pi * 2)
 
         super().__init__(interval * 2)
 
@@ -48,7 +50,7 @@ class Render(RenderState):
         self.col_1.set_hue(self.progress() + self.offset_1)
         self.col_2.set_hue(self.progress() + self.offset_2)
 
-        ceil.clear(False)
+        ceil.clear()
         ceil[self.point_1[0], self.point_1[1]] = colour_rgb_to_neopixel_rgb(
             self.col_1.rgb
         )

@@ -25,7 +25,7 @@ class Render(RenderState):
         super().__init__(interval * 1.5)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         xs_val = self.xs[int(len(self.xs) * self.progress())]
         x = xs_val
@@ -37,6 +37,8 @@ class Render(RenderState):
 
         ceil.show()
         return super().render(delta, ceil)
+
+
 def run(**kwargs):
     color_input = color_format_to_rgb(kwargs["color"])
     interval = float(kwargs["interval"])

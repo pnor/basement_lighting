@@ -21,7 +21,7 @@ class Render(RenderState):
         super().__init__(interval * 3)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         for x in range(0, self.NUM_POINTS):
             x_index = x / self.NUM_POINTS

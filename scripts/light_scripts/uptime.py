@@ -39,19 +39,19 @@ def run(**kwargs):
     # If system has been up for less than a day, show output in hours
     if uptime_seconds < SECONDS_IN_DAY:
         num_hours = int(uptime_seconds / SECONDS_IN_HOUR)
-        if num_hours > ceil.NUMBER_LIGHTS:
+        if num_hours > ceil.number_lights():
             ceil.fill(HOURS_COLOR)
         elif num_hours == 0:
-            ceil.fill((60, 60, 60))
+            ceil.fill(np.array((60, 60, 60)))
         else:
             ceil[:num_hours] = HOURS_COLOR
     else:
         num_days = int(uptime_seconds / SECONDS_IN_DAY)
-        if num_days > ceil.NUMBER_LIGHTS * 2:
+        if num_days > ceil.number_lights() * 2:
             ceil.fill(DAYS_COLOR)
-        elif num_days > ceil.NUMBER_LIGHTS:
+        elif num_days > ceil.number_lights():
             ceil.fill(DAYS_COLOR_SECONDARY)
-            ceil[: (num_days - ceil.NUMBER_LIGHTS)] = DAYS_COLOR
+            ceil[: (num_days - ceil.number_lights())] = DAYS_COLOR
         else:
             ceil[:num_days] = DAYS_COLOR
 

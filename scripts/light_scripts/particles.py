@@ -7,6 +7,7 @@ import sys
 import numpy as np
 from backend.backend_types import RGB
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import (
     clamp,
     color_format_to_rgb,
@@ -68,7 +69,7 @@ class Render(RenderState):
         super().__init__(self.interval)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
         for i in range(len(self.particles)):
             self.particles[i].lifetime += delta
             self.particles[i].point.step(delta)
@@ -99,7 +100,7 @@ def run(**kwargs):
     speed = float(kwargs["interval"])
 
     ceil: Ceiling = kwargs["ceiling"]
-    ceil.use_cartesian(search_range=0.1)
+    ceil.use_cartesian(search_range=0.2)
     ceil.clear()
 
     render_loop = Render(color_input, speed)
@@ -108,7 +109,7 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(),
+        ceiling=State().create_ceiling(),
         color=sys.argv[1],
         interval=sys.argv[2],
     )

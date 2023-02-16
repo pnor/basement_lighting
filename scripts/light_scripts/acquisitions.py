@@ -59,7 +59,7 @@ class Render(RenderState):
         super().__init__(0.25)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         for p in self.particles:
             p.lifetime += delta

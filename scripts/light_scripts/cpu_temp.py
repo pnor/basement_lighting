@@ -33,7 +33,7 @@ class Render(RenderState):
         self.WARM_COLOR = colors[3]
         self.HOT_COLOR = colors[4]
         self.VERY_HOT_COLOR = colors[5]
-        self.UNKNOWN_COLOR = (255, 255, 255)
+        self.UNKNOWN_COLOR = np.array((255, 255, 255))
 
         super().__init__(interval)
 
@@ -48,7 +48,7 @@ class Render(RenderState):
         thermal_zone0_int = int(int(thermal_zone0_str) / 1000)
 
         last_light_index = int(
-            clamp(thermal_zone0_int / 100, 0.01, 1) * ceil.NUMBER_LIGHTS
+            clamp(thermal_zone0_int / 100, 0.01, 1) * ceil.number_lights()
         )
 
         if thermal_zone0_int in self.COLD_RANGE:

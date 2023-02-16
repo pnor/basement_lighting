@@ -26,10 +26,12 @@ class Render(RenderState):
         super().__init__(interval * 7)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         for p in self.points:
-            index = (int(self.progress() * ceil.NUMBER_LIGHTS) + p) % ceil.NUMBER_LIGHTS
+            index = (
+                int(self.progress() * ceil.number_lights()) + p
+            ) % ceil.number_lights()
 
             for i in range(0, self.TAIL_LENGTH):
                 ceil[index - i] = self.colors[i]
@@ -47,7 +49,7 @@ def run(**kwargs):
     ceil.use_linear()
     ceil.clear()
 
-    render_loop = Render(color_input, ceil.NUMBER_LIGHTS, interval)
+    render_loop = Render(color_input, ceil.number_lights(), interval)
     render_loop.run(30, ceil)
 
 

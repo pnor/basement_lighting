@@ -21,7 +21,7 @@ class Render(RenderState):
         super().__init__(interval * 1.5)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         y = self.progress()
 

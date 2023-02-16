@@ -36,7 +36,7 @@ class Render(RenderState):
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         prog = self.progress()
 
-        ceil.clear(False)
+        ceil.clear()
         for i in range(self.RANDOM_SIZE):
             for j in range(self.RANDOM_SIZE):
                 before_col = (self.color * self.points[i, j]).astype(int)

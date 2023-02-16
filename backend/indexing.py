@@ -34,9 +34,7 @@ def row_getitem(key: Tuple[int, int], ceiling: Ceiling) -> RGB:
     return ceiling.get_by_index(index)
 
 
-def row_setitem(
-    self, key: Union[Tuple[int, int], int], color: RGB, ceiling: Ceiling
-) -> None:
+def row_setitem(key: Union[Tuple[int, int], int], color: RGB, ceiling: Ceiling) -> None:
     """
     key: (row, col) or row
     if key is a tuple, will set one LED. If key is an int corresponding to the row, will set
@@ -48,7 +46,7 @@ def row_setitem(
         ceiling.set_by_index(index, color)
     elif type(key) is int:
         row = key
-        for i in range(self.rows()[row]):
+        for i in range(ceiling.rows()[row]):
             index = row_col_to_indx(row, i, ceiling)
             ceiling.set_by_index(index, color)
     else:

@@ -70,7 +70,7 @@ class Render(RenderState):
         super().__init__(interval * 6)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         prog = self.progress()
 

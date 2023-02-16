@@ -16,12 +16,12 @@ class Render(RenderState):
     def __init__(self, color: colour.Color, interval: Optional[float]):
         self.color = color
         self.secondary_color = copy.deepcopy(color)
-        self.secondary_color.hue = (self.secondary_color.hue + 0.2) % 1
+        self.secondary_color.hue = (self.secondary_color.hue + 0.3) % 1
         self.color_range = color_range(self.color, self.secondary_color, 20)
 
         assert interval is not None
-        self.ROWS = 4
-        self.COLS = 4
+        self.ROWS = 5
+        self.COLS = 5
         self.SIZE_RANGE = [0.04, 0.3]
         self.progresses = np.arange(0, 1, 1 / (self.ROWS * self.COLS))
         np.random.shuffle(self.progresses)
@@ -30,12 +30,17 @@ class Render(RenderState):
         NUM_PAD_POINTS = 150
         self.progress_curve = np.arange(0, 1, 1 / (NUM_POINTS / 2))
         self.progress_curve = self.progress_curve**2
-        self.progress_curve = list(np.zeros(NUM_PAD_POINTS // 2)) + list(self.progress_curve) + list(reversed(self.progress_curve)) + list(np.zeros(NUM_PAD_POINTS // 2))
+        self.progress_curve = (
+            list(np.zeros(NUM_PAD_POINTS // 2))
+            + list(self.progress_curve)
+            + list(reversed(self.progress_curve))
+            + list(np.zeros(NUM_PAD_POINTS // 2))
+        )
 
         super().__init__(interval * 6)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         def _draw(ceil, x, y, color):
             ceil[x, y] = color
@@ -50,8 +55,10 @@ class Render(RenderState):
                 prog = self.progress_curve[int(len(self.progress_curve) * prog)]
                 rad = (self.SIZE_RANGE[0] * (1 - prog)) + (self.SIZE_RANGE[1] * prog)
                 color = self.color_range[int(prog * len(self.color_range))]
-                ceil.with_float_cartesian(lambda c: _draw(c, x_spacing + x, y_spacing + y,
-                                                          color), effect_radius=rad)
+                ceil.with_float_cartesian(
+                    lambda c: _draw(c, x_spacing + x, y_spacing + y, color),
+                    effect_radius=rad,
+                )
         ceil.show()
         return super().render(delta, ceil)
 
@@ -69,4 +76,8 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(test_mode=True, print_to_stdout=True), color=sys.argv[1], interval=sys.argv[2])
+    run(
+        ceiling=Ceiling(test_mode=True, print_to_stdout=True),
+        color=sys.argv[1],
+        interval=sys.argv[2],
+    )

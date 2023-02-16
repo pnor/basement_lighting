@@ -23,7 +23,7 @@ class Render(RenderState):
         return super().render(delta, ceil)
 
     def interval_reached(self, ceil: Ceiling) -> None:
-        ceil.clear(False)
+        ceil.clear()
 
         ceil[::2] = self.color if self.first_lit else (0, 0, 0)
         ceil[1::2] = (0, 0, 0) if self.first_lit else self.color

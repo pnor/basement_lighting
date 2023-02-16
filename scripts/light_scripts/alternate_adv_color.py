@@ -24,7 +24,7 @@ class Render(RenderState):
         return super().render(delta, ceil)
 
     def interval_reached(self, ceil: Ceiling) -> None:
-        ceil.clear(False)
+        ceil.clear()
 
         step = self.step + 2
         col = color_obj_to_rgb(self.color)

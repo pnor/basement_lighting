@@ -8,6 +8,7 @@ import sys
 import time
 from typing import Optional, Union
 from backend.backend_types import RGB
+from backend.state import State
 
 from backend.ceiling import Ceiling
 from backend.util import (
@@ -55,7 +56,7 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(),
+        ceiling=State().create_ceiling(),
         color=sys.argv[1],
         interval=sys.argv[2],
     )

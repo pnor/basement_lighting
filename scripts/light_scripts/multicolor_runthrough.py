@@ -45,17 +45,21 @@ class Render(RenderState):
         super().__init__(interval * 8)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         for p in self.points1:
-            index = (int(self.progress() * ceil.NUMBER_LIGHTS) + p) % ceil.NUMBER_LIGHTS
+            index = (
+                int(self.progress() * ceil.number_lights()) + p
+            ) % ceil.number_lights()
             for i in range(0, self.TAIL_LENGTH):
-                ceil[(index - i) % ceil.NUMBER_LIGHTS] = self.colors1[i]
+                ceil[(index - i) % ceil.number_lights()] = self.colors1[i]
 
         for p in self.points2:
-            index = (int((1 - self.progress()) * ceil.NUMBER_LIGHTS) + p) % ceil.NUMBER_LIGHTS
+            index = (
+                int((1 - self.progress()) * ceil.number_lights()) + p
+            ) % ceil.number_lights()
             for i in range(0, self.TAIL_LENGTH):
-                ceil_index = (index + i) % ceil.NUMBER_LIGHTS
+                ceil_index = (index + i) % ceil.number_lights()
                 cur_color = ceil[ceil_index]
                 ceil[ceil_index] = mix_colors_fast(self.colors2[i], np.array(cur_color))
 
@@ -72,7 +76,7 @@ def run(**kwargs):
     ceil.use_linear()
     ceil.clear()
 
-    render_loop = Render(color_input, ceil.NUMBER_LIGHTS, interval)
+    render_loop = Render(color_input, ceil.number_lights(), interval)
     render_loop.run(30, ceil)
 
 

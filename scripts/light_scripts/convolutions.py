@@ -111,7 +111,7 @@ class Render(RenderState):
         prog = convolve_pixel(self.base_grid[x_low:x_high, y_low:y_high], self.filter)
         self.next_grid[x, y] = prog
 
-        ceil.clear(False)
+        ceil.clear()
         for i in range(self.SIDE_LENGTH**2):
             row = i // self.SIDE_LENGTH
             col = i % self.SIDE_LENGTH
@@ -140,7 +140,7 @@ def run(**kwargs):
     ceil.use_float_cartesian(effect_radius=0.1)
     ceil.clear()
 
-    render_loop = Render(color_input, ceil.NUMBER_LIGHTS, interval, ceil)
+    render_loop = Render(color_input, ceil.number_lights(), interval, ceil)
     render_loop.run(60, ceil)
 
 

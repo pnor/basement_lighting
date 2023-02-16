@@ -23,7 +23,7 @@ def hex_to_rgb(hex_str: str) -> RGB:
     color_obj = colour.Color(hex_str)
     rgb = color_obj.rgb
     rgb = [int(x * 255) for x in rgb]
-    return rgb
+    return np.array(rgb)
 
 
 def hex_to_color_obj(hex_str: str) -> colour.Color:
@@ -163,7 +163,6 @@ def distance_formula(x1: float, y1: float, x2: float, y2: float):
 
 @jit(fastmath=True, cache=True)
 def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
-    theta = np.radians(theta)
     x = r * np.cos(theta)
     y = r * np.sin(theta)
     return x, y
@@ -187,9 +186,8 @@ def transform_unit_circle_to_origin(
 @jit(fastmath=True, cache=True)
 def rotate_vector(vector: NDArray[np.float64], theta: float) -> NDArray[np.float64]:
     """
-    theta in degrees
+    theta in radians
     """
-    theta = np.radians(theta)
     rot_mat = np.array(
         [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
     )

@@ -23,7 +23,7 @@ class Render(RenderState):
         assert rows is not None
         index = int(self.progress() * len(rows))
 
-        ceil.clear(False)
+        ceil.clear()
         for i in range(0, self.TAIL_LENGTH):
             ceil[index - i] = self.colors[i]
 

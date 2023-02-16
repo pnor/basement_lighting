@@ -26,7 +26,9 @@ from scripts.library.render import RenderState
 
 
 class ColorLifetimePoint:
-    def __init__(self, color: NDArray[np.int32], lifetime: float, point: Point, radius: float) -> None:
+    def __init__(
+        self, color: NDArray[np.int32], lifetime: float, point: Point, radius: float
+    ) -> None:
         self.color = color
         self.point = point
         self.radius = radius
@@ -42,14 +44,14 @@ class ColorLifetimePoint:
 
 def create_random_point() -> ColorLifetimePoint:
     pos = np.random.random(2)
-    col = np.array(color_format_to_rgb('#2e05fc'))
+    col = np.array(color_format_to_rgb("#2e05fc"))
 
     return ColorLifetimePoint(col, 5, Point(pos, np.zeros(2), np.zeros(2)), 0.2)
 
 
 def create_random_shine() -> ColorLifetimePoint:
     pos = np.random.random(2)
-    col = np.array(color_format_to_rgb('#eadfaf'))
+    col = np.array(color_format_to_rgb("#eadfaf"))
 
     return ColorLifetimePoint(col, 1, Point(pos, np.zeros(2), np.zeros(2)), 0.02)
 
@@ -70,7 +72,7 @@ class Render(RenderState):
         super().__init__(0.25)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
 
         for p in self.particles:
             p.lifetime -= delta
@@ -88,9 +90,7 @@ class Render(RenderState):
             col = (p.color * prog).astype(np.int32)
             p.draw(x, y, col, ceil)
 
-        self.particles = list(
-            filter(lambda p: p.lifetime > 0, self.particles)
-        )
+        self.particles = list(filter(lambda p: p.lifetime > 0, self.particles))
 
         ceil.show()
 
@@ -100,7 +100,11 @@ class Render(RenderState):
         if np.random.random() < 0.5:
             self.particles += [create_random_point(), create_random_point()]
         if np.random.random() < 0.8:
-            self.particles += [create_random_shine(), create_random_shine(), create_random_shine()]
+            self.particles += [
+                create_random_shine(),
+                create_random_shine(),
+                create_random_shine(),
+            ]
         return super().interval_reached(ceil)
 
 

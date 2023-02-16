@@ -20,9 +20,9 @@ class Render(RenderState):
         super().__init__(interval * 5)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        index = int(self.progress() * ceil.NUMBER_LIGHTS)
+        index = int(self.progress() * ceil.number_lights())
 
-        ceil.clear(False)
+        ceil.clear()
         for i in range(0, self.TAIL_LENGTH):
             ceil[index - i] = self.colors[i]
 

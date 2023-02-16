@@ -26,7 +26,7 @@ class Render(RenderState):
         super().__init__(interval * 3)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        ceil.clear(False)
+        ceil.clear()
         for theta in range(0, 360, 10):
             for i in range(len(self.radiuses)):
                 amt = np.sin((i / len(self.radiuses) + (self.progress())) * (2 * np.pi))

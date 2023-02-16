@@ -6,6 +6,7 @@ import sys
 import time
 from typing import Optional, Union
 from backend.backend_types import RGB
+import numpy as np
 
 from backend.ceiling import Ceiling
 from backend.util import color_range, dim_color
@@ -22,10 +23,10 @@ class Render(RenderState):
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear()
-        theta = self.progress() * 360
+        theta = self.progress() * np.pi * 2
 
         for i in range(0, self.TAIL_LENGTH):
-            ceil[0.8, theta - (i * 20)] = self.colors[i]
+            ceil[0.4, theta - (i * 20)] = self.colors[i]
 
         ceil.show()
         return super().render(delta, ceil)
@@ -36,7 +37,7 @@ def run(**kwargs):
     interval = float(kwargs["interval"])
 
     ceil: Ceiling = kwargs["ceiling"]
-    ceil.use_float_polar((0.5, 0.5), effect_radius=0.4)
+    ceil.use_float_polar((0.5, 0.5), effect_radius=0.2)
     ceil.clear()
 
     render_loop = Render(color_input, interval)

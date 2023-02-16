@@ -5,6 +5,7 @@
 
 import sys
 import time
+import numpy as np
 from typing import Optional, Union
 from backend.backend_types import RGB
 
@@ -19,14 +20,14 @@ class Render(RenderState):
         self.TAIL_LENGTH = 8
         self.colors = color_range(color, dim_color(color), self.TAIL_LENGTH)
 
-        super().__init__(interval)
+        super().__init__(interval * 4)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear()
-        theta = self.progress() * 360
+        theta = self.progress() * 2 * np.pi
 
         for i in range(0, self.TAIL_LENGTH):
-            ceil[0.6, theta - (i * 20)] = self.colors[i]
+            ceil[0.4, theta - (i * 20)] = self.colors[i]
 
         ceil.show()
         return super().render(delta, ceil)

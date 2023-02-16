@@ -3,6 +3,8 @@
 # NAME: Run through
 # Runs a single LED throughout the light strip
 
+# TODO broken
+
 import sys
 import time
 from typing import Optional, Union
@@ -17,6 +19,7 @@ class Render(RenderState):
     def __init__(self, color: RGB, interval: Optional[float]):
         self.TAIL_LENGTH = 7
         self.colors = color_range(color, dim_color(color), self.TAIL_LENGTH)
+        print(self.colors)
         super().__init__(interval * 5)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:

@@ -40,7 +40,7 @@ class Render(RenderState):
         self.color_progress = 0.0
 
         self.COLOR_RANGE = 0.2  # percentage of self.colors to use at once
-        self.NUM_POINTS = 30
+        self.NUM_POINTS = 50
         super().__init__(interval * 4)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:

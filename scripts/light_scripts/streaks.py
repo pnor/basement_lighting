@@ -25,7 +25,7 @@ class Render(RenderState):
         self.color_obj = colour.Color(hsl=(0, 1, 0.5))
         self._point = np.array([0.5, 0.5])
         self._velocity = np.array([1.0, 0]) * speed
-        self._velocity = rotate_vector(self._velocity, np.random.random() * 360)
+        self._velocity = rotate_vector(self._velocity, np.random.random() * np.pi * 2)
         self.speed = speed
         super().__init__(interval)
 
@@ -33,7 +33,7 @@ class Render(RenderState):
         self.color_obj = colour.Color(hsl=(0, 1, 0.5))
         self._point = np.array([0.5, 0.5])
         self._velocity = np.array([1.0, 0]) * self.speed
-        self._velocity = rotate_vector(self._velocity, np.random.random() * 360)
+        self._velocity = rotate_vector(self._velocity, np.random.random() * np.pi * 2)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         self._point += self._velocity * delta

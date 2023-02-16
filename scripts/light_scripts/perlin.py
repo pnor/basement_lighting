@@ -25,14 +25,13 @@ class Render(RenderState):
         # Number of points used to sample the perlin noise obj
         self.SAMPLE_SIZE = 20
         # Brightest color this will yield
-        self.color = np.array(color)
+        self.color = color
         # Minimal brightness of any LED
-        self.MIN_BRIGHTNESS = 0.15
+        self.MIN_BRIGHTNESS = 0.20
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         prog = sigmoid_0_to_1(self.progress())
         ceil.clear()
-        # TODO
 
         for i in range(self.SAMPLE_SIZE):
             for j in range(self.SAMPLE_SIZE):
@@ -68,7 +67,7 @@ class Render(RenderState):
 
     def interval_reached(self, ceiling: Ceiling) -> None:
         self.cur_perlin_noise = self.next_perlin_noise
-        self.next_perlin_noise = PerlinNoise(octaves=np.random.randint(1, 4))
+        self.next_perlin_noise = PerlinNoise(octaves=np.random.randint(1, 6))
         return super().interval_reached(ceiling)
 
 

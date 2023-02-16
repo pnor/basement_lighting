@@ -88,9 +88,7 @@ def dim_color_by_amount_fast(color: RGB, dim_amount: float) -> RGB:
     """Dims a color by a percentage of its current luminance
     Only works if color is a RGB tuple
     """
-    for i in range(len(color)):
-        color[i] = int(color[i] * dim_amount)
-    return color
+    return (color * dim_amount).astype(int)
 
 
 def interpolate_colors(

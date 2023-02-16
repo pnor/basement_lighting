@@ -24,7 +24,7 @@ def linear_setitem(key: Union[int, slice], color: RGB, ceiling: Ceiling):
         for i in range(start, stop, step):
             ceiling.set_by_index(i % ceiling.number_lights(), color)
     else:
-        ceiling.set_by_index(key, color)
+        ceiling.set_by_index(key % ceiling.number_lights(), color)
 
 
 def row_getitem(key: Tuple[int, int], ceiling: Ceiling) -> RGB:

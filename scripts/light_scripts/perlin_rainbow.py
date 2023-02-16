@@ -64,8 +64,8 @@ def run(**kwargs):
     ceil.use_float_cartesian(effect_radius=0.1)
     ceil.clear()
 
-    render_loop = Render(interval)
-    render_loop.run(10, ceil)
+    render_loop = Render(interval * 3)
+    render_loop.run(20, ceil)
 
 
 if __name__ == "__main__":

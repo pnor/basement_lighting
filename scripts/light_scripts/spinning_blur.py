@@ -26,7 +26,7 @@ class Render(RenderState):
         theta = self.progress() * np.pi * 2
 
         for i in range(0, self.TAIL_LENGTH):
-            ceil[0.4, theta - (i * 20)] = self.colors[i]
+            ceil[0.4, theta - (i * np.pi / 8)] = self.colors[i]
 
         ceil.show()
         return super().render(delta, ceil)

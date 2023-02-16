@@ -23,7 +23,7 @@ class Render(RenderState):
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear()
 
-        y = self.progress()
+        y = (self.progress() * 1.3) - 0.15
 
         ceil[0.1, y] = self.color
         ceil[0.9, y] = self.color
@@ -39,7 +39,7 @@ def run(**kwargs):
     color = np.array(color_input)
 
     ceil: Ceiling = kwargs["ceiling"]
-    ceil.use_float_cartesian(effect_radius=0.1)
+    ceil.use_float_cartesian(effect_radius=0.3)
     ceil.clear()
 
     render_loop = Render(color_input, interval)

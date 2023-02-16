@@ -60,9 +60,9 @@ class Charger:
         self.cur_color = color_from_range
 
         if self.cur_time > self.CHARGE_TIME:
-            for i in range(0, 360, 5):
+            for i in np.linspace(0, 2 * np.pi, 50):
                 shockwave_speed = (self.speed * 1.0) + (
-                    np.random.random() * (self.speed * 6)
+                    np.random.random() * (self.speed * 2)
                 )
                 shockwave_accel = -(np.random.random() * (self.speed * 1))
 

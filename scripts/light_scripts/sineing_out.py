@@ -41,7 +41,7 @@ def run(**kwargs):
     interval = float(kwargs["interval"])
 
     ceil = kwargs["ceiling"]
-    ceil.use_float_polar(origin=(0.5, 0.5), effect_radius=0.1)
+    ceil.use_float_polar(origin=(0.5, 0.5), effect_radius=0.12)
 
     render_loop = Render(color_input, interval)
     render_loop.run(60, ceil)

@@ -19,8 +19,8 @@ from scripts.library.render import RenderState
 
 
 # Number of sample points we want to use when drawing on the ceiling
-screen_width = 30
-screen_height = 30
+screen_width = 35
+screen_height = 35
 # largely copied from the example code at the bottom of the article:
 theta_spacing = 0.07
 phi_spacing = 0.02

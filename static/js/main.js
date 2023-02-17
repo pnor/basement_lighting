@@ -27,14 +27,19 @@ function start(ev) {
 
     var colorInput = document.getElementById("colorInput");
     var color = colorInput.value;
+    if (color == "") {
+        color = "#beebee";
+    }
 
     var speedInput = document.getElementById("speedInput");
     var speed = speedInput.value;
+    if (speed == "") {
+        speed = 1;
+    }
 
     // var post = { file: path, color: "#beebee", interval: 1 };
     var post = { file: path, color: color, interval: speed };
 
-    console.log("posting to `${URL}/control/start`")
     xhr.open("POST", `${URL}/control/start`, true);
 
     // Send start request

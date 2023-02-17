@@ -37,7 +37,6 @@ function start(ev) {
         speed = 1;
     }
 
-    // var post = { file: path, color: "#beebee", interval: 1 };
     var post = { file: path, color: color, interval: speed };
 
     xhr.open("POST", `${URL}/control/start`, true);

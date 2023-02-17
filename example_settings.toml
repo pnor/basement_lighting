@@ -1,0 +1,13 @@
+[settings]
+dimensions=2
+arrangement_file="./settings/thousand.csv"
+io_pin=10
+number_lights=1024 # optional, can be inferred from arrangement_file
+rows=[512, 512]
+url="http://127.0.0.1:5000"
+
+[test]
+test_mode=true # whether to render result in a demo window instead of using a live strip
+sphere_size=0.01
+camera_position=[0.5, 0.5, 2.0]
+dimension_mask=[0, 1, 2]

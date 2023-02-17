@@ -2,6 +2,7 @@
 
 # NAME: Run thru 2.8 χ BackCover
 
+from backend.state import State
 import numpy as np
 import sys
 import copy
@@ -81,4 +82,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(test_mode=True), color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=State().create_ceiling(), color=sys.argv[1], interval=sys.argv[2])

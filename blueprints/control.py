@@ -37,8 +37,11 @@ def start_script() -> str:
         )
 
     file_to_run = data_dict["file"]
+
     color = data_dict.get("color")
+
     interval = data_dict.get("interval")
+    interval = float(interval) if interval else None
 
     if not os.path.exists(file_to_run):
         return json.dumps(
@@ -67,7 +70,7 @@ def stop_script() -> str:
 
 
 def _start_script(
-    path: str, color_arg: Optional[str], interval_arg: Optional[int]
+    path: str, color_arg: Optional[str], interval_arg: Optional[float]
 ) -> bool:
     """Creates a new process to run the ceiling script.
     Returns True if it succesfully started the process."""

@@ -36,3 +36,8 @@ h4, h5, h6 {
     font-weight: normal;
     font-size: map.get($font-sizes, "2");
 }
+
+// Input
+input {
+    font-family: $font-body;
+}

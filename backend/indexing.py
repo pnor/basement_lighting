@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Callable, List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 from backend.backend_types import RGB
 

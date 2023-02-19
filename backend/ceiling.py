@@ -6,20 +6,8 @@ from typing_extensions import Self
 import light_arrangements_python
 
 from backend.backend_types import RGB
-from backend.indexing import (
-    cartesian_getitem,
-    cartesian_setitem,
-    float_cartesian_setitem,
-    flaot_cartesian_getitem,
-    float_polar_getitem,
-    float_polar_setitem,
-    linear_getitem,
-    linear_setitem,
-    polar_getitem,
-    polar_setitem,
-    row_getitem,
-    row_setitem,
-)
+import backend.indexing
+
 from backend.indexing_type import IndexingType
 
 
@@ -30,8 +18,8 @@ class Ceiling:
         """
         # -- Indexing
         self.indexing_type = IndexingType.LINEAR
-        self._get_func = linear_getitem
-        self._set_func = linear_setitem
+        self._get_func = backend.indexing.linear_getitem
+        self._set_func = backend.indexing.linear_setitem
         self._search_radius = 0
         self._set_radius = 0
         self._center = [0.5, 0.5]
@@ -133,8 +121,8 @@ class Ceiling:
     def use_linear(self):
         "Use linear indexing"
         self.indexing_type = IndexingType.LINEAR
-        self._get_func = linear_getitem
-        self._set_func = linear_setitem
+        self._get_func = backend.indexing.linear_getitem
+        self._set_func = backend.indexing.linear_setitem
 
     def with_linear(self, block: Callable[[Self], None]) -> None:
         """Execute `block` with the linear indexing method"""
@@ -148,8 +136,8 @@ class Ceiling:
     def use_row(self):
         """Use row based indexing"""
         self.indexing_type = IndexingType.ROWS
-        self._get_func = row_getitem
-        self._set_func = row_setitem
+        self._get_func = backend.indexing.row_getitem
+        self._set_func = backend.indexing.row_setitem
 
     def with_row(self, block: Callable[[Self], None]) -> None:
         """Execute `block` with the row indexing method"""
@@ -168,8 +156,8 @@ class Ceiling:
         self._search_radius = search_range
         self._set_radius = search_range
         self.indexing_type = IndexingType.CARTESIAN
-        self._get_func = cartesian_getitem
-        self._set_func = cartesian_setitem
+        self._get_func = backend.indexing.cartesian_getitem
+        self._set_func = backend.indexing.cartesian_setitem
 
     def with_cartesian(
         self,
@@ -194,8 +182,8 @@ class Ceiling:
         self._set_radius = search_range
         self._center = origin
         self.indexing_type = IndexingType.POLAR
-        self._get_func = polar_getitem
-        self._set_func = polar_setitem
+        self._get_func = backend.indexing.polar_getitem
+        self._set_func = backend.indexing.polar_setitem
 
     def with_polar(
         self,
@@ -218,8 +206,8 @@ class Ceiling:
         """Use floating point cartesian indexing"""
         self._set_radius = effect_radius
         self.indexing_type = IndexingType.FLOAT_POLAR
-        self._get_func = flaot_cartesian_getitem
-        self._set_func = float_cartesian_setitem
+        self._get_func = backend.indexing.flaot_cartesian_getitem
+        self._set_func = backend.indexing.float_cartesian_setitem
 
     def with_float_cartesian(
         self,
@@ -244,8 +232,8 @@ class Ceiling:
         self._set_radius = effect_radius
         self._center = origin
         self.indexing_type = IndexingType.FLOAT_POLAR
-        self._get_func = float_polar_getitem
-        self._set_func = float_polar_setitem
+        self._get_func = backend.indexing.float_polar_getitem
+        self._set_func = backend.indexing.float_polar_setitem
 
     def with_float_polar(
         self,

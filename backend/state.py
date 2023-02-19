@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from backend.ceiling import Ceiling
-from typing import Callable, Optional, List, Tuple
+import backend.ceiling
+
+from typing import Optional
 from multiprocessing import Process, Pipe
-from multiprocessing.connection import _ConnectionBase
 from threading import Lock
 
 from backend.settings import Settings
@@ -17,10 +17,10 @@ class State:
         self.current_pattern: Optional[str] = None
         self.lock = Lock()
 
-    def create_ceiling(self) -> Ceiling:
+    def create_ceiling(self) -> backend.ceiling.Ceiling:
         if self.settings.test_mode:
             assert self.settings.camera_position is not None
-            return Ceiling(
+            return backend.ceiling.Ceiling(
                 type="test",
                 rows=self.settings.rows,
                 number_lights=self.settings.number_lights,

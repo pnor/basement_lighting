@@ -27,6 +27,7 @@ class Ceiling:
         # Reading configs and instantiating the light arrangement
         self._rows = kwargs["rows"]
         light_arrangement_type = kwargs["type"]
+        self._number_children_for_division = kwargs["number_children_for_division"]
 
         dimensions = kwargs["dimensions"]
         arrangement_file = kwargs["arrangement_file"]
@@ -39,6 +40,7 @@ class Ceiling:
             self.light_arrangement = light_arrangements_python.init_test(
                 dimensions,
                 arrangement_file,
+                self._number_children_for_division,
                 sphere_size,
                 camera_position,
                 dimension_mask,
@@ -48,7 +50,11 @@ class Ceiling:
             io_pin = kwargs["io_pin"]
 
             self.light_arrangement = light_arrangements_python.init_ws281x(
-                dimensions, arrangement_file, number_lights, io_pin
+                dimensions,
+                arrangement_file,
+                self._number_children_for_division,
+                number_lights,
+                io_pin,
             )
         else:
             raise ValueError("invalid value: " + light_arrangement_type)

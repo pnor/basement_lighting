@@ -26,6 +26,7 @@ class State:
                 number_lights=self.settings.number_lights,
                 dimensions=self.settings.dimensions,
                 arrangement_file=self.settings.arrangement_file,
+                number_children_for_division=self.settings.number_children_for_division,
                 sphere_size=self.settings.sphere_size,
                 camera_position=tuple(self.settings.camera_position),
                 dimension_mask=self.settings.dimension_mask,
@@ -37,6 +38,7 @@ class State:
                 number_lights=self.settings.number_lights,
                 dimensions=self.settings.dimensions,
                 arrangement_file=self.settings.arrangement_file,
+                number_children_for_division=self.settings.number_children_for_division,
                 io_pin=self.settings.io_pin,
             )
 

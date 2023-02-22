@@ -13,28 +13,51 @@ class Settings:
     def __init__(self, file_path: str):
         dict = toml.load(file_path)
 
+        # url
         self.url: str = dict["settings"]["url"]
 
+        # arrangement file, number lights + dimensions
         self.arrangement_file: str = dict["settings"]["arrangement_file"]
         dimensions, number_lights = preprocess_arrangement_file(self.arrangement_file)
 
+        # Number children for division
+        number_children_for_division = None
+        performance_section = dict.get("performance")
+        if performance_section:
+            number_children_for_division = performance_section.get(
+                "number_children_for_division"
+            )
+        if number_children_for_division is None:
+            self.number_children_for_division = 10
+        else:
+            self.number_children_for_division = number_children_for_division
+
+        # Number lights
         num_lights = dict["settings"].get("number_lights")
         self.number_lights: int = (
             num_lights if num_lights is not None else number_lights
         )
 
+        # Dimensions
         dims = dict["settings"].get("dimensions")
         self.dimensions: int = dims if dims is not None else dimensions
 
+        # io pin
         self.io_pin: int = dict["settings"]["io_pin"]
+
+        # rows
         self.rows: Optional[List[int]] = dict["settings"].get("rows")
 
+        # sphere size
         self.sphere_size: Optional[float] = dict["test"].get("sphere_size")
         self.camera_position: Optional[List[float]] = dict["test"].get(
             "camera_position"
         )
+
+        # dimension mask
         self.dimension_mask: Optional[List[int]] = dict["test"].get("dimension_mask")
 
+        # test mode
         test_mode = dict["test"].get("test_mode")
         self.test_mode: bool = False if test_mode is None else bool(test_mode)
 

@@ -11,3 +11,6 @@ test_mode=true # whether to render result in a demo window instead of using a li
 sphere_size=0.01
 camera_position=[0.5, 0.5, 2.0]
 dimension_mask=[0, 1, 2]
+
+[performance]
+number_children_for_division=100 # Optional, effects performance of quadtree backend

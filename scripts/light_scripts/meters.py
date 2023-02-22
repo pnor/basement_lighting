@@ -9,6 +9,7 @@ import colour
 from typing import List, Optional, Union
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import (
     clamp,
     color_format_to_obj,
@@ -119,7 +120,7 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(),
+        ceiling=State().create_ceiling(),
         color=sys.argv[1],
         interval=sys.argv[2],
     )

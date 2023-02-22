@@ -11,6 +11,7 @@ import numpy as np
 from backend.backend_types import RGB
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import color_format_to_rgb, sigmoid_0_to_1
 from scripts.library.render import RenderState
 
@@ -48,4 +49,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=State().create_ceiling(), color=sys.argv[1], interval=sys.argv[2])

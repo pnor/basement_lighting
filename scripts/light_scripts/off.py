@@ -4,6 +4,7 @@
 # Turn all lights off
 
 from backend.ceiling import Ceiling
+from backend.state import State
 
 
 def run(**kwargs):
@@ -12,4 +13,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling())
+    run(ceiling=State().create_ceiling())

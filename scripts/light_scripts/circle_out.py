@@ -8,6 +8,7 @@ import sys
 import time
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import hex_to_rgb
 
 import numpy as np
@@ -41,4 +42,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(), color=sys.argv[1], interval=sys.argv[2])
+    run(ceiling=State().create_ceiling, color=sys.argv[1], interval=sys.argv[2])

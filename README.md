@@ -39,7 +39,7 @@ If you construct the ceiling using
 ``` python
 State().create_ceiling()
 ```
-As this will create a ceiling with the settings specified by `settings.toml`
+This will create a ceiling with the settings specified by `settings.toml`
 
 ## Settings
 To change what settings with the light strip, you can edit `settings.toml`.
@@ -53,8 +53,11 @@ To change what settings with the light strip, you can edit `settings.toml`.
 
 Testing:
 `test_mode`: boolean, if true will instead show the light animations in a demo window
+
 `sphere_size`: float, size of spheres in the demo
+
 `camera_position`: array of 3 floats, location  of camera in the demo window
+
 `dimension_mask`: array of 3 integers, represents which dimensions are used when viewing in the 3D demo space. Should typically be [0, 1, 2].
 - this is relevant if the light strip uses more than 3 dimensions, where you can choose which dimensions to view
 - can rearrange dimensions by changing the indeces (example: [2, 0, 1])

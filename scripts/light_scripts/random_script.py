@@ -14,6 +14,7 @@ from backend.backend_types import RGB
 from backend.ceiling import Ceiling
 from backend.ceiling_animation import circle_clear
 from backend.constants import SCRIPTS_PATH
+from backend.state import State
 from backend.util import color_obj_to_rgb, hex_to_rgb
 
 
@@ -78,4 +79,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling())
+    run(ceiling=State().create_ceiling())

@@ -15,6 +15,7 @@ import colour
 
 from backend.ceiling import Ceiling
 from backend.ceiling_animation import circle_clear
+from backend.state import State
 from backend.util import color_format_to_rgb, color_obj_to_rgb
 from scripts.library.render import RenderState
 
@@ -132,6 +133,6 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(),
+        ceiling=State().create_ceiling(),
         interval=sys.argv[1],
     )

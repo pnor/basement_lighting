@@ -9,6 +9,7 @@ from backend.backend_types import RGB
 import numpy as np
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import color_format_to_rgb, color_obj_to_rgb, color_range, dim_color
 from scripts.library.render import RenderState
 from backend.ceiling_animation import circle_clear, fade_out
@@ -71,6 +72,6 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(),
+        ceiling=State().create_ceiling(),
         interval=sys.argv[1],
     )

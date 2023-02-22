@@ -11,6 +11,7 @@ from backend.backend_types import RGB
 import numpy as np
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import clamp, color_range
 from scripts.library.render import RenderState
 
@@ -86,6 +87,6 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(),
+        ceiling=State().create_ceiling(),
         interval=sys.argv[1],
     )

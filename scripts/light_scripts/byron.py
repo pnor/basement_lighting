@@ -5,6 +5,7 @@
 import sys
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import hex_to_rgb
 
 
@@ -14,8 +15,8 @@ def run(**kwargs):
     ceil: Ceiling = kwargs["ceiling"]
     ceil.use_cartesian()
 
-    color_primary = hex_to_rgb("#0000ff")
-    color_secondary = hex_to_rgb("#aaaaff")
+    color_primary = hex_to_rgb("#0000cc")
+    color_secondary = hex_to_rgb("#6666cc")
 
     ceil.fill(color_primary)
     ceil[(0, 0):(0.25, 0.25)] = color_secondary
@@ -27,4 +28,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling())
+    run(ceiling=State().create_ceiling())

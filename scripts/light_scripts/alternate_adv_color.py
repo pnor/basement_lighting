@@ -8,6 +8,7 @@ from backend.backend_types import RGB
 import colour
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import color_obj_to_rgb
 from scripts.library.render import RenderState
 
@@ -54,4 +55,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling(), interval=sys.argv[1])
+    run(ceiling=State().create_ceiling(), interval=sys.argv[1])

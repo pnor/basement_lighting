@@ -14,6 +14,7 @@ from numba import jit
 from backend.backend_types import RGB
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import color_format_to_rgb
 from scripts.library.render import RenderState
 
@@ -30,7 +31,7 @@ K2 = 5
 K1: float = screen_width * K2 * 3 / (8 * (R1 + R2))
 
 
-@jit
+@jit(fastmath=True)
 def render_frame(A: float, B: float) -> NDArray[np.float64]:
     cosA = np.cos(A)
     sinA = np.sin(A)
@@ -124,7 +125,7 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     run(
-        ceiling=Ceiling(),
+        ceiling=State().create_ceiling(),
         color=sys.argv[1],
         interval=sys.argv[2],
     )

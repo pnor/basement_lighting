@@ -4,6 +4,7 @@
 
 from typing import Optional, Union
 from backend.ceiling import Ceiling
+from backend.state import State
 from scripts.library.render import RenderState
 
 
@@ -39,4 +40,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling())
+    run(ceiling=State().create_ceiling())

@@ -9,6 +9,7 @@ import numpy as np
 import colour
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import colour_rgb_to_neopixel_rgb, rotate_vector
 from scripts.library.render import RenderState
 
@@ -76,4 +77,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling())
+    run(ceiling=State().create_ceiling())

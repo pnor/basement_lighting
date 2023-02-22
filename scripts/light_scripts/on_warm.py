@@ -4,6 +4,7 @@
 # Light all colors to a warm light color
 
 from backend.ceiling import Ceiling
+from backend.state import State
 from backend.util import color_format_to_obj, color_obj_to_rgb, hex_to_rgb
 
 
@@ -17,4 +18,4 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    run(ceiling=Ceiling())
+    run(ceiling=State().create_ceiling())

@@ -188,7 +188,7 @@ class Render(RenderState):
         self.B = 0
         self.C = 0
 
-        super().__init__(interval * 0.5)
+        super().__init__(interval * 0.2)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         assert self.interval is not None

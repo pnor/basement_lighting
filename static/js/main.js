@@ -28,7 +28,8 @@ function start(ev) {
     var colorInput = document.getElementById("colorInput");
     var color = colorInput.value;
     if (color == "") {
-        color = "#beebee";
+        // Choose a random color
+        color = "#" + Math.floor(Math.random() * 16777215).toString(16);
     }
 
     var speedInput = document.getElementById("speedInput");

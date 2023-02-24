@@ -4,7 +4,7 @@ from typing import List, Optional, Tuple, Union
 
 from backend.backend_types import RGB
 
-# from backend.ceiling import Ceiling
+# import backend.ceiling
 from backend.coordinate_conversions import polar
 
 

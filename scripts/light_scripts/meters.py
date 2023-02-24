@@ -115,7 +115,7 @@ def run(**kwargs):
     row_info = ceil.rows()
     assert row_info is not None
     render_loop = Render(color_input, row_info, interval)
-    render_loop.run(30, ceil)
+    render_loop.run(60, ceil)
 
 
 if __name__ == "__main__":

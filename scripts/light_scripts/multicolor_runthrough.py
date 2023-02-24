@@ -24,9 +24,7 @@ class Render(RenderState):
         color1 = copy.deepcopy(color)
         color1.luminance = 0.95
         color2 = copy.deepcopy(color)
-        # color2.hue = (color2.hue + 0.2) % 1
         color2.luminance = 0.01
-
         color3 = copy.deepcopy(color)
         color3.luminance = 0.95
         color3.hue = (color3.hue - 0.1) % 1

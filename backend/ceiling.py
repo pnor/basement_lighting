@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
-import numpy as np
 from typing import Any, Callable, List, Optional, Tuple
 from typing_extensions import Self
 import light_arrangements_python
 
 from backend.backend_types import RGB
+from backend.indexing_type import IndexingType
 import backend.indexing
 
-from backend.indexing_type import IndexingType
+import numpy as np
 
 
 class Ceiling:

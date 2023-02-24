@@ -1,6 +1,5 @@
-from multiprocessing import Process, Pipe
-from multiprocessing.connection import _ConnectionBase
-from typing import Callable, Optional, Tuple
+from multiprocessing import Process
+from typing import Callable, Optional
 import importlib.util as importlib_util
 import json
 import numpy as np
@@ -130,7 +129,7 @@ def function_wrapper(f: Callable) -> Callable[[str, float], None]:
 
 
 def runnable_script(
-    file: str, color_arg: Optional[str], interval_arg: Optional[int]
+    file: str, color_arg: Optional[str], interval_arg: Optional[float]
 ) -> Optional[Process]:
     """
     Converts a path to a file to a process containing the function
@@ -153,7 +152,6 @@ def runnable_script(
     except:  # Script fails to execute
         return None
 
-    receiver, sender = Pipe()
     f = function_wrapper(mod.run)
     process = Process(
         target=f,

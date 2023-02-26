@@ -55,13 +55,13 @@ class Render(RenderState):
         self.side = int(np.sqrt(self.NUM_POINTS))
 
         # Lowest Highest x and y moved
-        self.MIN_XY = np.array([-100, 100])
+        self.MIN_XY = np.array([-300, 300])
         self.MAX_XY = np.array([-100, -100])
 
         # Range of function (min and max of points returned)
         self.RANGE = np.array([-1, 1], dtype=np.float64)
 
-        super().__init__(interval * 100)
+        super().__init__(interval * 500)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear()
@@ -71,8 +71,8 @@ class Render(RenderState):
 
         for i in range(self.side):
             for j in range(self.side):
-                x = x_base + (i / 2)
-                y = y_base + (j / 2)
+                x = x_base + (i / 2) * 10
+                y = y_base + (j / 2) * 10
 
                 res = convert_range(
                     wave_function(x, y), self.RANGE[0], self.RANGE[1], 0, 1

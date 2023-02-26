@@ -57,13 +57,13 @@ class Render(RenderState):
         self.side = int(np.sqrt(self.NUM_POINTS))
 
         # Lowest Highest x and y moved
-        self.MIN_XY = np.array([-100, -100])
-        self.MAX_XY = np.array([100, 100])
+        self.MIN_XY = np.array([-500, -500])
+        self.MAX_XY = np.array([50, 100])
 
         # Range of function (min and max of points returned)
         self.RANGE = np.array([-1, 1], dtype=np.float64)
 
-        super().__init__(interval * 100)
+        super().__init__(interval * 500)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear()

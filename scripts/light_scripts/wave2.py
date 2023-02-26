@@ -61,7 +61,7 @@ class Render(RenderState):
         # Range of function (min and max of points returned)
         self.RANGE = np.array([-1, 1], dtype=np.float64)
 
-        super().__init__(interval * 1000)
+        super().__init__(interval * 3000)
 
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
         ceil.clear()

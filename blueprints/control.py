@@ -11,8 +11,9 @@ from flask import (
     Blueprint,
     request,
 )
-from backend.ceiling_animation import circle_clear, row_clear
+from flask_socketio import send, emit, socketio
 
+from backend.ceiling_animation import circle_clear, row_clear
 from backend.state import global_state as state
 from backend.ceiling import Ceiling
 from backend.files import *
@@ -51,8 +52,10 @@ def start_script() -> str:
         res = _start_script(file_to_run, color, interval)
 
     if res:
+        emit("get_state", {"data": "RUNNING"}, namespace="/", broadcast=True)
         return json.dumps({"ok": True})
     else:
+        emit("get_state", {"data": "CRASHED"}, namespace="/", broadcast=True)
         return json.dumps(
             {
                 "ok": False,
@@ -65,6 +68,7 @@ def start_script() -> str:
 def stop_script() -> str:
     with state.lock:
         _stop_script()
+    emit("get_state", {"data": "STOPPED"}, namespace="/", broadcast=True)
     return json.dumps({"ok": True})
 
 
@@ -108,6 +112,12 @@ def function_wrapper(f: Callable) -> Callable[[str, float], None]:
 
     def _exit_gracefully(sig_number, stack_frame):
         # Send back the ceiling to the main app
+        emit(
+            "get_state",
+            {"data": "GRACEFULLY_TERMINATED"},
+            namespace="/",
+            broadcast=True,
+        )
         exit(0)
 
     def _function_wrapper(color: str, interval: float):

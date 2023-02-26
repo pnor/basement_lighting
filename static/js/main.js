@@ -1,8 +1,43 @@
 const STATE_PERIOD = 1000;
 
+var socket = io();
+socket.on('connect', function() {
+        socket.emit('my event', {data: 'I\'m connected!'});
+    });
+
+// Listen to state
+socket.on('get_state', function(e) {
+    console.log(e)
+
+    var header = document.getElementsByTagName("header")[0];
+    var title = document.getElementById("nowShowing");
+
+    if (e.data == "RUNNING") {
+        header.classList.add("header--active");
+        header.classList.remove("header--ok");
+        header.classList.remove("header--error");
+        title.innerHTML = response.pattern;
+    } else if (e.data == "GRACEFULLY_TERMINATED") {
+        header.classList.remove("header--active");
+        header.classList.add("header--ok");
+        header.classList.remove("header--error");
+        title.innerHTML = response.pattern;
+    } else if (e.data == "CRASHED") {
+        header.classList.remove("header--active");
+        header.classList.remove("header--ok");
+        header.classList.add("header--error");
+        title.innerHTML = response.pattern;
+    } else {
+        header.classList.remove("header--active");
+        header.classList.remove("header--ok");
+        header.classList.remove("header--error");
+        title.innerHTML = "N/A";
+    }
+})
+
 // Periodically get state
 get_state();
-setInterval(get_state, STATE_PERIOD);
+//setInterval(get_state, STATE_PERIOD);
 
 // Add click events to selectors
 window.addEventListener("load", function() {

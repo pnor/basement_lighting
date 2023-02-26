@@ -1,4 +1,4 @@
--e git+ssh://git@github.com/pnor/basement_lighting.git@f02fd3b3f3322ccedc2e1b6fcc15f41c60fa607f#egg=basement_lighting
+-e git+ssh://git@github.com/pnor/basement_lighting.git@29224f021949e5bcf3ac103cf031655c7ac4e91a#egg=basement_lighting
 colour==0.1.5
 light-arrangements-python @ git+https://github.com/pnor/light-arrangements-python@956b84b3e7c8ce2bdede96444caee6dfd9842200
 llvmlite==0.39.1

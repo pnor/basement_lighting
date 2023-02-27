@@ -12,26 +12,34 @@ socket.on('get_state', function(e) {
     var header = document.getElementsByTagName("header")[0];
     var title = document.getElementById("nowShowing");
 
-    if (e.data == "RUNNING") {
+    var state = e.state;
+    var pattern = e.pattern;
+
+    if (state == "RUNNING") {
         header.classList.add("header--active");
         header.classList.remove("header--ok");
         header.classList.remove("header--error");
-        title.innerHTML = response.pattern;
-    } else if (e.data == "GRACEFULLY_TERMINATED") {
+        title.innerHTML = pattern;
+    } else if (state == "GRACEFULLY_TERMINATED") {
         header.classList.remove("header--active");
         header.classList.add("header--ok");
         header.classList.remove("header--error");
-        title.innerHTML = response.pattern;
-    } else if (e.data == "CRASHED") {
+        title.innerHTML = pattern;
+    } else if (state == "CRASHED") {
         header.classList.remove("header--active");
         header.classList.remove("header--ok");
         header.classList.add("header--error");
-        title.innerHTML = response.pattern;
+        title.innerHTML = pattern;
+    } else if (state == "STOPPED") {
+        header.classList.remove("header--active");
+        header.classList.remove("header--ok");
+        header.classList.remove("header--error");
+        title.innerHTML = pattern;
     } else {
         header.classList.remove("header--active");
         header.classList.remove("header--ok");
         header.classList.remove("header--error");
-        title.innerHTML = "N/A";
+        title.innerHTML = "<internal error: unknown response>";
     }
 })
 

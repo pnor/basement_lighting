@@ -8,7 +8,7 @@ Common Animations for the ceiling object
 from typing import Tuple
 import numpy as np
 import colour
-from microcontroller import time
+import time
 from backend.backend_types import RGB
 from backend.ceiling import Ceiling
 from backend.util import clamp

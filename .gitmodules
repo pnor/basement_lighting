@@ -1,0 +1,3 @@
+[submodule "scripts/light_scripts"]
+	path = scripts/light_scripts
+	url = git@github.com:pnor/basement_lighting_scripts.git

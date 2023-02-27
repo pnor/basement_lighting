@@ -1,9 +1,7 @@
-const STATE_PERIOD = 1000;
-
 var socket = io();
 socket.on('connect', function() {
         socket.emit('my event', {data: 'I\'m connected!'});
-    });
+});
 
 // Listen to state
 socket.on('get_state', function(e) {
@@ -43,9 +41,8 @@ socket.on('get_state', function(e) {
     }
 })
 
-// Periodically get state
+// Get state starting out
 get_state();
-//setInterval(get_state, STATE_PERIOD);
 
 // Add click events to selectors
 window.addEventListener("load", function() {

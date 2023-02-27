@@ -110,6 +110,10 @@ def function_wrapper(f: Callable) -> Callable[[str, float], None]:
     Also catches interrupts from `process.terminate()` to distinguish from actually crashing
     """
 
+    # TODO send state across process does not work; need to look into
+    # https://flask-socketio.readthedocs.io/en/latest/deployment.html#emitting-from-an-external-process
+    # which involves non trivial changes to how the website is working
+
     def _exit_gracefully(sig_number, stack_frame):
         # Send back the ceiling to the main app
         send_state(ScriptState.GRACEFULLY_TERMINATED, state.current_pattern)

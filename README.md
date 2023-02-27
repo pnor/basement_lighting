@@ -27,6 +27,14 @@ Run with:
 flask run
 ```
 
+### Scripts
+The scripts are located in a seperate repository that can be fetched using
+
+``` sh
+./update_scripts
+```
+from the root directory
+
 ### Running light scripts directly
 Run whichever script directly:
 

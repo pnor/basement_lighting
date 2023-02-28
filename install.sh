@@ -22,7 +22,13 @@ $cmd -m venv ./venv
 . venv/bin/activate
 
 echo "${CYAN}Installing dependencies${NC}"
-pip install -r requirements.txt
+if [[ $(uname) == "Darwin" ]]; then
+    echo "${CYAN} ~ Installing on MacOS; omitting rs_ws281x in build${NC}"
+    pip install -r requirements_macos.txt
+else
+    echo "${CYAN} ~ Assuming Linux${NC}"
+    pip install -r requirements.txt
+fi
 pip install -e .
 
 echo "${NC}Installing node dependencies${NC}"

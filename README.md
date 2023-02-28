@@ -12,7 +12,7 @@ Or you can do it manually by running these commands:
 python -m venv ./venv
 venv/bin/activate
 # Install python packages
-pip install -r requirements.txt
+pip install -r requirements.txt # Or if on MacOS, requirements_macos.txt
 # Install node packages
 npm install
 npm run compile

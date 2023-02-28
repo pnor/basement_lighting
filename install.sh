@@ -5,7 +5,7 @@ CYAN='\033[0;36m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${CYAN}Creating and entering virtual environment${NC}"
+echo "${CYAN}Creating and entering virtual environment${NC}"
 # Find a python executable
 if command -v python; then
     cmd=python
@@ -16,19 +16,17 @@ else
     exit 1
 fi
 python_location=$(which $cmd)
-echo -e "Using command ${CYAN}$cmd${NC} at ${CYAN}$python_location${NC}"
+echo "Using command ${CYAN}$cmd${NC} at ${CYAN}$python_location${NC}"
 $cmd -m venv ./venv
 venv/bin/activate
 
-echo -e "${CYAN}Installing dependencies${NC}"
+echo "${CYAN}Installing dependencies${NC}"
 pip install -r requirements.txt
 pip install -e .
 
-echo -e "${NC}Installing node dependencies${NC}"
+echo "${NC}Installing node dependencies${NC}"
 npm install
 npm run compile
 
-echo -e "${NC}Attempting to fetch and update scripts submodule${NC}"
-./update_scripts.sh
-
-echo -e "${GREEN}finished installing!${NC}"
+echo "${GREEN}finished installing!${NC}"
+echo "Can fetch light scripts to run with ${CYAN}./update_scripts.sh${NC} or add your own in ${CYAN}scripts/light_scripts${NC}"

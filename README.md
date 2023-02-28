@@ -3,16 +3,14 @@ Using a Rasberry pi and WS2811 addressable light strips to create cool lighting 
 
 ## How to Run
 ### Installation
-Setup the python virtual environment:
-``` sh
-python -m venv ./venv
-source venv/bin/activate
-```
 You can quickly install everything you need to run by running `./install.sh`.
 
 
 Or you can do it manually by running these commands:
 ``` sh
+# Create a virtual environment
+python -m venv ./venv
+venv/bin/activate
 # Install python packages
 pip install -r requirements.txt
 # Install node packages
@@ -34,6 +32,10 @@ The scripts are located in a seperate repository that can be fetched using
 ./update_scripts
 ```
 from the root directory
+
+Alternatively, you can write and put scripts in `scripts/light_scripts` to be
+discoverable by the website.
+
 
 ### Running light scripts directly
 Run whichever script directly:

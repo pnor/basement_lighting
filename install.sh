@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+echo "Creating and entering virtual environment"
+python -m venv ./venv
+venv/bin/activate
+
 echo "Installing dependencies"
 pip install -r requirements.txt
 pip install -e .

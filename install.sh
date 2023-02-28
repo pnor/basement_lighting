@@ -17,7 +17,7 @@ else
 fi
 python_location=$(which $cmd)
 echo -e "Using command ${CYAN}$cmd${NC} at ${CYAN}$python_location${NC}"
-python -m venv ./venv
+$cmd -m venv ./venv
 venv/bin/activate
 
 echo -e "${CYAN}Installing dependencies${NC}"

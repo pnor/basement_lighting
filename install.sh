@@ -1,6 +1,16 @@
 #!/usr/bin/env sh
 
 echo "Creating and entering virtual environment"
+# Find a python executable
+if command -v python; then
+    cmd=python
+elif command -v python3; then
+    cmd=python
+else
+    echo "Unable to find python; is it installed?"
+    exit 1
+fi
+echo "Using python cmd $cmd at" $(which $cmd)
 python -m venv ./venv
 venv/bin/activate
 

@@ -19,7 +19,7 @@ fi
 python_location=$(which $cmd)
 echo "Using command ${CYAN}$cmd${NC} at ${CYAN}$python_location${NC}"
 $cmd -m venv ./venv
-venv/bin/activate
+. venv/bin/activate
 
 echo "${CYAN}Installing dependencies${NC}"
 pip install -r requirements.txt

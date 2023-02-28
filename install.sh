@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -o errexit
 
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
@@ -10,7 +11,7 @@ echo "${CYAN}Creating and entering virtual environment${NC}"
 if command -v python; then
     cmd=python
 elif command -v python3; then
-    cmd=python
+    cmd=python3
 else
     echo "${RED}Unable to find python; is it installed?${NC}"
     exit 1

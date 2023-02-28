@@ -1,4 +1,4 @@
-from multiprocessing import Process
+from multiprocess import Process
 from typing import Callable, Optional
 import importlib.util as importlib_util
 import json

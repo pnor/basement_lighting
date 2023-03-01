@@ -8,6 +8,7 @@ from threading import Lock
 
 from backend.settings import Settings
 
+Ceiling = backend.ceiling.Ceiling
 
 class State:
     def __init__(self) -> None:

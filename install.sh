@@ -1,39 +1,43 @@
 #!/usr/bin/env sh
 set -o errexit
 
-GREEN='\033[0;32m'
-CYAN='\033[0;36m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+CYAN=$(tput setaf 6)
+NC=$(tput sgr0)
 
-echo "${CYAN}Creating and entering virtual environment${NC}"
+printf "%sCreating and entering virtual environment%s\n" "$CYAN" "$NC"
 # Find a python executable
-if command -v python; then
-    cmd=python
-elif command -v python3; then
+if command -v python3; then
     cmd=python3
+elif command -v python; then
+    if [ "$(python --version | awk '{ print(substr($2, 0, 1)) }')" != "3" ]; then
+        printf "$%sPython at was not Python3!%s\n" "$RED" "$NC"
+        printf "Using python at %s%s%s\n" "$RED" "$(which python)" "$NC"
+        exit 1
+    fi
+    cmd=python
 else
-    echo "${RED}Unable to find python; is it installed?${NC}"
+    printf "%sUnable to find python; is it installed?%s\n" "$RED" "$NC"
     exit 1
 fi
-python_location=$(which $cmd)
-echo "Using command ${CYAN}$cmd${NC} at ${CYAN}$python_location${NC}"
+printf "Using command %s%s%s at %s%s%s\n" "$CYAN" "$cmd" "$NC" "$CYAN" "$(which $cmd)" "$NC"
 $cmd -m venv ./venv
 . venv/bin/activate
 
-echo "${CYAN}Installing dependencies${NC}"
-if [[ $(uname) == "Darwin" ]]; then
-    echo "${CYAN} ~ Installing on MacOS; omitting rs_ws281x in build${NC}"
+printf "%sInstalling dependencies%s" "$CYAN" "$NC"
+if [ "$(uname)" = "Darwin" ]; then
+    printf "%s ~ Installing on MacOS; omitting rs_ws281x in build%s\n" "$CYAN" "$NC"
     pip install -r requirements_macos.txt
 else
-    echo "${CYAN} ~ Assuming Linux${NC}"
+    printf "%s ~ Assuming Linux%s" "$CYAN" "$NC"
     pip install -r requirements.txt
 fi
 pip install -e .
 
-echo "${NC}Installing node dependencies${NC}"
+printf "%sInstalling node dependencies%s" "$CYAN" "$NC"
 npm install
 npm run compile
 
-echo "${GREEN}finished installing!${NC}"
-echo "Can fetch light scripts to run with ${CYAN}./update_scripts.sh${NC} or add your own in ${CYAN}scripts/light_scripts${NC}"
+printf "%sfinished installing!%s" "$GREEN" "$NC"
+printf "Can fetch light scripts to run with %s ./update_scripts.sh%s or add your own in %s scripts/light_scripts%s\n" "$CYAN" "$NC" "$CYAN" "$NC"

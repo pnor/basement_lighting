@@ -1,0 +1,15 @@
+@use 'sass:map';
+
+@use 'control' as *;
+@use 'colors' as *;
+@use 'spacing' as *;
+
+// Input Field
+.textinput {
+    @include control;
+
+    background: none;
+    border: none;
+    border-bottom: 1px solid $color-fg;
+    color: $color-fg;
+}

@@ -49,7 +49,7 @@ setup(
     install_requires=[],
     extras_require={},
     sass_manifests={"basement_lighting": ("static/sass", "static/css")},
-    setup_requires=["libsass >= 0.6.0"],
+#    setup_requires=["libsass >= 0.6.0"],
     entry_points={
         "console_scripts": [
             #            "api = api.api:main",

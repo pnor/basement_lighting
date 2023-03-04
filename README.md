@@ -1,6 +1,10 @@
 # Space Lighting
 Using a Rasberry pi and WS2811 addressable light strips to create cool lighting effects
 
+
+https://user-images.githubusercontent.com/19177346/222918843-47d61f54-d825-48e4-b15e-c21e39d8f65e.mp4
+
+
 ## How to Run
 ### Installation
 You can quickly install everything you need to run by running `./install.sh`.

@@ -48,6 +48,9 @@ class Ceiling:
         elif light_arrangement_type == "ws281x":
             number_lights = kwargs["number_lights"]
             io_pin = kwargs["io_pin"]
+            brightness = kwargs["brightness"]
+            pixel_order = kwargs["pixel_order"]
+            frequency = kwargs["frequency"]
 
             self.light_arrangement = light_arrangements_python.init_ws281x(
                 dimensions,
@@ -55,6 +58,9 @@ class Ceiling:
                 self._number_children_for_division,
                 number_lights,
                 io_pin,
+                brightness,
+                pixel_order,
+                frequency,
             )
         else:
             raise ValueError("invalid value: " + light_arrangement_type)

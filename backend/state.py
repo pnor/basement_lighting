@@ -10,6 +10,7 @@ from backend.settings import Settings
 
 Ceiling = backend.ceiling.Ceiling
 
+
 class State:
     def __init__(self) -> None:
         self.settings = Settings("settings.toml")
@@ -41,6 +42,9 @@ class State:
                 arrangement_file=self.settings.arrangement_file,
                 number_children_for_division=self.settings.number_children_for_division,
                 io_pin=self.settings.io_pin,
+                brightness=self.settings.brightness,
+                pixel_order=self.settings.pixel_order,
+                frequency=self.settings.frequency,
             )
 
 

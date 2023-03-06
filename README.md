@@ -58,26 +58,7 @@ This will create a ceiling with the settings specified by `settings.toml`
 ## Settings
 To change what settings with the light strip, you can edit `settings.toml`.
 
-`dimensions`: int, number of dimensions of the arrangement. Should match arrangement file data.
-`arrangement_file`: string, path to file used to specify how lights are arranged
-`io_pin`: int, GPIO pin on rasberry pi
-`number_lights`: int, number of lights to control (can be inferred from arrangement file)
-`rows`: list of int, if strip is arranged in rows, specifies how many per row. Optional
-`url`: string, endpoint website is run on
-
-Testing:
-`test_mode`: boolean, if true will instead show the light animations in a demo window
-
-`sphere_size`: float, size of spheres in the demo
-
-`camera_position`: array of 3 floats, location  of camera in the demo window
-
-`dimension_mask`: array of 3 integers, represents which dimensions are used when viewing in the 3D demo space. Should typically be [0, 1, 2].
-- this is relevant if the light strip uses more than 3 dimensions, where you can choose which dimensions to view
-- can rearrange dimensions by changing the indeces (example: [2, 0, 1])
-
-
-An example is provided in `example/example_settings.toml`
+See `example/example_settings.toml` for a description of what each setting does.
 
 ## Adding a light script
 You can add a light script by creating a file and putting inside either the `parametric_scripts` directory or the `light_scripts`. Scripts that take inputs should go in `parametric_scripts`, and scripts that do not should go in `light_scripts`.

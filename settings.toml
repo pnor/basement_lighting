@@ -1,10 +1,16 @@
 [settings]
 #dimensions=2
+
 arrangement_file="settings/zigzag200.csv"
 #arrangement_file="./settings/thousand.csv"
 #arrangement_file="./settings/tenthousand.csv"
+
 io_pin=10
 #number_lights=200
+brightness=120
+pixel_order="bgr"
+frequency=800000
+
 rows=[29, 29, 32, 29, 32, 28, 20]
 url="http://127.0.0.1:5000"
 

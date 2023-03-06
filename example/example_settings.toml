@@ -1,16 +1,31 @@
 [settings]
-dimensions=2
-arrangement_file="./settings/thousand.csv"
-io_pin=10
+# === Arrangement
+dimensions=2 # number of dimensions of the light strip display
+
+arrangement_file="./settings/thousand.csv" # a file path from root of git repo
+
+rows=[512, 512] # if the strip is arranged in rows, can specify here
+
+# === Hardware
+io_pin=10 # GPIO pin on rasberry PI
+
 number_lights=1024 # optional, can be inferred from arrangement_file
-rows=[512, 512]
-url="http://127.0.0.1:5000"
+
+brightness=120 # maximum brightness of the light strip, 255 (max) by default
+
+pixel_order="bgr" # which channels correspond to which colors, "rgb" by default
+
+frequency=800000 # frequency of the signals to the LEDs. Should be 400K-800K, and is  800K by default
+
+# === Website
+url="http://127.0.0.1:5000" # Url the website will use to contact flask server. *should match endpoint flask run is using*
 
 [test]
 test_mode=true # whether to render result in a demo window instead of using a live strip
-sphere_size=0.01
-camera_position=[0.5, 0.5, 2.0]
-dimension_mask=[0, 1, 2]
+sphere_size=0.01 # Size of demo spheres
+camera_position=[0.5, 0.5, 2.0] # Location of camera in scene.
+# For 2D, [0.5, 0.5, 2.0] works while in 3D, [2.0, 0.5, 2.0] works
+dimension_mask=[0, 1, 2] # In > 3D contexts, specifies which dimensions are shown in the scene
 
 [performance]
 number_children_for_division=100 # Optional, effects performance of quadtree backend

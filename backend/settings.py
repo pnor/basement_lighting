@@ -45,6 +45,18 @@ class Settings:
         # io pin
         self.io_pin: int = dict["settings"]["io_pin"]
 
+        # brightness
+        brightness: int = dict["settings"].get("brightness")
+        self.brightness: int = brightness if brightness else 255
+
+        # pixel order
+        pixel_order: str = dict["settings"].get("pixel_order")
+        self.pixel_order: str = pixel_order if pixel_order else "rgb"
+
+        # frequency
+        frequency: int = dict["settings"].get("frequency")
+        self.frequency: int = frequency if frequency else 800000
+
         # rows
         self.rows: Optional[List[int]] = dict["settings"].get("rows")
 

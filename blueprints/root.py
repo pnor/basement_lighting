@@ -2,6 +2,7 @@ import json
 from flask import (
     Blueprint,
     render_template,
+    request,
 )
 
 from backend.state import global_state as state
@@ -42,6 +43,31 @@ def get_state() -> str:
         pattern = state.current_pattern
 
     return json.dumps({"state": result, "pattern": pattern})
+
+
+@bp.route("/brightness", methods=["POST"])
+def set_brightness() -> str:
+    """
+    Sets max brightness of light
+    """
+    data_dict = request.json
+    if data_dict is None or data_dict.get("brightness") is None:
+        return json.dumps(
+            {"ok": False, "error": "request body requires brightness: int key pair"}
+        )
+
+    try:
+        brightness = int(data_dict["brightness"])
+    except ValueError:
+        return json.dumps({"ok": False, "error": "brightness could not be parsed"})
+
+    if brightness not in range(256):
+        return json.dumps({"ok": False, "error": "brightness must be 0..255"})
+
+    with state.lock:
+        state.settings.brightness = brightness
+
+    return json.dumps({"ok": True})
 
 
 # ========================================

@@ -117,7 +117,7 @@ def function_wrapper(f: Callable) -> Callable[[str, float], None]:
             np.random.seed(now)
             random.seed(now)
             ceiling = state.create_ceiling()
-            circle_clear(ceiling, 0.2, np.array((255, 255, 255)))
+            circle_clear(ceiling, 1.0, np.array((255, 255, 255)))
             f(ceiling=ceiling, color=color, interval=interval)
         except Exception as e:
             print(e)

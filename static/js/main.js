@@ -13,9 +13,6 @@ window.addEventListener("load", function() {
 
     var btnStop = document.getElementsByClassName("stop")[0];
     btnStop.addEventListener("click", function(){ stop() });
-
-    // Add brightness listener
-    document.getElementById("brightnessInput").addEventListener("input", update_brightness);
 });
 
 
@@ -37,7 +34,12 @@ function start(ev) {
         speed = 1;
     }
 
-    var post = { file: path, color: color, interval: speed };
+    var brightness = document.getElementById("brightnessInput").value;
+    if (brightness == "") {
+        brightness = 120;
+    }
+
+    var post = { file: path, color: color, interval: speed, brightness: brightness };
 
     xhr.open("POST", `${URL}/control/start`, true);
 
@@ -85,20 +87,4 @@ function get_state() {
                 title.innerHTML = "N/A";
             }
         });
-}
-
-function update_brightness(text) {
-    console.log(text)
-    console.log(text.value)
-    console.log(document.getElementById("brightnessInput"))
-    console.log(document.getElementById("brightnessInput").value)
-
-    var xhr = new XMLHttpRequest();
-    var post = { brightness: document.getElementById("brightnessInput").value };
-
-    xhr.open("POST", `${URL}/brightness`, true);
-
-    // Send start request
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(JSON.stringify(post));
 }

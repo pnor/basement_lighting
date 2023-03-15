@@ -42,13 +42,17 @@ def start_script() -> str:
     interval = data_dict.get("interval")
     interval = float(interval) if interval else None
 
+    brightness = data_dict.get("brightness")
+    brightness = int(brightness) if brightness else 120
+    brightness = np.clip(brightness, 0, 255)
+
     if not os.path.exists(file_to_run):
         return json.dumps(
             {"ok": False, "error": ("path doesn't exist: %s" % file_to_run)}
         )
 
     with state.lock:
-        res = _start_script(file_to_run, color, interval)
+        res = _start_script(file_to_run, color, interval, brightness)
 
     if res:
         return json.dumps({"ok": True})
@@ -69,7 +73,7 @@ def stop_script() -> str:
 
 
 def _start_script(
-    path: str, color_arg: Optional[str], interval_arg: Optional[float]
+    path: str, color_arg: Optional[str], interval_arg: Optional[float], brightness: int
 ) -> bool:
     """Creates a new process to run the ceiling script.
     Returns True if it succesfully started the process."""
@@ -77,6 +81,9 @@ def _start_script(
     if state.current_process is not None:
         state.current_process.terminate()
         state.current_process.join()
+
+    # Update brightness
+    state.settings.brightness = brightness
 
     # Load new script
     script = runnable_script(path, color_arg, interval_arg)

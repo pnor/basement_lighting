@@ -146,10 +146,10 @@ def sigmoid(x: float) -> float:
 
 
 @jit(fastmath=True, cache=True)
-def sigmoid_0_to_1(x: float) -> float:
+def sigmoid_0_to_1(x: float, scale: float = 8) -> float:
     """Returns result between 0..1
     `x` should be in 0..1"""
-    LARGE_NUM = 8
+    LARGE_NUM = scale
     sigmoid_input = (x - 0.5) * LARGE_NUM
     return sigmoid(sigmoid_input)
 

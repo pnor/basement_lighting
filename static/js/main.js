@@ -13,6 +13,10 @@ window.addEventListener("load", function() {
 
     var btnStop = document.getElementsByClassName("stop")[0];
     btnStop.addEventListener("click", function(){ stop() });
+
+    // Init color chooser with random color
+    var colorInput = document.getElementById("colorInput");
+    colorInput.value = random_hex_color();
 });
 
 
@@ -24,8 +28,7 @@ function start(ev) {
     var colorInput = document.getElementById("colorInput");
     var color = colorInput.value;
     if (color == "" || color.toLowerCase() == "random") {
-        // Choose a random color
-        color = "#" + (Math.floor(Math.random() * 16777215).toString(16)).padStart(6, "0");
+        color = random_hex_color();
     }
 
     var speedInput = document.getElementById("speedInput");
@@ -87,4 +90,8 @@ function get_state() {
                 title.innerHTML = "N/A";
             }
         });
+}
+
+function random_hex_color() {
+    return "#" + (Math.floor(Math.random() * 16777215).toString(16)).padStart(6, "0");
 }

@@ -33,7 +33,7 @@ def hex_to_color_obj(hex_str: str) -> colour.Color:
 def color_obj_to_rgb(color_obj: colour.Color) -> RGB:
     rgb = color_obj.rgb
     rgb = [int(x * 255) for x in rgb]
-    return np.array(rgb)
+    return np.array(rgb, dtype=np.uint8)
 
 
 def color_format_to_obj(color: Union[RGB, str, colour.Color]) -> colour.Color:

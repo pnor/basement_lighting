@@ -39,7 +39,12 @@ function start(ev) {
 
     var brightness = document.getElementById("brightnessInput").value;
     if (brightness == "") {
-        brightness = 120;
+        brightness = 80;
+    }
+    if (brightness > 255) {
+        brightness = 255;
+    } else if (brightness < 0) {
+        brightness = 0;
     }
 
     var post = { file: path, color: color, interval: speed, brightness: brightness };

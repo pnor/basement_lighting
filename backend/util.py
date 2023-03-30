@@ -160,13 +160,6 @@ def distance_formula(x1: float, y1: float, x2: float, y2: float):
 
 
 @jit(fastmath=True, cache=True)
-def polar_to_cartesian(r: float, theta: float) -> Tuple[float, float]:
-    x = r * np.cos(theta)
-    y = r * np.sin(theta)
-    return x, y
-
-
-@jit(fastmath=True, cache=True)
 def transform_unit_circle_to_origin(
     x: float, y: float, orig_x: float, orig_y: float
 ) -> Tuple[float, float]:

@@ -136,13 +136,17 @@ def colour_rgb_to_neopixel_rgb(rgb: Tuple[float, float, float]) -> RGB:
 
 @jit(fastmath=True, cache=True)
 def clamp(num, min_value, max_value):
-    num = max(min(num, max_value), min_value)
-    return num
+    return np.clip(num, min_value, max_value)
 
 
 @jit(fastmath=True, cache=True)
 def sigmoid(x: float) -> float:
     return 1 / (1 + np.exp(-x))
+
+
+@jit(fastmath=True, cache=True)
+def gaussian(x: float) -> float:
+    return (1 / (np.sqrt(2 * np.pi))) * np.exp(-(1 / 2) * (x**2))
 
 
 @jit(fastmath=True, cache=True)
@@ -152,6 +156,16 @@ def sigmoid_0_to_1(x: float, scale: float = 8) -> float:
     LARGE_NUM = scale
     sigmoid_input = (x - 0.5) * LARGE_NUM
     return sigmoid(sigmoid_input)
+
+
+@jit(fastmath=True, cache=True)
+def gaussian_0_to_1(x: float, scale: float = 7.75) -> float:
+    """Returns result between 0..1
+    `x` should be in 0..1"""
+    LARGE_NUM = scale
+    gaussian_input = (x - 0.5) * LARGE_NUM
+    assert gaussian(gaussian_input) / 0.399 < 1
+    return gaussian(gaussian_input) / 0.399
 
 
 @jit(fastmath=True, cache=True)

@@ -6,12 +6,13 @@ import numpy as np
 import os
 import random
 import signal
+import colour
 import time
 from flask import (
     Blueprint,
     request,
 )
-from backend.ceiling_animation import circle_clear, row_clear
+from backend.ceiling_animation import circle_clear, fade_out
 
 from backend.state import global_state as state
 from backend.ceiling import Ceiling
@@ -195,9 +196,9 @@ def function_wrapper(f: Callable, transition_type: str) -> Callable[[str, float]
             random.seed(now)
             ceiling = state.create_ceiling()
             if transition_type == TRANSITION_COLOR_CHANGE:
-                circle_clear(ceiling, 0.3, np.array((0, 0, 0)))
+                fade_out(ceiling, 0.2)
             elif transition_type == TRANSITION_START:
-                circle_clear(ceiling, 1.0, np.array((255, 255, 255)))
+                circle_clear(ceiling, 1.0, colour.Color("white"))
             f(ceiling=ceiling, color=color, interval=interval)
         except Exception as e:
             print(e)

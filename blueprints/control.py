@@ -19,6 +19,11 @@ from backend.files import *
 
 bp = Blueprint("control", __name__, url_prefix="/control")
 
+# Transition Types
+TRANSITION_START = "start"
+TRANSITION_STOP = "start"
+TRANSITION_COLOR_CHANGE = "change"
+
 
 @bp.route("/start", methods=["POST"])
 def start_script() -> str:
@@ -52,7 +57,7 @@ def start_script() -> str:
         )
 
     with state.lock:
-        res = _start_script(file_to_run, color, interval, brightness)
+        res = _start_script(file_to_run, color, interval, brightness, TRANSITION_START)
 
     if res:
         return json.dumps({"ok": True})
@@ -105,7 +110,11 @@ def change_color() -> str:
 
 
 def _start_script(
-    path: str, color_arg: Optional[str], interval_arg: Optional[float], brightness: int
+    path: str,
+    color_arg: Optional[str],
+    interval_arg: Optional[float],
+    brightness: int,
+    transition_type: str,
 ) -> bool:
     """Creates a new process to run the ceiling script.
     Returns True if it succesfully started the process."""
@@ -118,7 +127,7 @@ def _start_script(
     state.settings.brightness = brightness
 
     # Load new script
-    script = runnable_script(path, color_arg, interval_arg)
+    script = runnable_script(path, color_arg, interval_arg, transition_type)
     if script is None:
         print("Script crashed when loaded as a module")
         return False
@@ -161,11 +170,15 @@ def _change_color(color: str) -> bool:
     current_brightness = state.current_brightness
     _stop_script()
     return _start_script(
-        current_script_path, color, current_interval, current_brightness
+        current_script_path,
+        color,
+        current_interval,
+        current_brightness,
+        TRANSITION_COLOR_CHANGE,
     )
 
 
-def function_wrapper(f: Callable) -> Callable[[str, float], None]:
+def function_wrapper(f: Callable, transition_type: str) -> Callable[[str, float], None]:
     """Wraps the function in another function that doesn't use keyword arguements.
     Also catches interrupts from `process.terminate()` to distinguish from actually crashing
     """
@@ -181,7 +194,10 @@ def function_wrapper(f: Callable) -> Callable[[str, float], None]:
             np.random.seed(now)
             random.seed(now)
             ceiling = state.create_ceiling()
-            circle_clear(ceiling, 1.0, np.array((255, 255, 255)))
+            if transition_type == TRANSITION_COLOR_CHANGE:
+                circle_clear(ceiling, 0.3, np.array((0, 0, 0)))
+            elif transition_type == TRANSITION_START:
+                circle_clear(ceiling, 1.0, np.array((255, 255, 255)))
             f(ceiling=ceiling, color=color, interval=interval)
         except Exception as e:
             print(e)
@@ -193,7 +209,10 @@ def function_wrapper(f: Callable) -> Callable[[str, float], None]:
 
 
 def runnable_script(
-    file: str, color_arg: Optional[str], interval_arg: Optional[float]
+    file: str,
+    color_arg: Optional[str],
+    interval_arg: Optional[float],
+    transition_type: str,
 ) -> Optional[Process]:
     """
     Converts a path to a file to a process containing the function
@@ -216,7 +235,7 @@ def runnable_script(
     except:  # Script fails to execute
         return None
 
-    f = function_wrapper(mod.run)
+    f = function_wrapper(mod.run, transition_type)
     process = Process(
         target=f,
         args=(color_arg, interval_arg),

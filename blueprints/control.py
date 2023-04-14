@@ -23,7 +23,7 @@ bp = Blueprint("control", __name__, url_prefix="/control")
 # Transition Types
 TRANSITION_START = "start"
 TRANSITION_STOP = "start"
-TRANSITION_COLOR_CHANGE = "change"
+TRANSITION_COLOR_CHANGE = "color_change"
 
 
 @bp.route("/start", methods=["POST"])

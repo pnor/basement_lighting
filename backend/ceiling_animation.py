@@ -26,3 +26,8 @@ def fade_out(ceiling: Ceiling, duration: float) -> None:
     """Clears the currently display by fading it out over time"""
     animation = FadeOut(duration)
     animation.run(60, ceiling)
+
+
+def black_out(ceiling: Ceiling) -> None:
+    """Clears current display immediately"""
+    ceiling.clear()

@@ -17,6 +17,12 @@ class State:
 
         self.current_process: Optional[Process] = None
         self.current_pattern: Optional[str] = None
+
+        self.current_script_path: Optional[str] = None
+        self.current_color: Optional[str] = None
+        self.current_interval: Optional[float] = None
+        self.current_brightness: Optional[int] = None
+
         self.lock = Lock()
 
     def create_ceiling(self) -> backend.ceiling.Ceiling:

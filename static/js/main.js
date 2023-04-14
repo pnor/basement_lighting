@@ -4,6 +4,7 @@ const STATE_PERIOD = 1000;
 get_state();
 setInterval(get_state, STATE_PERIOD);
 
+    console.log('yay')
 // Add event listeners
 window.addEventListener("load", function() {
     var buttons = document.getElementsByClassName("button"); 
@@ -64,6 +65,26 @@ function stop() {
     // Send stop request
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send( null );
+}
+
+function colorChange() {
+    var xhr = new XMLHttpRequest();
+
+    var colorInput = document.getElementById("colorInput");
+    var color = colorInput.value;
+    if (color == "" || color.toLowerCase() == "random") {
+        color = random_hex_color();
+    }
+
+    var post = { color: color};
+
+    xhr.open("POST", `${URL}/control/color`, true);
+
+    console.log('runningg')
+    // Send start request
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(JSON.stringify(post));
+
 }
 
 function get_state() {

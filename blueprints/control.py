@@ -72,6 +72,38 @@ def stop_script() -> str:
     return json.dumps({"ok": True})
 
 
+@bp.route("/color", methods=["POST"])
+def change_color() -> str:
+    """
+    Changes the color of the currently running script
+    expects one arg for color
+    """
+    data_dict = request.json
+    if data_dict is None:
+        return json.dumps({"ok": False, "error": "request body requires color"})
+    elif type(data_dict) is not dict:
+        return json.dumps(
+            {"ok": False, "error": "request body must contain json dictionary"}
+        )
+
+    color = data_dict.get("color")
+    if color is None:
+        return json.dumps({"ok": False, "error": "request body requires arg for color"})
+
+    with state.lock:
+        res = _change_color(color)
+
+    if res:
+        return json.dumps({"ok": True})
+    else:
+        return json.dumps(
+            {
+                "ok": False,
+                "error": ("unable to change color to %s" % color),
+            }
+        )
+
+
 def _start_script(
     path: str, color_arg: Optional[str], interval_arg: Optional[float], brightness: int
 ) -> bool:
@@ -96,6 +128,11 @@ def _start_script(
     state.current_process.start()
     state.current_pattern = parse_script_name_from_file(path)
 
+    state.current_script_path = path
+    state.current_color = color_arg
+    state.current_interval = interval_arg
+    state.current_brightness = brightness
+
     return True
 
 
@@ -106,6 +143,26 @@ def _stop_script() -> None:
         state.current_process.join()
         state.current_process = None
         state.current_pattern = None
+
+        state.current_script_path = None
+        state.current_color = None
+        state.current_interval = None
+        state.current_brightness = None
+
+
+def _change_color(color: str) -> bool:
+    "Changes the color of the currently running script to `color`"
+
+    if state.current_script_path is None:
+        return True
+
+    current_script_path = state.current_script_path
+    current_interval = state.current_interval
+    current_brightness = state.current_brightness
+    _stop_script()
+    return _start_script(
+        current_script_path, color, current_interval, current_brightness
+    )
 
 
 def function_wrapper(f: Callable) -> Callable[[str, float], None]:

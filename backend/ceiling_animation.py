@@ -12,6 +12,7 @@ import time
 from backend.backend_types import RGB
 from backend.ceiling import Ceiling
 from backend.transitions.circle_out import CircleOut
+from backend.transitions.circle_out_soft import CircleOutSoft
 from backend.transitions.fade_out import FadeOut
 from backend.util import clamp
 
@@ -19,6 +20,13 @@ from backend.util import clamp
 def circle_clear(ceiling: Ceiling, duration: float, color: colour.Color) -> None:
     """Clears the currently display with a circle animation (centered at the middle)"""
     animation = CircleOut(duration, color)
+    animation.run(60, ceiling)
+
+
+def circle_clear_soft(ceiling: Ceiling, duration: float, color: colour.Color) -> None:
+    """Clears the currently display with a circle animation (centered at the middle)"""
+    ceiling.fill(np.array([255, 0, 100]))
+    animation = CircleOutSoft(duration, color)
     animation.run(60, ceiling)
 
 

@@ -4,7 +4,6 @@ const STATE_PERIOD = 1000;
 get_state();
 setInterval(get_state, STATE_PERIOD);
 
-    console.log('yay')
 // Add event listeners
 window.addEventListener("load", function() {
     var buttons = document.getElementsByClassName("button"); 
@@ -80,7 +79,6 @@ function colorChange() {
 
     xhr.open("POST", `${URL}/control/color`, true);
 
-    console.log('runningg')
     // Send start request
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(post));

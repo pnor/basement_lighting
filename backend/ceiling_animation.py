@@ -25,7 +25,6 @@ def circle_clear(ceiling: Ceiling, duration: float, color: colour.Color) -> None
 
 def circle_clear_soft(ceiling: Ceiling, duration: float, color: colour.Color) -> None:
     """Clears the currently display with a circle animation (centered at the middle)"""
-    ceiling.fill(np.array([255, 0, 100]))
     animation = CircleOutSoft(duration, color)
     animation.run(60, ceiling)
 

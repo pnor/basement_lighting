@@ -12,9 +12,6 @@ from numpy._typing import NDArray
 
 from backend.backend_types import RGB
 
-# We import and type LEDSpace due to circular import dependency error /:
-# import backend.led_locations as backend_led_space
-
 
 # ===== Color Math =========================
 
@@ -202,10 +199,3 @@ def rotate_vector(vector: NDArray[np.float64], theta: float) -> NDArray[np.float
     x_comp = (vector_0 * rot_mat[0, 0]) + (vector_1 * rot_mat[1, 0])
     y_comp = (vector_0 * rot_mat[1, 0]) + (vector_1 * rot_mat[1, 1])
     return np.array([x_comp, y_comp])
-    # return np.dot(vector, rot_mat)
-
-
-@jit(fastmath=True, cache=True)
-def fast_round(number: float, decimals: int) -> float:
-    """Rounds `number` to `decimals` decimal points"""
-    return np.around(number, decimals)

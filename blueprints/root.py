@@ -1,4 +1,5 @@
 import json
+from typing import Dict
 from flask import (
     Blueprint,
     render_template,
@@ -43,6 +44,15 @@ def get_state() -> str:
         pattern = state.current_pattern
 
     return json.dumps({"state": result, "pattern": pattern})
+
+
+@bp.route("/scripts")
+def get_scripts() -> str:
+    script_and_names: List[Dict[str, str]] = []
+    for t in script_names:
+        script_and_names += [{"script": t[1], "name": t[0]}]
+
+    return json.dumps({"results": script_and_names})
 
 
 # ========================================

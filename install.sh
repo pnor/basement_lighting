@@ -28,16 +28,22 @@ $cmd -m venv ./venv
 printf "%sInstalling dependencies%s" "$CYAN" "$NC"
 if [ "$(uname)" = "Darwin" ]; then
     printf "%s ~ Installing on MacOS; omitting rs_ws281x in build%s\n" "$CYAN" "$NC"
-    pip install -r requirements_macos.txt
+    if ! pip install -r requirements_macos.txt; then
+        printf "%sError occured while installing dependencies ): %s\n" "$RED" "$NC"
+        exit 1
+    fi
 else
-    printf "%s ~ Assuming Linux%s" "$CYAN" "$NC"
-    pip install -r requirements.txt
+    printf "%s ~ Assuming Linux%s\n" "$CYAN" "$NC"
+    if ! pip install -r requirements.txt; then
+        printf "%sError occured while installing dependencies ): %s\n" "$RED" "$NC"
+        exit 1
+    fi
 fi
 pip install -e .
 
-printf "%sInstalling node dependencies%s" "$CYAN" "$NC"
+printf "%sInstalling node dependencies%s\n" "$CYAN" "$NC"
 npm install
 npm run compile
 
-printf "%sfinished installing!%s" "$GREEN" "$NC"
+printf "%sfinished installing!%s\n" "$GREEN" "$NC"
 printf "Can fetch light scripts to run with %s ./update_scripts.sh%s or add your own in %s scripts/light_scripts%s\n" "$CYAN" "$NC" "$CYAN" "$NC"

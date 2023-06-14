@@ -80,12 +80,12 @@ def dim_color_by_amount(color: Union[RGB, str, colour.Color], dim_amount: float)
     return np.array(rgb)
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def dim_color_by_amount_fast(color: RGB, dim_amount: float) -> RGB:
     """Dims a color by a percentage of its current luminance
     Only works if color is a RGB tuple
     """
-    return (color * dim_amount).astype(int)
+    return (color * dim_amount).astype(np.int32)
 
 
 def interpolate_colors(
@@ -101,7 +101,7 @@ def interpolate_colors(
     return colour_rgb_to_neopixel_rgb(res_color.rgb)
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def mix_colors_fast(
     col_a: RGB,
     col_b: RGB,
@@ -131,22 +131,22 @@ def colour_rgb_to_neopixel_rgb(rgb: Tuple[float, float, float]) -> RGB:
 # ===== Math =========================
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def clamp(num, min_value, max_value):
-    return np.clip(num, min_value, max_value)
+    return np.clip(np.array(num), min_value, max_value)
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def sigmoid(x: float) -> float:
     return 1 / (1 + np.exp(-x))
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def gaussian(x: float) -> float:
     return (1 / (np.sqrt(2 * np.pi))) * np.exp(-(1 / 2) * (x**2))
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def sigmoid_0_to_1(x: float, scale: float = 8) -> float:
     """Returns result between 0..1
     `x` should be in 0..1"""
@@ -155,7 +155,7 @@ def sigmoid_0_to_1(x: float, scale: float = 8) -> float:
     return sigmoid(sigmoid_input)
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def gaussian_0_to_1(x: float, scale: float = 7.75) -> float:
     """Returns result between 0..1
     `x` should be in 0..1"""
@@ -165,12 +165,12 @@ def gaussian_0_to_1(x: float, scale: float = 7.75) -> float:
     return gaussian(gaussian_input) / 0.399
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def distance_formula(x1: float, y1: float, x2: float, y2: float):
     return np.sqrt(np.power(x2 - x1, 2) + np.power(y2 - y1, 2))
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def transform_unit_circle_to_origin(
     x: float, y: float, orig_x: float, orig_y: float
 ) -> Tuple[float, float]:
@@ -185,7 +185,7 @@ def transform_unit_circle_to_origin(
     return x, y
 
 
-@jit(fastmath=True, cache=True)
+@jit(fastmath=True, cache=True, nopython=True)
 def rotate_vector(vector: NDArray[np.float64], theta: float) -> NDArray[np.float64]:
     """
     theta in radians

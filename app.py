@@ -2,6 +2,7 @@ from flask import Flask
 
 import os
 import logging
+import logging.handlers
 
 from backend.constants import APP_LOGFILE
 from blueprints import root, control
@@ -12,8 +13,9 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
     FORMAT = "%(asctime)-15s %(message)s"
+    # rotate after 2GB
     handler = logging.handlers.RotatingFileHandler(
-        APP_LOGFILE, maxBytes=1024000, backupCount=3
+        APP_LOGFILE, maxBytes=1024 * 1024 * 1024 * 2, backupCount=3
     )
     logging.basicConfig(
         format=FORMAT,

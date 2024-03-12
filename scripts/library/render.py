@@ -29,9 +29,7 @@ class RenderState(ABC):
 
     @abstractmethod
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        logging.getLogger(backend.constants.SCRIPT_LOGGER_NAME).debug(
-            "render: delta=%s", delta
-        )
+        pass
 
     def interval_reached(self, ceil: Ceiling) -> None:
         logging.getLogger(backend.constants.SCRIPT_LOGGER_NAME).debug(

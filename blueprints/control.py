@@ -215,8 +215,9 @@ def function_wrapper(
         signal.signal(signal.SIGTERM, _exit_gracefully)
 
         FORMAT = "%(asctime)-15s %(message)s"
+        # rotate after 2GB
         handler = logging.handlers.RotatingFileHandler(
-            SCRIPT_LOGFILE_NAME, maxBytes=1024000, backupCount=3
+            SCRIPT_LOGFILE_NAME, maxBytes=1024 * 1024 * 1024 * 2, backupCount=3
         )
         logging.basicConfig(
             format=FORMAT,
@@ -237,6 +238,10 @@ def function_wrapper(
                 circle_clear_soft(ceiling, 0.8, colour.Color("white"))
             f(ceiling=ceiling, color=color, interval=interval)
         except Exception as e:
+            logging.getLogger(SCRIPT_LOGGER_NAME).error(
+                "Error occured when running the script!!!"
+            )
+            logging.getLogger(SCRIPT_LOGGER_NAME).error("Error:\n%s", e)
             print(e)
             exit(1)
         else:

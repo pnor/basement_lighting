@@ -5,6 +5,6 @@ import logging
 import backend.constants
 
 
-def logger() -> logging.Logger:
+def log() -> logging.Logger:
     """Gets the main logger for scripts"""
     return logging.getLogger(backend.constants.SCRIPT_LOGGER_NAME)

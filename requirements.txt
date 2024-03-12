@@ -12,13 +12,14 @@ gevent-websocket==0.10.1
 greenlet==2.0.2
 itsdangerous==2.1.2
 Jinja2==3.1.2
-light-arrangements-python @ git+https://github.com/pnor/light-arrangements-python@main
+light-arrangements-python @ git+https://github.com/pnor/light-arrangements-python@df009f798518ccf5e92cd38447a7ae4834977861
 llvmlite==0.40.0
 MarkupSafe==2.1.2
 multiprocess==0.70.14
 numba==0.57.0
 numpy==1.24.3
 perlin-noise==1.12
+psutil==5.9.8
 python-dotenv==1.0.0
 python-engineio==4.3.4
 python-socketio==5.7.2

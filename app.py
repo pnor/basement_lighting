@@ -1,11 +1,28 @@
 from flask import Flask
+
 import os
+import logging
+
+from backend.constants import APP_LOGFILE
 from blueprints import root, control
 
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+
+    FORMAT = "%(asctime)-15s %(message)s"
+    handler = logging.handlers.RotatingFileHandler(
+        APP_LOGFILE, maxBytes=1024000, backupCount=3
+    )
+    logging.basicConfig(
+        format=FORMAT,
+        level=logging.INFO,
+        datefmt="%Y-%m-%d %H:%M:%S",
+        handlers=[handler],
+    )
+    app.logger.setLevel("DEBUG")
+
     app.config.from_mapping(
         SECRET_KEY="dev",
     )

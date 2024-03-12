@@ -3,7 +3,9 @@
 from typing import Callable, Union, Optional
 from abc import ABC, abstractmethod
 import time
+import logging
 
+import backend.constants
 from backend.ceiling import Ceiling
 from backend.util import clamp
 
@@ -21,13 +23,20 @@ class RenderState(ABC):
         When `interval` is reacher, timer resets and `interval_reached` is called
         """
         self.interval = interval
+        logging.getLogger(backend.constants.SCRIPT_LOGGER_NAME).debug(
+            "init RenderState with interval=%s", interval
+        )
 
     @abstractmethod
     def render(self, delta: float, ceil: Ceiling) -> Union[bool, None]:
-        pass
+        logging.getLogger(backend.constants.SCRIPT_LOGGER_NAME).debug(
+            "render: delta=%s", delta
+        )
 
     def interval_reached(self, ceil: Ceiling) -> None:
-        pass
+        logging.getLogger(backend.constants.SCRIPT_LOGGER_NAME).debug(
+            "interval of %s reached", self.interval
+        )
 
     def run(self, fps: float, ceil: Ceiling):
         """Handles boiler plate of running a render loop at `FPS` frames per second.
@@ -58,7 +67,6 @@ class RenderState(ABC):
                         self.interval_reached(ceil)
 
                 delta -= 1
-
 
     def progress(self) -> float:
         """Returns percetnage progress towards `_interval` (always 0..1)"""

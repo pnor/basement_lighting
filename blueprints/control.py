@@ -8,11 +8,10 @@ import random
 import signal
 import colour
 import time
-from flask import (
-    Blueprint,
-    request,
-)
+import logging, logging.handlers
+from flask import Blueprint, request, current_app
 from backend.ceiling_animation import circle_clear, circle_clear_soft, fade_out
+from backend.constants import SCRIPT_LOGFILE_NAME, SCRIPT_LOGGER_NAME
 
 from backend.state import global_state as state
 from backend.ceiling import Ceiling
@@ -31,6 +30,8 @@ def start_script() -> str:
     """
     Runs the file provided in the request with the args color and interval
     """
+    current_app.logger.info('Running "start script" route function')
+
     data_dict = request.json
     if data_dict is None:
         return json.dumps(
@@ -52,7 +53,16 @@ def start_script() -> str:
     brightness = int(brightness) if brightness else 120
     brightness = np.clip(brightness, 0, 255)
 
+    current_app.logger.info(
+        "Args: file_to_run: %s color: %s interval: %s brightness: %s",
+        file_to_run,
+        color,
+        interval,
+        brightness,
+    )
+
     if not os.path.exists(file_to_run):
+        current_app.logger.info("file '%s' does not exist!", file_to_run)
         return json.dumps(
             {"ok": False, "error": ("path doesn't exist: %s" % file_to_run)}
         )
@@ -61,20 +71,27 @@ def start_script() -> str:
         res = _start_script(file_to_run, color, interval, brightness, TRANSITION_START)
 
     if res:
+        current_app.logger.info("succesfully started running script %s!", file_to_run)
         return json.dumps({"ok": True})
     else:
+        current_app.logger.info(
+            "crashed trying to load script %s as a module!!", file_to_run
+        )
         return json.dumps(
             {
                 "ok": False,
-                "error": ("script %s crashed when loaded as a module" % file_to_run),
+                "error": ("script %s crashed when loaded as a module", file_to_run),
             }
         )
 
 
 @bp.route("/stop", methods=["POST"])
 def stop_script() -> str:
+    current_app.logger.info('Running "stop script" route function')
+
     with state.lock:
         _stop_script()
+
     return json.dumps({"ok": True})
 
 
@@ -84,6 +101,8 @@ def change_color() -> str:
     Changes the color of the currently running script
     expects one arg for color
     """
+    current_app.logger.info("Changing color of script")
+
     data_dict = request.json
     if data_dict is None:
         return json.dumps({"ok": False, "error": "request body requires color"})
@@ -93,10 +112,13 @@ def change_color() -> str:
         )
 
     color = data_dict.get("color")
+
     if color is None:
+        current_app.logger.debug("Color was None so returning error json response")
         return json.dumps({"ok": False, "error": "request body requires arg for color"})
 
     with state.lock:
+        current_app.logger.info("Changing color of script to %s", color)
         res = _change_color(color)
 
     if res:
@@ -179,17 +201,31 @@ def _change_color(color: str) -> bool:
     )
 
 
-def function_wrapper(f: Callable, transition_type: str) -> Callable[[str, float], None]:
+def function_wrapper(
+    f: Callable, transition_type: str, logging_level: str
+) -> Callable[[str, float], None]:
     """Wraps the function in another function that doesn't use keyword arguements.
     Also catches interrupts from `process.terminate()` to distinguish from actually crashing
     """
 
     def _exit_gracefully(sig_number, stack_frame):
-        # Send back the ceiling to the main app
         exit(0)
 
     def _function_wrapper(color: str, interval: float):
         signal.signal(signal.SIGTERM, _exit_gracefully)
+
+        FORMAT = "%(asctime)-15s %(message)s"
+        handler = logging.handlers.RotatingFileHandler(
+            SCRIPT_LOGFILE_NAME, maxBytes=1024000, backupCount=3
+        )
+        logging.basicConfig(
+            format=FORMAT,
+            level=logging.INFO,
+            datefmt="%Y-%m-%d %H:%M:%S",
+            handlers=[handler],
+        )
+        logging.getLogger(SCRIPT_LOGGER_NAME).setLevel(logging_level)
+
         try:
             now = int(time.time())
             np.random.seed(now)
@@ -236,7 +272,7 @@ def runnable_script(
     except:  # Script fails to execute
         return None
 
-    f = function_wrapper(mod.run, transition_type)
+    f = function_wrapper(mod.run, transition_type, "DEBUG")
     process = Process(
         target=f,
         args=(color_arg, interval_arg),
